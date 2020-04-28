@@ -1,0 +1,2 @@
+create database sgdma;
+GRANT ALL ON sgdma.* TO 'sgduser'@'localhost' IDENTIFIED BY 'M@C0V1d19' WITH GRANT OPTION;
