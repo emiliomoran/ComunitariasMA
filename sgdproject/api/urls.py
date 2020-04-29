@@ -5,6 +5,9 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'category', views.CategoryViewSet)
 router.register(r'collection-center', views.CollectionCenterViewSet)
+router.register(r'provider', views.ProviderViewSet)
+router.register(r'provider-contact', views.ProviderContactViewSet)
+router.register(r'donation', views.DonationViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
