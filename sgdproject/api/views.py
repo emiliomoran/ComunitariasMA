@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer
-from .models import Category, CollectionCenter, Provider, ProviderContact
+from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation
 # Create your views here.
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -19,3 +19,7 @@ class ProviderViewSet(viewsets.ModelViewSet):
 class ProviderContactViewSet(viewsets.ModelViewSet):
 	queryset = ProviderContact.objects.all().order_by('lastName')
     serializer_class = ProviderContactSerializer
+	
+class DonationViewSet(viewsets.ModelViewSet):
+	queryset = Donation.objects.all().order_by('collectionCenter')
+    serializer_class = DonationSerializer

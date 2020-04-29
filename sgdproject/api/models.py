@@ -49,4 +49,17 @@ class ProviderContact(models.Model):
 	def __str__(self):
         return self.name
 		
-		
+class Donation(models.Model):
+	provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
+	category = models.ForeignKey(Category, on_delete=models.CASCADE)
+	description = models.CharField(max_length=250, null=True, blank=True)
+	collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE)
+	beginDate = models.DateTimeField(blank=True)
+	expirationDate = models.DateTimeField(blank=True)
+	photo = models.ImageField(upload_to = 'donations/')
+	state = models.IntegerField(default=1, blank=True)
+	createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+	createdBy = models.CharField(max_length=50)
+	
+	def __str__(self):
+        return self.name
