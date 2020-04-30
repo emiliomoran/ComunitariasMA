@@ -13,13 +13,13 @@ class CollectionCenterViewSet(viewsets.ModelViewSet):
     serializer_class = CollectionCenterSerializer
 	
 class ProviderViewSet(viewsets.ModelViewSet):
-	queryset = Provider.objects.all().order_by('businessName')
+    queryset = Provider.objects.all().order_by('businessName')
     serializer_class = ProviderSerializer
 	
 class ProviderContactViewSet(viewsets.ModelViewSet):
-	queryset = ProviderContact.objects.all().order_by('lastName')
+    queryset = ProviderContact.objects.all().order_by('lastName')
     serializer_class = ProviderContactSerializer
 	
 class DonationViewSet(viewsets.ModelViewSet):
-	queryset = Donation.objects.all().order_by('collectionCenter')
+    queryset = Donation.objects.all().order_by('collectionCenter')
     serializer_class = DonationSerializer
