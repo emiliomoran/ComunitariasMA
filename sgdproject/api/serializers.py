@@ -1,27 +1,28 @@
 from rest_framework import serializers
 from .models import Category, CollectionCenter, Provider, ProviderContact, Donation
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('id', 'name', 'description', 'state', 'createdAt', 'createdBy') #Delete field to not show
 
-class CollectionCenterSerializer(serializers.HyperlinkedModelSerializer):
+class CollectionCenterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectionCenter
         fields = ('id', 'name', 'address', 'latitude', 'longitude', 'state', 'createdAt', 'createdBy')
 
-class ProviderContactSerializer(serializers.HyperlinkedModelSerializer):
+class ProviderContactSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ProviderContact
-		fields = ('firstName', 'lastName', 'phoneNumer', 'social', 'business', 'state', 'createdAt', 'createdBy')
+		fields = ('firstName', 'lastName', 'phoneNumer', 'social', 'provider', 'state', 'createdAt', 'createdBy')
 
 class ProviderSerializer(serializers.HyperlinkedModelSerializer):
-    donationList = CategorySerializer(read_only=True, many=True)
-    contacts = ProviderContactSerializer(source='providercontact_set', many=True)
+    #donationList = CategorySerializer(read_only=True, many=True)
+    #contacts = ProviderContactSerializer(source='providercontact_set', many=True)
+    contacts = ProviderContactSerializer(many=True, read_only=True)
     class Meta:
         model = Provider
-        fields = ('businessName', 'address', 'phoneNumer', 'email', 'donationList', 'contacts', 'state', 'createdAt', 'createdBy')
+        fields = ('businessName', 'address', 'phoneNumer', 'email', 'contacts', 'state', 'createdAt', 'createdBy')
 		
 class DonationSerializer(serializers.HyperlinkedModelSerializer):
     provider = ProviderSerializer()
