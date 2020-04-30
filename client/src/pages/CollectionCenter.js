@@ -3,7 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 
-class Category extends React.Component {
+class CollectionCenters extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,19 +13,22 @@ class Category extends React.Component {
   }
 
   componentDidMount = () => {
-    this.getCategory();
+    this.getCollectionCenter();
   };
 
-  getCategory = () => {
+  getCollectionCenter = () => {
     //console.log("Request get");
-    Api.get("category/")
+    Api.get("collection-center/")
       .then((response) => {
+        //console.log(response);
         let data = [];
         response.data.map((item, index) => {
           let category = {
             key: item.id,
             name: item.name,
-            description: item.description,
+            address: item.address,
+            latitude: item.latitude,
+            longitude: item.longitude,
           };
           data.push(category);
           return true;
@@ -43,20 +46,22 @@ class Category extends React.Component {
       });
   };
 
-  addCategory = (data) => {
+  addCollectionCenter = (data) => {
     this.setState({
       loading: true,
     });
     //console.log("Request post");
-    //console.log(data);
-    Api.post("category/", {
+    console.log(data);
+    Api.post("collection-center/", {
       name: data.name,
-      description: data.description ? data.description : "",
+      address: data.address,
+      latitude: data.latitude,
+      longitude: data.longitude,
       createdBy: "reactclient",
     })
       .then((response) => {
         console.log(response);
-        this.getCategory();
+        this.getCollectionCenter();
       })
       .catch((error) => {
         this.setState({
@@ -70,15 +75,17 @@ class Category extends React.Component {
     this.setState({
       loading: true,
     });
-    //console.log("Request put");
-    Api.put(`category/${data.key}/`, {
+    console.log("Request put");
+    Api.put(`collection-center/${data.key}/`, {
       name: data.name,
-      description: data.description ? data.description : "",
+      address: data.address,
+      latitude: data.latitude,
+      longitude: data.longitude,
       createdBy: "reactclient",
     })
       .then((response) => {
-        //console.log(response);
-        this.getCategory();
+        console.log(response);
+        this.getCollectionCenter();
       })
       .catch((error) => {
         this.setState({
@@ -93,10 +100,10 @@ class Category extends React.Component {
       loading: true,
     });
     //console.log("Request delete");
-    Api.delete(`category/${key}/`)
+    Api.delete(`collection-center/${key}/`)
       .then((response) => {
         console.log(response);
-        this.getCategory();
+        this.getCollectionCenter();
       })
       .catch((error) => {
         this.setState({
@@ -115,12 +122,16 @@ class Category extends React.Component {
         key: "name",
       },
       {
-        title: "Descripción",
-        key: "description",
+        title: "Dirección",
+        key: "address",
       },
       {
         title: "Acción",
         key: "action",
+      },
+      {
+        title: "Ubicación",
+        key: "ubication",
       },
     ];
 
@@ -133,31 +144,45 @@ class Category extends React.Component {
         type: "text",
       },
       {
-        key: "description",
-        label: "Descripción",
-        required: false,
-        maxLength: 250,
-        type: "textArea",
+        key: "address",
+        label: "Dirección",
+        required: true,
+        maxLength: 500,
+        type: "text",
+      },
+      {
+        key: "latitude",
+        label: "Latitud",
+        required: true,
+        maxLength: null,
+        type: "coordinate",
+      },
+      {
+        key: "longitude",
+        label: "Longitud",
+        required: true,
+        maxLength: null,
+        type: "coordinate",
       },
     ];
 
     return (
       <Row>
-        <h3>Categorías</h3>
+        <h3>Centros de acopio</h3>
         <CrudTable
           columns={columns}
           data={data}
           fieldsForm={fieldsForm}
-          title="Categoría"
-          add={this.addCategory}
+          title="Centro de acopio"
+          add={this.addCollectionCenter}
           edit={this.editCategory}
           delete={this.deleteCategory}
           loading={loading}
-          includesMap={false}
+          includesMap={true}
         />
       </Row>
     );
   }
 }
 
-export default Category;
+export default CollectionCenters;

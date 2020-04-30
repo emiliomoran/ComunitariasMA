@@ -3,3 +3,8 @@
   background: rgba(255, 255, 255, 0.2) !important;
   margin: 16px !important;
 }
+
+.leaflet-container {
+  width: 100% !important;
+  height: 500px !important;
+}

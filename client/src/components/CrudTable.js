@@ -1,5 +1,6 @@
 import React from "react";
 import { Table, Divider, Icon, Button, Modal, Form, Input, Row } from "antd";
+import Map from "../components/Map";
 
 const { TextArea } = Input;
 const { confirm } = Modal;
@@ -16,6 +17,9 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         fieldsForm,
         title,
         editedItem,
+        includesMap,
+        showMapForm,
+        hasPoint,
       } = this.props;
       const { getFieldDecorator } = form;
       //console.log(editedItem);
@@ -31,30 +35,58 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
           <Form layout="vertical">
             {fieldsForm &&
               fieldsForm.map((field) => (
-                <Form.Item key={field.key} label={field.label}>
+                <Form.Item
+                  key={field.key}
+                  label={field.label}
+                  style={{
+                    display: field.type === "coordinate" ? "none" : "block",
+                  }}
+                >
                   {getFieldDecorator(field.key, {
-                    rules: [
-                      {
-                        required: field.required,
-                        message: `${field.name} requerido!`,
-                      },
-                      {
-                        max: field.maxLength,
-                        message: `Sólo se permiten ${field.maxLength} caracteres!`,
-                      },
-                    ],
+                    rules: field.maxLength
+                      ? [
+                          {
+                            required: field.required,
+                            message: `${field.label} requerido!`,
+                          },
+                          {
+                            max: field.maxLength,
+                            message: `Sólo se permiten ${field.maxLength} caracteres!`,
+                          },
+                        ]
+                      : [
+                          {
+                            required: field.required,
+                            message: `${field.label} requerido!`,
+                          },
+                        ],
                     initialValue: editedItem
                       ? editedItem[field.key]
                       : undefined,
                   })(
                     field.type === "text" ? (
                       <Input />
+                    ) : field.type === "textArea" ? (
+                      <TextArea rows={5} />
                     ) : (
-                      field.type === "textArea" && <TextArea rows={5} />
+                      field.type === "coordinate" && <Input />
                     )
                   )}
                 </Form.Item>
               ))}
+            {includesMap && (
+              <div>
+                {editedItem
+                  ? "Editar ubicación en el mapa"
+                  : "Añadir ubicación en el mapa"}{" "}
+                <Icon
+                  type="environment"
+                  theme="twoTone"
+                  twoToneColor={hasPoint ? "#52c41a" : "#C8BDBB"}
+                  onClick={() => showMapForm(editedItem)}
+                />
+              </div>
+            )}
           </Form>
         </Modal>
       );
@@ -68,6 +100,11 @@ class CrudTable extends React.Component {
     this.state = {
       visible: false,
       editedItem: undefined,
+      visibleMap: false,
+      readOnlyMap: true,
+      previewPoint: undefined,
+      hasPoint: false,
+      edit: false,
     };
   }
 
@@ -93,6 +130,21 @@ class CrudTable extends React.Component {
             </span>
           ),
         };
+      } else if (c.key === "ubication") {
+        item = {
+          title: c.title,
+          key: c.key,
+          render: (text, record) => (
+            <span>
+              <Icon
+                type="environment"
+                theme="twoTone"
+                twoToneColor="#52c41a"
+                onClick={() => this.showMap(record.key)}
+              />
+            </span>
+          ),
+        };
       } else {
         item = {
           title: c.title,
@@ -110,20 +162,104 @@ class CrudTable extends React.Component {
   setEditedItem = (key) => {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
+    let point = {
+      latitude: item.latitude,
+      longitude: item.longitude,
+    };
     this.setState({
       editedItem: item,
       visible: true,
+      hasPoint: true,
+      previewPoint: point,
     });
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    console.log("showModal");
+    this.setState({
+      hasPoint: false,
+      previewPoint: undefined,
+      editedItem: undefined,
+      readOnlyMap: true,
+      visible: true,
+    });
   };
 
   handleCancel = () => {
     const { form } = this.formRef.props;
     form.resetFields();
-    this.setState({ visible: false });
+    this.setState({ visible: false, previewPoint: undefined, hasPoint: false });
+  };
+
+  showMap = (key) => {
+    console.log("showMap");
+    let item = this.props.data.find((obj) => obj.key === key);
+    this.setState({
+      editedItem: item,
+      visibleMap: true,
+    });
+  };
+
+  showMapForm = (item) => {
+    console.log("showMapForm");
+    this.setState({
+      editedItem: item,
+      visibleMap: true,
+      readOnlyMap: false,
+      edit: true,
+    });
+  };
+
+  closeMap = () => {
+    console.log("closeMap");
+    this.setState({
+      //editedItem: undefined,
+      visibleMap: false,
+      readOnlyMap: true,
+    });
+  };
+
+  closeMapForm = () => {
+    console.log("closeMapForm");
+    const { form } = this.formRef.props;
+    form.setFieldsValue({
+      latitude: undefined,
+      longitude: undefined,
+    });
+    this.setState({
+      visibleMap: false,
+      readOnlyMap: true,
+      previewPoint: undefined,
+      hasPoint: false,
+    });
+  };
+
+  closeMapFormEdit = () => {
+    console.log("closeMapFormEdit");
+    console.log(this.state.editedItem);
+    console.log(this.state.previewPoint);
+    if (
+      this.state.editedItem &&
+      this.state.previewPoint &&
+      this.state.editedItem.latitude === this.state.previewPoint.latitude &&
+      this.state.editedItem.longitude === this.state.previewPoint.longitude
+    ) {
+      this.setState({
+        visibleMap: false,
+        readOnlyMap: true,
+        //previewPoint: undefined,
+      });
+    } else {
+      let point = {
+        latitude: this.state.editedItem.latitude,
+        longitude: this.state.editedItem.longitude,
+      };
+      this.setState({
+        visibleMap: false,
+        readOnlyMap: true,
+        previewPoint: point,
+      });
+    }
   };
 
   handleCreate = () => {
@@ -143,7 +279,13 @@ class CrudTable extends React.Component {
         this.props.add(values);
       }
       form.resetFields();
-      this.setState({ visible: false });
+      this.setState({
+        editedItem: undefined,
+        visible: false,
+        previewPoint: undefined,
+        hasPoint: false,
+        readOnlyMap: true,
+      });
     });
   };
 
@@ -166,10 +308,39 @@ class CrudTable extends React.Component {
     });
   };
 
-  render() {
-    const { editedItem } = this.state;
+  setCoordinatesForm = (point) => {
+    console.log(point);
+    const { form } = this.formRef.props;
+    form.setFieldsValue({
+      latitude: point.latitude,
+      longitude: point.longitude,
+    });
+    this.setState({
+      previewPoint: point,
+      hasPoint: true,
+      visibleMap: false,
+    });
+  };
 
-    const { columns, data, fieldsForm, title, loading } = this.props;
+  render() {
+    const {
+      editedItem,
+      visible,
+      visibleMap,
+      readOnlyMap,
+      previewPoint,
+      hasPoint,
+      edit,
+    } = this.state;
+
+    const {
+      columns,
+      data,
+      fieldsForm,
+      title,
+      loading,
+      includesMap,
+    } = this.props;
 
     const columns_table = this.set_columns(columns);
 
@@ -181,21 +352,37 @@ class CrudTable extends React.Component {
             onClick={this.showModal}
             style={{ position: "absolute", right: 0 }}
           >
-            Nueva
+            Nuevo
           </Button>
           <CategoryForm
             fieldsForm={fieldsForm}
             wrappedComponentRef={this.saveFormRef}
-            visible={this.state.visible}
+            visible={visible}
             onCancel={this.handleCancel}
             onCreate={this.handleCreate}
             title={title}
             editedItem={editedItem}
+            includesMap={includesMap}
+            showMapForm={this.showMapForm}
+            hasPoint={hasPoint}
           />
         </div>
         <br></br>
         <br></br>
-        <Table columns={columns_table} dataSource={data} loading={loading} />;
+        <Table columns={columns_table} dataSource={data} loading={loading} />
+        <Map
+          key={`map-${Math.random()}`}
+          visible={visibleMap}
+          close={this.closeMap}
+          closeFromForm={this.closeMapForm}
+          closeMapFormEdit={this.closeMapFormEdit}
+          title={title}
+          item={editedItem}
+          readOnly={readOnlyMap}
+          save={this.setCoordinatesForm}
+          previewPoint={previewPoint}
+          edit={edit}
+        />
       </Row>
     );
   }
