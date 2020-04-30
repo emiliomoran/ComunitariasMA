@@ -4,34 +4,37 @@ from .models import Category, CollectionCenter, Provider, ProviderContact, Donat
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name', 'description', 'state', 'createdAt', 'createdBy') #Delete field to not show
+        fields = "__all__" #Delete field to not show
 
 class CollectionCenterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectionCenter
-        fields = ('id', 'name', 'address', 'latitude', 'longitude', 'state', 'createdAt', 'createdBy')
+        fields = "__all__"
 
 class ProviderContactSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ProviderContact
-		fields = ('firstName', 'lastName', 'phoneNumer', 'social', 'provider', 'state', 'createdAt', 'createdBy')
+		fields = "__all__"
 
-class ProviderSerializer(serializers.HyperlinkedModelSerializer):
+class ProviderSerializer(serializers.ModelSerializer):
     #donationList = CategorySerializer(read_only=True, many=True)
     #contacts = ProviderContactSerializer(source='providercontact_set', many=True)
     contacts = ProviderContactSerializer(many=True, read_only=True)
+    categories = CategorySerializer(many=True, read_only=True)    
     class Meta:
         model = Provider
-        fields = ('businessName', 'address', 'phoneNumer', 'email', 'contacts', 'state', 'createdAt', 'createdBy')
+        fields = "__all__"
 		
-class DonationSerializer(serializers.HyperlinkedModelSerializer):
-    provider = ProviderSerializer()
-    category = CategorySerializer()
-    collectionCenter = CollectionCenterSerializer()
-    photo_url = serializers.SerializerMethodField('get_photo_url')
+class DonationSerializer(serializers.ModelSerializer):
+    #provider = ProviderSerializer(many=False, read_only=False)
+    #category = CategorySerializer(many=False, read_only=False)
+    #collectionCenter = CollectionCenterSerializer(many=False, read_only=False)
+    photo_url = serializers.SerializerMethodField()
     class Meta:
         model = Donation
-        fields = ('provider', 'category', 'description', 'collectionCenter', 'beginDate', 'expirationDate', 'photo', 'photo_url', 'state', 'createdAt', 'createdBy')
+        fields = "__all__"
     
-    def get_photo_url(self, obj):
-        return obj.photo.url
+    def get_photo_url(self, donation):
+        request = self.context.get('request')
+        photo_url = donation.photo.url
+        return request.build_absolute_uri(photo_url)

@@ -29,7 +29,7 @@ class Provider(models.Model):
     address = models.CharField(max_length=500)
     phoneNumer = models.CharField(max_length=20)
     email = models.CharField(max_length=50)
-    categories = models.ManyToManyField(Category)
+    categories = models.ManyToManyField(Category, related_name="categories")
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
@@ -55,7 +55,7 @@ class ProviderContact(models.Model):
 class Donation(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    description = models.CharField(max_length=500)
+    description = models.CharField(max_length=500, )
     collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE)
     beginDate = models.DateTimeField(blank=True, null=True)
     expirationDate = models.DateTimeField(blank=True, null=True)
