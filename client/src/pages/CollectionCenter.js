@@ -22,15 +22,15 @@ class CollectionCenters extends React.Component {
       .then((response) => {
         //console.log(response);
         let data = [];
-        response.data.map((item, index) => {
-          let category = {
+        response.data.map((item) => {
+          let collectionCenter = {
             key: item.id,
             name: item.name,
             address: item.address,
             latitude: item.latitude,
             longitude: item.longitude,
           };
-          data.push(category);
+          data.push(collectionCenter);
           return true;
         });
         this.setState({
@@ -71,7 +71,7 @@ class CollectionCenters extends React.Component {
       });
   };
 
-  editCategory = (data) => {
+  editCollectionCenter = (data) => {
     this.setState({
       loading: true,
     });
@@ -95,7 +95,7 @@ class CollectionCenters extends React.Component {
       });
   };
 
-  deleteCategory = (key) => {
+  deleteCollectionCenter = (key) => {
     this.setState({
       loading: true,
     });
@@ -175,8 +175,8 @@ class CollectionCenters extends React.Component {
           fieldsForm={fieldsForm}
           title="Centro de acopio"
           add={this.addCollectionCenter}
-          edit={this.editCategory}
-          delete={this.deleteCategory}
+          edit={this.editCollectionCenter}
+          delete={this.deleteCollectionCenter}
           loading={loading}
           includesMap={true}
         />

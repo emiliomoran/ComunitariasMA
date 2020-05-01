@@ -1,13 +1,57 @@
 import React from "react";
-import { Table, Divider, Icon, Button, Modal, Form, Input, Row } from "antd";
+import {
+  Table,
+  Divider,
+  Icon,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Row,
+  Tag,
+  Select,
+} from "antd";
 import Map from "../components/Map";
+import ListContacts from "../components/ListContact";
 
 const { TextArea } = Input;
 const { confirm } = Modal;
+const { Option } = Select;
 
 const CategoryForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
+    setRules = (field) => {
+      let rules = [];
+
+      if (field.required) {
+        rules.push({
+          required: field.required,
+          message: `${field.label} requerido!`,
+        });
+      }
+      if (field.maxLength) {
+        rules.push({
+          max: field.maxLength,
+          message: `Sólo se permiten ${field.maxLength} caracteres!`,
+        });
+      }
+      if (field.type === "email") {
+        rules.push({
+          type: "email",
+          message: "Correo no válido!",
+        });
+      }
+      if (field.type === "phone") {
+        rules.push({
+          //type: "regexp",
+          pattern: new RegExp("^[0-9]*$"),
+          message: "Teléfono no válido!",
+        });
+      }
+      return rules;
+    };
+
     render() {
       const {
         visible,
@@ -20,9 +64,11 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         includesMap,
         showMapForm,
         hasPoint,
+        optionsMultipleSelect,
       } = this.props;
       const { getFieldDecorator } = form;
       //console.log(editedItem);
+
       return (
         <Modal
           visible={visible}
@@ -43,33 +89,30 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                   }}
                 >
                   {getFieldDecorator(field.key, {
-                    rules: field.maxLength
-                      ? [
-                          {
-                            required: field.required,
-                            message: `${field.label} requerido!`,
-                          },
-                          {
-                            max: field.maxLength,
-                            message: `Sólo se permiten ${field.maxLength} caracteres!`,
-                          },
-                        ]
-                      : [
-                          {
-                            required: field.required,
-                            message: `${field.label} requerido!`,
-                          },
-                        ],
+                    rules: this.setRules(field),
                     initialValue: editedItem
                       ? editedItem[field.key]
                       : undefined,
                   })(
-                    field.type === "text" ? (
+                    field.type === "text" ||
+                      field.type === "phone" ||
+                      field.type === "email" ||
+                      field.type === "coordinate" ? (
                       <Input />
                     ) : field.type === "textArea" ? (
                       <TextArea rows={5} />
                     ) : (
-                      field.type === "coordinate" && <Input />
+                      <Select
+                        mode="multiple"
+                        placeholder="Seleccionar la(s) categoría(s)"
+                      >
+                        {optionsMultipleSelect &&
+                          optionsMultipleSelect.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
                     )
                   )}
                 </Form.Item>
@@ -145,6 +188,31 @@ class CrudTable extends React.Component {
             </span>
           ),
         };
+      } else if (c.key === "tags") {
+        item = {
+          title: c.title,
+          key: c.key,
+          render: (item) => (
+            <span>
+              {item.tags.map((tag) => {
+                return <Tag key={tag.key}>{tag.label}</Tag>;
+              })}
+            </span>
+          ),
+        };
+      } else if (c.key === "contacts") {
+        item = {
+          title: c.title,
+          key: c.key,
+          render: (text, record) => (
+            <span>
+              <Icon
+                type="contacts"
+                onClick={() => this.props.showContacts(record.key)}
+              />
+            </span>
+          ),
+        };
       } else {
         item = {
           title: c.title,
@@ -175,7 +243,7 @@ class CrudTable extends React.Component {
   };
 
   showModal = () => {
-    console.log("showModal");
+    //console.log("showModal");
     this.setState({
       hasPoint: false,
       previewPoint: undefined,
@@ -192,7 +260,7 @@ class CrudTable extends React.Component {
   };
 
   showMap = (key) => {
-    console.log("showMap");
+    //console.log("showMap");
     let item = this.props.data.find((obj) => obj.key === key);
     this.setState({
       editedItem: item,
@@ -201,7 +269,7 @@ class CrudTable extends React.Component {
   };
 
   showMapForm = (item) => {
-    console.log("showMapForm");
+    //console.log("showMapForm");
     this.setState({
       editedItem: item,
       visibleMap: true,
@@ -211,7 +279,7 @@ class CrudTable extends React.Component {
   };
 
   closeMap = () => {
-    console.log("closeMap");
+    //console.log("closeMap");
     this.setState({
       //editedItem: undefined,
       visibleMap: false,
@@ -220,7 +288,7 @@ class CrudTable extends React.Component {
   };
 
   closeMapForm = () => {
-    console.log("closeMapForm");
+    //console.log("closeMapForm");
     const { form } = this.formRef.props;
     form.setFieldsValue({
       latitude: undefined,
@@ -235,9 +303,9 @@ class CrudTable extends React.Component {
   };
 
   closeMapFormEdit = () => {
-    console.log("closeMapFormEdit");
-    console.log(this.state.editedItem);
-    console.log(this.state.previewPoint);
+    //console.log("closeMapFormEdit");
+    //console.log(this.state.editedItem);
+    //console.log(this.state.previewPoint);
     if (
       this.state.editedItem &&
       this.state.previewPoint &&
@@ -297,7 +365,7 @@ class CrudTable extends React.Component {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
     confirm({
-      title: `¿Está seguro de eliminar ${item.name} ?`,
+      title: `¿Está seguro de eliminar ${item.name}?`,
       okText: "Acepar",
       cancelText: "Cancelar",
       onOk: () => {
@@ -309,7 +377,7 @@ class CrudTable extends React.Component {
   };
 
   setCoordinatesForm = (point) => {
-    console.log(point);
+    //console.log(point);
     const { form } = this.formRef.props;
     form.setFieldsValue({
       latitude: point.latitude,
@@ -340,7 +408,21 @@ class CrudTable extends React.Component {
       title,
       loading,
       includesMap,
+      includesContacts,
+      visibleContacts,
+      showContacts,
+      closeContacts,
+      columnsContacts,
+      dataContacts,
+      provider,
+      fieldsFormContact,
+      addContact,
+      editContact,
+      deleteContact,
+      optionsMultipleSelect,
     } = this.props;
+
+    //console.log(provider);
 
     const columns_table = this.set_columns(columns);
 
@@ -365,6 +447,8 @@ class CrudTable extends React.Component {
             includesMap={includesMap}
             showMapForm={this.showMapForm}
             hasPoint={hasPoint}
+            showContacts={showContacts}
+            optionsMultipleSelect={optionsMultipleSelect}
           />
         </div>
         <br></br>
@@ -383,6 +467,19 @@ class CrudTable extends React.Component {
           previewPoint={previewPoint}
           edit={edit}
         />
+        {includesContacts && (
+          <ListContacts
+            provider={provider}
+            visible={visibleContacts}
+            close={closeContacts}
+            columns={columnsContacts}
+            data={dataContacts}
+            fieldsFormContact={fieldsFormContact}
+            addContact={addContact}
+            editContact={editContact}
+            deleteContact={deleteContact}
+          />
+        )}
       </Row>
     );
   }

@@ -21,7 +21,7 @@ class Category extends React.Component {
     Api.get("category/")
       .then((response) => {
         let data = [];
-        response.data.map((item, index) => {
+        response.data.map((item) => {
           let category = {
             key: item.id,
             name: item.name,
