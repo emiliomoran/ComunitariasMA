@@ -20,7 +20,7 @@ class ProviderSerializer(serializers.ModelSerializer):
     #donationList = CategorySerializer(read_only=True, many=True)
     #contacts = ProviderContactSerializer(source='providercontact_set', many=True)
     contacts = ProviderContactSerializer(many=True, read_only=True)
-    categories = CategorySerializer(many=True, read_only=True)    
+    #categories = CategorySerializer(many=True, read_only=False)
     class Meta:
         model = Provider
         fields = "__all__"

@@ -25,9 +25,9 @@ class CollectionCenter(models.Model):
         return self.name
 		
 class Provider(models.Model):
-    businessName = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     address = models.CharField(max_length=500)
-    phoneNumer = models.CharField(max_length=20)
+    phoneNumber = models.CharField(max_length=20)
     email = models.CharField(max_length=50)
     categories = models.ManyToManyField(Category, related_name="categories")
     state = models.IntegerField(default=1, blank=True)
@@ -35,13 +35,13 @@ class Provider(models.Model):
     createdBy = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.businessName
+        return self.name
     
 		
 class ProviderContact(models.Model):
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)
-    phoneNumer = models.CharField(max_length=20)
+    phoneNumber = models.CharField(max_length=20)
     social = models.CharField(max_length=50, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE, related_name="contacts")
     state = models.IntegerField(default=1, blank=True)

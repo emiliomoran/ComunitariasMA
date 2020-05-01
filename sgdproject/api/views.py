@@ -13,7 +13,7 @@ class CollectionCenterViewSet(viewsets.ModelViewSet):
     serializer_class = CollectionCenterSerializer
 	
 class ProviderViewSet(viewsets.ModelViewSet):
-    queryset = Provider.objects.all().order_by('businessName')
+    queryset = Provider.objects.all().order_by('name')
     serializer_class = ProviderSerializer
 	
 class ProviderContactViewSet(viewsets.ModelViewSet):
