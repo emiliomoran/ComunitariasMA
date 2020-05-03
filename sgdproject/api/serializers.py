@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -62,4 +62,19 @@ class SupportGroupSerializer(serializers.ModelSerializer):
 class GroupMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupMember
+        fields = "__all__"
+
+class CampaignSerializer(serializers.ModelSerializer):
+    photo = serializers.ImageField(use_url=True)
+    class Meta:
+        model = Campaign
+        fields = "__all__"
+
+    """def get_photo_url(self, obj):
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.photo.url)"""
+
+class DistributionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Distribution
         fields = "__all__"

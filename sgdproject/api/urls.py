@@ -12,6 +12,8 @@ router.register(r'user', views.UserViewSet)
 router.register(r'volunteer', views.VolunteerViewSet)
 router.register(r'support-group', views.SupportGroupViewSet)
 router.register(r'group-member', views.GroupMemberViewSet)
+router.register(r'campaign', views.CampaignViewSet)
+router.register(r'distribution', views.DistributionViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

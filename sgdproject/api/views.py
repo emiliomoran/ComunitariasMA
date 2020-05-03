@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer, UserSerializer,VolunteerSerializer, SupportGroupSerializer, GroupMemberSerializer
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember
+from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer, UserSerializer,VolunteerSerializer, SupportGroupSerializer, GroupMemberSerializer, CampaignSerializer, DistributionSerializer
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution
 # Create your views here.
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -39,3 +39,11 @@ class SupportGroupViewSet(viewsets.ModelViewSet):
 class GroupMemberViewSet(viewsets.ModelViewSet):
     queryset = GroupMember.objects.all().order_by('lastName')
     serializer_class = GroupMemberSerializer
+
+class CampaignViewSet(viewsets.ModelViewSet):
+    queryset = Campaign.objects.all().order_by('name')
+    serializer_class = CampaignSerializer
+
+class DistributionViewSet(viewsets.ModelViewSet):
+    queryset = Distribution.objects.all()
+    serializer_class = DistributionSerializer

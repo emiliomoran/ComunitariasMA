@@ -117,3 +117,34 @@ class GroupMember(models.Model):
 
     def __str__(self):
         return self.firstName + '' + self.lastName
+
+
+class Campaign(models.Model):
+    name = models.CharField(max_length=50)
+    contactName = models.CharField(max_length=50)
+    description = models.TextField()
+    photo = models.ImageField(blank=True, null=True, upload_to = 'campaigns/')
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    def delete(self, *arg, **kwargs):
+        self.photo.delete()
+        super().delete(*arg,**kwargs)
+
+
+class Distribution(models.Model):
+    departureAddress = models.CharField(max_length=50)
+    destinationAddress = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    manager = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
+    information = models.TextField()
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.departureAddress
