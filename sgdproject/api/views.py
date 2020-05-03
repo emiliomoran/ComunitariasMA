@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation
+from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer, UserSerializer,VolunteerSerializer, SupportGroupSerializer, GroupMemberSerializer
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember
 # Create your views here.
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -23,3 +23,19 @@ class ProviderContactViewSet(viewsets.ModelViewSet):
 class DonationViewSet(viewsets.ModelViewSet):
     queryset = Donation.objects.all().order_by('collectionCenter')
     serializer_class = DonationSerializer
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all().order_by('username')
+    serializer_class = UserSerializer
+
+class VolunteerViewSet(viewsets.ModelViewSet):
+    queryset = Volunteer.objects.all().order_by('lastName')
+    serializer_class = VolunteerSerializer
+
+class SupportGroupViewSet(viewsets.ModelViewSet):
+    queryset = SupportGroup.objects.all().order_by('name')
+    serializer_class = SupportGroupSerializer
+
+class GroupMemberViewSet(viewsets.ModelViewSet):
+    queryset = GroupMember.objects.all().order_by('lastName')
+    serializer_class = GroupMemberSerializer

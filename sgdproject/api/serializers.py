@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation
+from rest_framework.validators import UniqueValidator
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,3 +39,27 @@ class DonationSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         photo_url = donation.photo.url
         return request.build_absolute_uri(photo_url)
+
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
+    password = serializers.CharField(write_only=True, style={'input_type':'password'})
+    class Meta:
+        model = User
+        fields = "__all__"
+
+class VolunteerSerializer(serializers.ModelSerializer):
+    ACTIVITIES_CHOICES = [("1","Armar kits"),("2","Manejar vehículos"),("3","Actualización de datos"),("4","Servicios(médicos, psicólogos)"),]
+    activites = serializers.MultipleChoiceField(choices=ACTIVITIES_CHOICES)
+    class Meta:
+        model = Volunteer
+        fields = "__all__"
+
+class SupportGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SupportGroup
+        fields = "__all__"
+
+class GroupMemberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GroupMember
+        fields = "__all__"

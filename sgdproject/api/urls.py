@@ -8,6 +8,10 @@ router.register(r'collection-center', views.CollectionCenterViewSet)
 router.register(r'provider', views.ProviderViewSet)
 router.register(r'provider-contact', views.ProviderContactViewSet)
 router.register(r'donation', views.DonationViewSet)
+router.register(r'user', views.UserViewSet)
+router.register(r'volunteer', views.VolunteerViewSet)
+router.register(r'support-group', views.SupportGroupViewSet)
+router.register(r'group-member', views.GroupMemberViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

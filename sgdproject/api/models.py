@@ -66,3 +66,54 @@ class Donation(models.Model):
     
     def __str__(self):
         return self.description
+
+
+class User(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    password = models.CharField(max_length=20)
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.username
+
+
+class Volunteer(models.Model):
+    firstName = models.CharField(max_length=50)
+    lastName = models.CharField(max_length=50)
+    phoneNumber = models.CharField(max_length=20)
+    social = models.TextField(blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    activities = models.CharField(max_length=10)
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.firstName + '' + self.lastName
+
+
+class SupportGroup(models.Model):
+    name = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    members = models.TextField()
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class GroupMember(models.Model):
+    firstName = models.CharField(max_length=50)
+    lastName = models.CharField(max_length=50)
+    phoneNumber = models.CharField(max_length=20)
+    supportgroup = models.ForeignKey(SupportGroup, on_delete=models.CASCADE)
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.firstName + '' + self.lastName
