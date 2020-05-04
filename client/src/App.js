@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Category from "./pages/Category";
 import CollectionCenter from "./pages/CollectionCenter";
 import Provider from "./pages/Provider";
+import Donation from ".pages/Donation";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -41,6 +42,11 @@ class App extends React.Component {
                 <span className="nav-text">Empresas</span>
                 <Link to="/empresas" />
               </Menu.Item>
+              <Menu.Item key="4">
+                <Icon type="medicine-box" />
+                <span className="nav-text">Donaciones</span>
+                <Link to="/donaciones" />
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
@@ -60,6 +66,7 @@ class App extends React.Component {
                   component={CollectionCenter}
                 />
                 <Route exact path="/empresas" component={Provider} />
+                <Route exact path="/donaciones" component={Donation} />
               </div>
             </Content>
             <Footer style={{ textAlign: "center" }}>
