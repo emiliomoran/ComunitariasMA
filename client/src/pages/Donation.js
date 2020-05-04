@@ -39,7 +39,7 @@ class Donation extends React.Component {
               let infoProvider = {
                 key: provider.value,
                 label: provider.text,
-              });
+              };
             }
 
           let collectionCenter = 
@@ -48,7 +48,7 @@ class Donation extends React.Component {
               let infoCollectionCenter = {
                 key: collectionCenter.value,
                 label: collectionCenter.text,
-              });
+              };
             }
 
             return true;

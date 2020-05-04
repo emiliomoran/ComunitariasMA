@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Category from "./pages/Category";
 import CollectionCenter from "./pages/CollectionCenter";
 import Provider from "./pages/Provider";
-import Donation from ".pages/Donation";
+import Donation from "./pages/Donation";
 
 const { Header, Content, Footer, Sider } = Layout;
 
