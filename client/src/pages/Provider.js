@@ -363,7 +363,7 @@ class Provider extends React.Component {
         label: "Categorías",
         required: true,
         maxLength: null,
-        tyoe: "multipleSelect",
+        type: "multipleSelect",
       },
     ];
 
