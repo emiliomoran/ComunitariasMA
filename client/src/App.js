@@ -6,7 +6,8 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Category from "./pages/Category";
 import CollectionCenter from "./pages/CollectionCenter";
 import Provider from "./pages/Provider";
-import Donation from "./pages/Donation";
+//import Donation from "./pages/Donation";
+import SupportGroup from "./pages/SupportGroup";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -47,6 +48,11 @@ class App extends React.Component {
                 <span className="nav-text">Donaciones</span>
                 <Link to="/donaciones" />
               </Menu.Item>
+              <Menu.Item key="5">
+                <Icon type="team" />
+                <span className="nav-text">Grupos de apoyo</span>
+                <Link to="/grupos-apoyo" />
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
@@ -66,7 +72,8 @@ class App extends React.Component {
                   component={CollectionCenter}
                 />
                 <Route exact path="/empresas" component={Provider} />
-                <Route exact path="/donaciones" component={Donation} />
+                {/* <Route exact path="/donaciones" component={Donation} /> */}
+                <Route exact path="/grupos-apoyo" component={SupportGroup} />
               </div>
             </Content>
             <Footer style={{ textAlign: "center" }}>

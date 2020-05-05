@@ -88,12 +88,12 @@ class Category extends React.Component {
       });
   };
 
-  deleteCategory = (key) => {
+  deleteCategory = (data) => {
     this.setState({
       loading: true,
     });
     //console.log("Request delete");
-    Api.delete(`category/${key}/`)
+    Api.delete(`category/${data.key}/`)
       .then((response) => {
         console.log(response);
         this.getCategory();

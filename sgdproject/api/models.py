@@ -96,8 +96,8 @@ class Volunteer(models.Model):
 
 class SupportGroup(models.Model):
     name = models.CharField(max_length=50)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    members = models.TextField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    #members = models.TextField()
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
@@ -110,7 +110,7 @@ class GroupMember(models.Model):
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)
     phoneNumber = models.CharField(max_length=20)
-    supportgroup = models.ForeignKey(SupportGroup, on_delete=models.CASCADE)
+    supportgroup = models.ForeignKey(SupportGroup, on_delete=models.CASCADE, related_name="members")
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
@@ -137,10 +137,13 @@ class Campaign(models.Model):
 
 
 class Distribution(models.Model):
+    MANAGER_TYPE_CHOICES = [(None,"---------"),("1","Grupo de Apoyo"), ("2","Voluntario"),]
     departureAddress = models.CharField(max_length=50)
     destinationAddress = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    manager = models.ForeignKey(Volunteer, on_delete=models.CASCADE)
+    manager_type = models.CharField(max_length=2, choices=MANAGER_TYPE_CHOICES)
+    managerSG = models.ForeignKey(SupportGroup, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Manager")
+    managerVO = models.ForeignKey(Volunteer, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Manager")
     information = models.TextField()
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)

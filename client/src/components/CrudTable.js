@@ -101,6 +101,8 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       <Input />
                     ) : field.type === "textArea" ? (
                       <TextArea rows={5} />
+                    ) : field.type === "password" ? (
+                      <Input type="password" />
                     ) : (
                       <Select
                         mode="multiple"
@@ -200,7 +202,7 @@ class CrudTable extends React.Component {
             </span>
           ),
         };
-      } else if (c.key === "contacts") {
+      } else if (c.key === "contacts" || c.key === "members") {
         item = {
           title: c.title,
           key: c.key,
@@ -340,6 +342,7 @@ class CrudTable extends React.Component {
       if (this.state.editedItem) {
         //console.log(this.state.editedItem);
         values.key = this.state.editedItem.key;
+        values.user = this.state.editedItem.user;
         //console.log("Received values of form edit: ", values);
         this.props.edit(values);
       } else {
@@ -364,13 +367,17 @@ class CrudTable extends React.Component {
   confirmDelete = (key) => {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
+    console.log(item);
     confirm({
       title: `¿Está seguro de eliminar ${item.name}?`,
       okText: "Acepar",
       cancelText: "Cancelar",
       onOk: () => {
         //console.log(item.key);
-        this.props.delete(item.key);
+        this.props.delete({
+          key: item.key,
+          user: item.user,
+        });
       },
       onCancel() {},
     });

@@ -152,12 +152,12 @@ class Provider extends React.Component {
       });
   };
 
-  deleteProvider = (key) => {
+  deleteProvider = (data) => {
     this.setState({
       loading: true,
     });
     //console.log("Request delete");
-    Api.delete(`provider/${key}/`)
+    Api.delete(`provider/${data.key}/`)
       .then((response) => {
         //console.log(response);
         this.getProvider();

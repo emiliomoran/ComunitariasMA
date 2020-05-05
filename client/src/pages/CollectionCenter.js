@@ -95,12 +95,12 @@ class CollectionCenters extends React.Component {
       });
   };
 
-  deleteCollectionCenter = (key) => {
+  deleteCollectionCenter = (data) => {
     this.setState({
       loading: true,
     });
     //console.log("Request delete");
-    Api.delete(`collection-center/${key}/`)
+    Api.delete(`collection-center/${data.key}/`)
       .then((response) => {
         console.log(response);
         this.getCollectionCenter();
