@@ -12,11 +12,12 @@ class SupportGroup extends React.Component {
       visibleMembers: false,
       dataMembers: [],
       supportGroup: undefined,
+      dataUsers: [],
     };
   }
 
   componentDidMount = () => {
-    this.getSupportGroups();
+    this.getUsers();
   };
 
   showMember = (key) => {
@@ -53,16 +54,18 @@ class SupportGroup extends React.Component {
 
   getSupportGroups = () => {
     //console.log("Request get");
-    Api.get("suppot-group/")
+    //console.log(this.state.dataUsers);
+    Api.get("support-group/")
       .then((response) => {
         //console.log(response);
         let data = [];
         response.data.map((item) => {
+          let user = this.state.dataUsers.find((obj) => obj.key === item.user);
           let supportGroup = {
             key: item.id,
             name: item.name,
-            username: item.username,
-            password: item.password,
+            username: user.username,
+            user: item.user,
             members: item.members,
           };
           data.push(supportGroup);
@@ -81,27 +84,73 @@ class SupportGroup extends React.Component {
       });
   };
 
-  addSupportGroup = (data) => {
-    this.setState({
-      loading: true,
-    });
-    //console.log("Request post");
-    //console.log(data);
-    Api.post("support-group/", {
-      name: data.name,
-      username: data.username,
-      password: data.password,
-      createdBy: "reactclient",
-    })
+  getUsers = () => {
+    Api.get("user/")
       .then((response) => {
         //console.log(response);
-        this.getSupportGroups();
+        let data = [];
+        response.data.map((item) => {
+          let user = {
+            key: item.id,
+            username: item.username,
+          };
+          data.push(user);
+          return true;
+        });
+        this.setState(
+          {
+            dataUsers: data,
+            //loading: false,
+          },
+          () => this.getSupportGroups()
+        );
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
         console.log(error);
+      });
+  };
+
+  addSupportGroup = (data) => {
+    this.setState({
+      loading: true,
+    });
+    //console.log("Request post");
+    //console.log(data);
+    //Add new user
+    Api.post("user/", {
+      username: data.username,
+      password: data.password,
+      createdBy: "reactclient",
+    })
+      .then((response) => {
+        //console.log(response);
+        const user_id = response.data.id;
+        //Add new Support Group
+        Api.post("support-group/", {
+          name: data.name,
+          user: user_id,
+          createdBy: "reactclient",
+        })
+          .then((response) => {
+            //console.log(response);
+            this.getUsers();
+          })
+          .catch((error) => {
+            this.setState({
+              loading: false,
+            });
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        //Error message
+        this.setState({
+          loading: false,
+        });
       });
   };
 
@@ -109,34 +158,64 @@ class SupportGroup extends React.Component {
     this.setState({
       loading: true,
     });
-    //console.log("Request put", data);
-    Api.put(`provider/${data.key}/`, {
-      name: data.name,
+    //console.log("Request post");
+    //console.log(data);
+    //Edit user
+    Api.put(`user/${data.user}/`, {
       username: data.username,
       password: data.password,
       createdBy: "reactclient",
     })
       .then((response) => {
         //console.log(response);
-        this.getSupportGroups();
+        const user_id = response.data.id;
+        //Add new Support Group
+        Api.put(`support-group/${data.key}/`, {
+          name: data.name,
+          user: user_id,
+          createdBy: "reactclient",
+        })
+          .then((response) => {
+            //console.log(response);
+            this.getUsers();
+          })
+          .catch((error) => {
+            this.setState({
+              loading: false,
+            });
+            console.log(error);
+          });
       })
       .catch((error) => {
+        console.log(error);
+        //Error message
         this.setState({
           loading: false,
         });
-        console.log(error);
       });
   };
 
-  deleteSupportGroup = (key) => {
+  deleteSupportGroup = (data) => {
     this.setState({
       loading: true,
     });
-    //console.log("Request delete");
-    Api.delete(`support-group/${key}/`)
+    console.log(data);
+    //Delete support group first
+    Api.delete(`support-group/${data.key}/`)
       .then((response) => {
         //console.log(response);
-        this.getSupportGroups();
+        //this.getUsers();
+        Api.delete(`user/${data.user}/`)
+          .then((response) => {
+            console.log(response);
+            this.getUsers();
+          })
+          .catch((error) => {
+            console.log(error);
+            this.setState({
+              loading: false,
+            });
+          });
       })
       .catch((error) => {
         this.setState({
@@ -150,12 +229,12 @@ class SupportGroup extends React.Component {
     this.setState({
       loading: true,
     });
-    //console.log(data);
+    console.log(data);
     Api.post("group-member/", {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
-      supportgroup: data.supportgroup,
+      supportgroup: data.provider, //provider in this case is supportGroup id
       createdBy: "reactclient",
     })
       .then((response) => {
@@ -178,7 +257,7 @@ class SupportGroup extends React.Component {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
-      supportgroup: data.supportgroup,
+      supportgroup: data.provider,
       createdBy: "reactclient",
     })
       .then((response) => {
@@ -221,7 +300,7 @@ class SupportGroup extends React.Component {
       visibleMembers,
       dataMembers,
       provider,
-      dataCategories,
+      //dataCategories,
     } = this.state;
 
     const columns = [
@@ -234,8 +313,8 @@ class SupportGroup extends React.Component {
         key: "username",
       },
       {
-        title: "Contraseña",
-        key: "password",
+        title: "Integrantes",
+        key: "members",
       },
       {
         title: "Acción",
@@ -333,8 +412,8 @@ class SupportGroup extends React.Component {
           fieldsFormContact={fieldsFormMember}
           addContact={this.addMember}
           editContact={this.editMember}
-          deleteContact={this.deleteContact}
-          optionsMultipleSelect={dataCategories}
+          deleteContact={this.deleteMember}
+          //optionsMultipleSelect={dataCategories}
         />
       </Row>
     );
