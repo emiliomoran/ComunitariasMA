@@ -96,7 +96,7 @@ class Volunteer(models.Model):
 
 class SupportGroup(models.Model):
     name = models.CharField(max_length=50)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     #members = models.TextField()
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
