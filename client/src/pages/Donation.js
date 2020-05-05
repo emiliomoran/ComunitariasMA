@@ -50,9 +50,6 @@ class Donation extends React.Component {
                 label: collectionCenter.text,
               };
             }
-
-            return true;
-          });
           let donation = {
             key: item.id,
             provider: infoProvider,
