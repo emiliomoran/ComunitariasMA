@@ -97,7 +97,7 @@ class Volunteer(models.Model):
 class SupportGroup(models.Model):
     name = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    members = models.TextField()
+    #members = models.TextField()
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
@@ -110,7 +110,7 @@ class GroupMember(models.Model):
     firstName = models.CharField(max_length=50)
     lastName = models.CharField(max_length=50)
     phoneNumber = models.CharField(max_length=20)
-    supportgroup = models.ForeignKey(SupportGroup, on_delete=models.CASCADE)
+    supportgroup = models.ForeignKey(SupportGroup, on_delete=models.CASCADE, related_name="members")
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)

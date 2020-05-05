@@ -54,14 +54,15 @@ class VolunteerSerializer(serializers.ModelSerializer):
         model = Volunteer
         fields = "__all__"
 
-class SupportGroupSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SupportGroup
-        fields = "__all__"
-
-class GroupMemberSerializer(serializers.ModelSerializer):
+class GroupMemberSerializer(serializers.ModelSerializer):    
     class Meta:
         model = GroupMember
+        fields = "__all__"
+
+class SupportGroupSerializer(serializers.ModelSerializer):
+    members = GroupMemberSerializer(many=True, read_only=True)
+    class Meta:
+        model = SupportGroup
         fields = "__all__"
 
 class CampaignSerializer(serializers.ModelSerializer):
