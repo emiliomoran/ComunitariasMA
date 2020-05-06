@@ -3,7 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 
-class Donation extends React.Component {
+class Distribution extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -197,3 +197,5 @@ class Donation extends React.Component {
         );
     }
 }
+
+export default Distribution;
