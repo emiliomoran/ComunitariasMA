@@ -265,7 +265,7 @@ class Donation extends React.Component {
 
     return (
       <Row>
-        <h3>Centros de acopio</h3>
+        <h3>Donaciones</h3>
         <CrudTable
           columns={columns}
           data={data}

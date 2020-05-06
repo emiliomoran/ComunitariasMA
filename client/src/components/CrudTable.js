@@ -116,6 +116,8 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       <TextArea rows={5} />
                     ) : field.type === "password" ? (
                       <Input type="password" />
+                    ) : field.type === "file" ? (
+                      <input type="file" accept="image/*" />
                     ) : (
                       <Select
                         mode="multiple"
@@ -247,6 +249,21 @@ class CrudTable extends React.Component {
               >
                 Restablecer contraseña
               </Button>
+            </span>
+          ),
+        };
+      } else if (c.key === "photo") {
+        item = {
+          title: c.title,
+          key: c.key,
+          render: (text, record) => (
+            <span>
+              <Icon
+                type="picture"
+                theme="twoTone"
+                twoToneColor="#52c41a"
+                onClick={() => console.log("clicked")}
+              />
             </span>
           ),
         };

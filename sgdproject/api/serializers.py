@@ -85,7 +85,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class VolunteerSerializer(serializers.ModelSerializer):
     ACTIVITIES_CHOICES = [("1","Armar kits"),("2","Manejar vehículos"),("3","Actualización de datos"),("4","Servicios(médicos, psicólogos)"),]
-    activites = serializers.MultipleChoiceField(choices=ACTIVITIES_CHOICES)
+    activities = serializers.MultipleChoiceField(choices=ACTIVITIES_CHOICES)
     class Meta:
         model = Volunteer
         fields = "__all__"

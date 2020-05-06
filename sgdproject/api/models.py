@@ -84,7 +84,7 @@ class Volunteer(models.Model):
     lastName = models.CharField(max_length=50)
     phoneNumber = models.CharField(max_length=20)
     social = models.TextField(blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     activities = models.CharField(max_length=10)
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
