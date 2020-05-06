@@ -13,6 +13,7 @@ import {
 } from "antd";
 import Map from "../components/Map";
 import ListContacts from "../components/ListContact";
+import PasswordManager from "./PasswordManager";
 
 const { TextArea } = Input;
 const { confirm } = Modal;
@@ -25,10 +26,17 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
       let rules = [];
 
       if (field.required) {
-        rules.push({
-          required: field.required,
-          message: `${field.label} requerido!`,
-        });
+        if (field.type === "password" && !this.props.editedItem) {
+          rules.push({
+            required: field.required,
+            message: `${field.label} requerido!`,
+          });
+        } else if (field.type !== "password") {
+          rules.push({
+            required: field.required,
+            message: `${field.label} requerido!`,
+          });
+        }
       }
       if (field.maxLength) {
         rules.push({
@@ -85,7 +93,12 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                   key={field.key}
                   label={field.label}
                   style={{
-                    display: field.type === "coordinate" ? "none" : "block",
+                    display:
+                      field.type === "coordinate"
+                        ? "none"
+                        : editedItem && field.type === "password"
+                        ? "none"
+                        : "block",
                   }}
                 >
                   {getFieldDecorator(field.key, {
@@ -212,6 +225,28 @@ class CrudTable extends React.Component {
                 type="contacts"
                 onClick={() => this.props.showContacts(record.key)}
               />
+            </span>
+          ),
+        };
+      } else if (c.key === "passwordManager") {
+        item = {
+          title: c.title,
+          key: c.key,
+          render: (text, record) => (
+            <span>
+              <Button
+                type="link"
+                onClick={() => this.props.showPasswordManager(1, record.user)}
+              >
+                Cambiar contraseña
+              </Button>
+              <Divider type="vertical" />
+              <Button
+                type="link"
+                onClick={() => this.props.showPasswordManager(2, record.user)}
+              >
+                Restablecer contraseña
+              </Button>
             </span>
           ),
         };
@@ -416,6 +451,7 @@ class CrudTable extends React.Component {
       loading,
       includesMap,
       includesContacts,
+      includesPassword,
       visibleContacts,
       showContacts,
       closeContacts,
@@ -427,6 +463,11 @@ class CrudTable extends React.Component {
       editContact,
       deleteContact,
       optionsMultipleSelect,
+      visiblePasswordManager,
+      titlePasswordManager,
+      fieldsPasswordManager,
+      closePasswordManager,
+      changePassword,
     } = this.props;
 
     //console.log(provider);
@@ -485,6 +526,15 @@ class CrudTable extends React.Component {
             addContact={addContact}
             editContact={editContact}
             deleteContact={deleteContact}
+          />
+        )}
+        {includesPassword && (
+          <PasswordManager
+            visible={visiblePasswordManager}
+            title={titlePasswordManager}
+            onCancel={closePasswordManager}
+            fieldsForm={fieldsPasswordManager}
+            changePassword={changePassword}
           />
         )}
       </Row>

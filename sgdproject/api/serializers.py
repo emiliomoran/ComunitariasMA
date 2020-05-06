@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution
+from django.contrib.auth.hashers import make_password, check_password
+from rest_framework.exceptions import AuthenticationFailed
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,11 +43,45 @@ class DonationSerializer(serializers.ModelSerializer):
         return request.build_absolute_uri(photo_url)
 
 class UserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
-    password = serializers.CharField(write_only=True, style={'input_type':'password'})
+    """ username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])
+    password = serializers.CharField(write_only=True, style={'input_type':'password'}) """
+    currentPassword = serializers.CharField(required=False, write_only=True)
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ('id', 'username', 'password', 'state','createdAt', 'createdBy', 'currentPassword')
+        extra_kwargs = {            
+            'password': {'write_only': True},
+            'currentPassword': {'write_only': True}
+        }
+
+    def create(self, validated_data):
+        #print(validated_data)
+        validated_data['password'] = make_password(validated_data['password'])
+        return super(UserSerializer, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        #print(validated_data)
+        #print(instance)
+        #print(instance.password)
+        if validated_data.get("username"): 
+            print(validated_data)
+            instance.username = validated_data.get('username', instance.username)        
+
+        if validated_data.get("password"):
+            if validated_data.get("currentPassword"):
+                #Change password
+                if check_password(validated_data.get("currentPassword"), instance.password):
+                    #print("Valido")
+                    instance.password = make_password(validated_data.get("password"))
+                else:
+                    raise AuthenticationFailed('Current password does not match')
+
+            else:
+                #print("Recovery password")
+                instance.password = make_password(validated_data.get("password"))        
+        instance.save()        
+        return instance
+              
 
 class VolunteerSerializer(serializers.ModelSerializer):
     ACTIVITIES_CHOICES = [("1","Armar kits"),("2","Manejar vehículos"),("3","Actualización de datos"),("4","Servicios(médicos, psicólogos)"),]

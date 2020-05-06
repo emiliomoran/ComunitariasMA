@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer, UserSerializer,VolunteerSerializer, SupportGroupSerializer, GroupMemberSerializer, CampaignSerializer, DistributionSerializer
 from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution
 # Create your views here.
@@ -28,6 +29,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by('username')
     serializer_class = UserSerializer
 
+""" class UserChangePassword(APIView):
+    def patch(self, request):
+        serialized = UserSerializer(data=request.DATA)
+        if serialized.is_valid():
+            serialized.save()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        else:
+            return Response(serialized.errors, status=status.HTTP_400_BAD_REQUEST) """
 class VolunteerViewSet(viewsets.ModelViewSet):
     queryset = Volunteer.objects.all().order_by('lastName')
     serializer_class = VolunteerSerializer

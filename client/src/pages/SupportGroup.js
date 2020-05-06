@@ -13,6 +13,10 @@ class SupportGroup extends React.Component {
       dataMembers: [],
       supportGroup: undefined,
       dataUsers: [],
+      visiblePasswordManager: false,
+      titlePasswordManager: "",
+      fieldsPasswordManager: [],
+      user_id: undefined,
     };
   }
 
@@ -49,6 +53,51 @@ class SupportGroup extends React.Component {
   closeMembers = () => {
     this.setState({
       visibleMembers: false,
+    });
+  };
+
+  showPasswordManager = (opt, user_id) => {
+    let title = "Cambio de contraseña";
+    let fields = [
+      {
+        key: "currentPassword",
+        label: "Contraseña actual",
+        required: true,
+        maxLength: 20,
+        type: "password",
+      },
+      {
+        key: "newPassword",
+        label: "Contraseña nueva",
+        required: true,
+        maxLength: 20,
+        type: "password",
+      },
+    ];
+    if (opt === 2) {
+      //Recovery password
+      title = "Recuperación de contraseña";
+      fields = [
+        {
+          key: "newPassword",
+          label: "Contraseña nueva",
+          required: true,
+          maxLength: 20,
+          type: "password",
+        },
+      ];
+    }
+    this.setState({
+      visiblePasswordManager: true,
+      titlePasswordManager: title,
+      fieldsPasswordManager: fields,
+      user_id: user_id,
+    });
+  };
+
+  closePasswordManager = () => {
+    this.setState({
+      visiblePasswordManager: false,
     });
   };
 
@@ -159,21 +208,21 @@ class SupportGroup extends React.Component {
       loading: true,
     });
     //console.log("Request post");
-    //console.log(data);
+    console.log(data);
     //Edit user
-    Api.put(`user/${data.user}/`, {
+    Api.patch(`user/${data.user}/`, {
       username: data.username,
-      password: data.password,
-      createdBy: "reactclient",
+      //password: data.password,
+      //createdBy: "reactclient",
     })
       .then((response) => {
         //console.log(response);
-        const user_id = response.data.id;
+        //const user_id = response.data.id;
         //Add new Support Group
-        Api.put(`support-group/${data.key}/`, {
+        Api.patch(`support-group/${data.key}/`, {
           name: data.name,
-          user: user_id,
-          createdBy: "reactclient",
+          //user: user_id,
+          //createdBy: "reactclient",
         })
           .then((response) => {
             //console.log(response);
@@ -253,12 +302,12 @@ class SupportGroup extends React.Component {
     this.setState({
       loading: true,
     });
-    Api.put(`group-member/${data.key}/`, {
+    Api.patch(`group-member/${data.key}/`, {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
       supportgroup: data.provider,
-      createdBy: "reactclient",
+      //createdBy: "reactclient",
     })
       .then((response) => {
         //console.log(response);
@@ -293,6 +342,35 @@ class SupportGroup extends React.Component {
       });
   };
 
+  changePassword = (data) => {
+    this.setState({
+      loading: true,
+    });
+    console.log(data);
+    //Edit user
+    Api.patch(`user/${this.state.user_id}/`, {
+      currentPassword: data.currentPassword,
+      password: data.newPassword,
+    })
+      .then((response) => {
+        //console.log(response);
+        this.setState({
+          visiblePasswordManager: false,
+          titlePasswordManager: "",
+          fieldsPasswordManager: [],
+          user_id: undefined,
+        });
+        this.getUsers();
+      })
+      .catch((error) => {
+        console.log(error);
+        //Error message
+        this.setState({
+          loading: false,
+        });
+      });
+  };
+
   render() {
     const {
       data,
@@ -300,6 +378,10 @@ class SupportGroup extends React.Component {
       visibleMembers,
       dataMembers,
       provider,
+      visiblePasswordManager,
+      titlePasswordManager,
+      fieldsPasswordManager,
+      user_id,
       //dataCategories,
     } = this.state;
 
@@ -315,6 +397,10 @@ class SupportGroup extends React.Component {
       {
         title: "Integrantes",
         key: "members",
+      },
+      {
+        title: "Administración de contraseña",
+        key: "passwordManager",
       },
       {
         title: "Acción",
@@ -360,7 +446,7 @@ class SupportGroup extends React.Component {
         key: "password",
         label: "Contraseña",
         required: true,
-        maxLength: 20,
+        maxLength: 64,
         type: "password",
       },
     ];
@@ -403,6 +489,7 @@ class SupportGroup extends React.Component {
           loading={loading}
           includesMap={false}
           includesContacts={true}
+          includesPassword={true}
           visibleContacts={visibleMembers}
           showContacts={this.showMember}
           closeContacts={this.closeMembers}
@@ -413,7 +500,12 @@ class SupportGroup extends React.Component {
           addContact={this.addMember}
           editContact={this.editMember}
           deleteContact={this.deleteMember}
-          //optionsMultipleSelect={dataCategories}
+          visiblePasswordManager={visiblePasswordManager}
+          titlePasswordManager={titlePasswordManager}
+          fieldsPasswordManager={fieldsPasswordManager}
+          showPasswordManager={this.showPasswordManager}
+          closePasswordManager={this.closePasswordManager}
+          changePassword={this.changePassword}
         />
       </Row>
     );
