@@ -9,6 +9,7 @@ import Provider from "./pages/Provider";
 //import Donation from "./pages/Donation";
 import SupportGroup from "./pages/SupportGroup";
 import Distribution from "./pages/Distribution";
+import Campaign from "./pages/Campaign";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -59,6 +60,11 @@ class App extends React.Component {
                 <span className="nav-text">Distribuciones</span>
                 <Link to="/distribuciones" />
               </Menu.Item>
+              <Menu.Item key="7">
+                <Icon type="notification" />
+                <span className="nav-text">Campañas</span>
+                <Link to="/campañas" />
+              </Menu.Item>
             </Menu>
           </Sider>
           <Layout>
@@ -81,6 +87,7 @@ class App extends React.Component {
                 {/* <Route exact path="/donaciones" component={Donation} /> */}
                 <Route exact path="/grupos-apoyo" component={SupportGroup} />
                 <Route exact path="/distribuciones" component={Distribution} />
+                <Route exact path="/campañas" component={Campaign} />
               </div>
             </Content>
             <Footer style={{ textAlign: "center" }}>
