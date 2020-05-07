@@ -46,6 +46,7 @@ class Campaign extends React.Component {
   		this.setState({
   			loading: true,
   		});
+      console.log(data);
   		Api.post('campaign/', {
   			name: data.name,
   			contactName: data.contactName,
@@ -67,6 +68,7 @@ class Campaign extends React.Component {
   		this.setState({
   			loading: true,
   		});
+      console.log(data);
   		Api.put(`campaign/${data.key}/`, {
   			name: data.name,
   			contactName: data.contactName,

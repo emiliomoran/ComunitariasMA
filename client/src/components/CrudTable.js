@@ -14,6 +14,7 @@ import {
 import Map from "../components/Map";
 import ListContacts from "../components/ListContact";
 import PasswordManager from "./PasswordManager";
+import FileUpload from "../components/FileUpload";
 
 const { TextArea } = Input;
 const { confirm } = Modal;
@@ -126,7 +127,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                     ) : field.type === "password" ? (
                       <Input type="password" />
                     ) : field.type === "file" ? (
-                      <input type="file" accept="image/*" />
+                      <FileUpload />
                     ) : (
                       <Select mode="multiple" placeholder="Seleccionar">
                         {optionsMultipleSelect &&
@@ -171,6 +172,7 @@ class CrudTable extends React.Component {
       previewPoint: undefined,
       hasPoint: false,
       edit: false,
+      file: undefined,
     };
   }
 
@@ -295,11 +297,13 @@ class CrudTable extends React.Component {
       latitude: item.latitude,
       longitude: item.longitude,
     };
+    let photo = { item.photo };
     this.setState({
       editedItem: item,
       visible: true,
       hasPoint: true,
       previewPoint: point,
+      file: undefined,
     });
   };
 
@@ -311,13 +315,14 @@ class CrudTable extends React.Component {
       editedItem: undefined,
       readOnlyMap: true,
       visible: true,
+      file: undefined,
     });
   };
 
   handleCancel = () => {
     const { form } = this.formRef.props;
     form.resetFields();
-    this.setState({ visible: false, previewPoint: undefined, hasPoint: false });
+    this.setState({ visible: false, previewPoint: undefined, hasPoint: false, file: undefined });
   };
 
   showMap = (key) => {
@@ -415,6 +420,7 @@ class CrudTable extends React.Component {
         previewPoint: undefined,
         hasPoint: false,
         readOnlyMap: true,
+        file: undefined,
       });
     });
   };
@@ -465,6 +471,7 @@ class CrudTable extends React.Component {
       previewPoint,
       hasPoint,
       edit,
+      file,
     } = this.state;
 
     const {
