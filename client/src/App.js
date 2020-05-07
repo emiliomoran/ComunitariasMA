@@ -8,8 +8,9 @@ import CollectionCenter from "./pages/CollectionCenter";
 import Provider from "./pages/Provider";
 //import Donation from "./pages/Donation";
 import SupportGroup from "./pages/SupportGroup";
-import Distribution from "./pages/Distribution";
+/* import Distribution from "./pages/Distribution"; */
 import Campaign from "./pages/Campaign";
+import Volunteer from "./pages/Volunteer";
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -56,11 +57,16 @@ class App extends React.Component {
                 <Link to="/grupos-apoyo" />
               </Menu.Item>
               <Menu.Item key="6">
+                <Icon type="team" />
+                <span className="nav-text">Voluntarios</span>
+                <Link to="/voluntarios" />
+              </Menu.Item>
+              <Menu.Item key="7">
                 <Icon type="car" />
                 <span className="nav-text">Distribuciones</span>
                 <Link to="/distribuciones" />
               </Menu.Item>
-              <Menu.Item key="7">
+              <Menu.Item key="8">
                 <Icon type="notification" />
                 <span className="nav-text">Campañas</span>
                 <Link to="/campañas" />
@@ -86,8 +92,9 @@ class App extends React.Component {
                 <Route exact path="/empresas" component={Provider} />
                 {/* <Route exact path="/donaciones" component={Donation} /> */}
                 <Route exact path="/grupos-apoyo" component={SupportGroup} />
-                <Route exact path="/distribuciones" component={Distribution} />
+                {/* <Route exact path="/distribuciones" component={Distribution} /> */}
                 <Route exact path="/campañas" component={Campaign} />
+                <Route exact path="/voluntarios" component={Volunteer} />
               </div>
             </Content>
             <Footer style={{ textAlign: "center" }}>

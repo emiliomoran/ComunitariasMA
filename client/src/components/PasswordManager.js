@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Table, Icon, Divider, Button, Form, Input } from "antd";
+import { Modal, Icon, Form, Input } from "antd";
 
 const PasswordManager = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line

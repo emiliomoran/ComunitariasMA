@@ -3,16 +3,14 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 
-class SupportGroup extends React.Component {
+class Volunteer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       loading: true,
-      visibleMembers: false,
-      dataMembers: [],
-      supportGroup: undefined,
       dataUsers: [],
+      dataActivities: [],
       visiblePasswordManager: false,
       titlePasswordManager: "",
       fieldsPasswordManager: [],
@@ -21,39 +19,7 @@ class SupportGroup extends React.Component {
   }
 
   componentDidMount = () => {
-    this.getUsers();
-  };
-
-  showMember = (key) => {
-    //console.log("showMember");
-    let supportGroup = this.state.data.find((obj) => obj.key === key);
-    //console.log(supportGroup);
-    let members = [];
-    supportGroup.members.map((contact) => {
-      //console.log(contact);
-      let data = {
-        key: contact.id,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        phoneNumber: contact.phoneNumber,
-      };
-      members.push(data);
-      return true;
-    });
-    this.setState(
-      {
-        dataMembers: members,
-        provider: supportGroup,
-        visibleMembers: true,
-      }
-      //() => console.log(this.state)
-    );
-  };
-
-  closeMembers = () => {
-    this.setState({
-      visibleMembers: false,
-    });
+    this.getActivities();
   };
 
   showPasswordManager = (opt, user_id) => {
@@ -101,23 +67,66 @@ class SupportGroup extends React.Component {
     });
   };
 
-  getSupportGroups = () => {
-    //console.log("Request get");
-    //console.log(this.state.dataUsers);
-    Api.get("support-group/")
+  getActivities = () => {
+    //console.log("categories");
+    Api.get("activity/")
       .then((response) => {
-        //console.log(response);
         let data = [];
         response.data.map((item) => {
+          data.push({
+            value: item.id,
+            text: item.name,
+          });
+          return true;
+        });
+        this.setState(
+          {
+            dataActivities: data,
+          },
+          () => this.getUsers()
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  getVolunteers = () => {
+    //console.log("Request get");
+    //console.log(this.state.dataUsers);
+    Api.get("volunteer/")
+      .then((response) => {
+        console.log(response);
+        let data = [];
+        response.data.map((item) => {
+          let activities = [];
+          console.log(item.activities);
+          item.activities.map((id) => {
+            let activity = this.state.dataActivities.find(
+              (obj) => obj.value === id
+            );
+            if (activity) {
+              activities.push({
+                key: activity.value,
+                label: activity.text,
+              });
+            }
+            return true;
+          });
+
           let user = this.state.dataUsers.find((obj) => obj.key === item.user);
-          let supportGroup = {
+          let volunteer = {
             key: item.id,
-            name: item.name,
+            firstName: item.firstName,
+            lastName: item.lastName,
             username: user.username,
+            phoneNumber: item.phoneNumber,
+            social: item.social,
             user: item.user,
-            members: item.members,
+            activities: item.activities,
+            tags: activities,
           };
-          data.push(supportGroup);
+          data.push(volunteer);
           return true;
         });
         this.setState({
@@ -151,7 +160,7 @@ class SupportGroup extends React.Component {
             dataUsers: data,
             //loading: false,
           },
-          () => this.getSupportGroups()
+          () => this.getVolunteers()
         );
       })
       .catch((error) => {
@@ -162,12 +171,12 @@ class SupportGroup extends React.Component {
       });
   };
 
-  addSupportGroup = (data) => {
+  addVoluteer = (data) => {
     this.setState({
       loading: true,
     });
     //console.log("Request post");
-    //console.log(data);
+    console.log(data);
     //Add new user
     Api.post("user/", {
       username: data.username,
@@ -178,14 +187,18 @@ class SupportGroup extends React.Component {
         //console.log(response);
         const user_id = response.data.id;
         //Add new Support Group
-        Api.post("support-group/", {
-          name: data.name,
+        Api.post("volunteer/", {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          activities: data.activities,
+          phoneNumber: data.phoneNumber,
+          social: data.social,
           user: user_id,
           createdBy: "reactclient",
         })
           .then((response) => {
             //console.log(response);
-            this.getUsers();
+            this.getActivities();
           })
           .catch((error) => {
             this.setState({
@@ -203,7 +216,7 @@ class SupportGroup extends React.Component {
       });
   };
 
-  editSupportGroup = (data) => {
+  editVolunteer = (data) => {
     this.setState({
       loading: true,
     });
@@ -219,14 +232,16 @@ class SupportGroup extends React.Component {
         //console.log(response);
         //const user_id = response.data.id;
         //Add new Support Group
-        Api.patch(`support-group/${data.key}/`, {
-          name: data.name,
-          //user: user_id,
-          //createdBy: "reactclient",
+        Api.patch(`volunteer/${data.key}/`, {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          activities: data.activities,
+          phoneNumber: data.phoneNumber,
+          social: data.social,
         })
           .then((response) => {
             //console.log(response);
-            this.getUsers();
+            this.getActivities();
           })
           .catch((error) => {
             this.setState({
@@ -274,74 +289,6 @@ class SupportGroup extends React.Component {
       });
   };
 
-  addMember = (data) => {
-    this.setState({
-      loading: true,
-    });
-    console.log(data);
-    Api.post("group-member/", {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phoneNumber: data.phoneNumber,
-      supportgroup: data.provider, //provider in this case is supportGroup id
-      createdBy: "reactclient",
-    })
-      .then((response) => {
-        //console.log(response);
-        this.setState({
-          visibleMembers: false,
-        });
-        this.getSupportGroups();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  editMember = (data) => {
-    this.setState({
-      loading: true,
-    });
-    Api.patch(`group-member/${data.key}/`, {
-      firstName: data.firstName,
-      lastName: data.lastName,
-      phoneNumber: data.phoneNumber,
-      supportgroup: data.provider,
-      //createdBy: "reactclient",
-    })
-      .then((response) => {
-        //console.log(response);
-        this.setState({
-          visibleMembers: false,
-        });
-        this.getSupportGroups();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  deleteMember = (key) => {
-    this.setState({
-      loading: true,
-    });
-    //console.log("Request delete", key);
-    Api.delete(`group-member/${key}/`)
-      .then((response) => {
-        //console.log(response);
-        this.setState({
-          visibleMembers: false,
-        });
-        this.getSupportGroups();
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
-        console.log(error);
-      });
-  };
-
   changePassword = (data) => {
     this.setState({
       loading: true,
@@ -375,27 +322,36 @@ class SupportGroup extends React.Component {
     const {
       data,
       loading,
-      visibleMembers,
-      dataMembers,
-      provider,
       visiblePasswordManager,
       titlePasswordManager,
       fieldsPasswordManager,
-      //dataCategories,
+      dataActivities,
     } = this.state;
 
     const columns = [
       {
-        title: "Nombre",
-        key: "name",
+        title: "Nombres",
+        key: "firstName",
+      },
+      {
+        title: "Apellidos",
+        key: "lastName",
+      },
+      {
+        title: "Actividades",
+        key: "tags",
       },
       {
         title: "Usuario",
         key: "username",
       },
       {
-        title: "Integrantes",
-        key: "members",
+        title: "Teléfono",
+        key: "phoneNumber",
+      },
+      {
+        title: "Red social",
+        key: "social",
       },
       {
         title: "Administración de contraseña",
@@ -407,32 +363,41 @@ class SupportGroup extends React.Component {
       },
     ];
 
-    const columnsMembers = [
-      {
-        title: "Nombres",
-        key: "firstName",
-      },
-      {
-        title: "Apellidos",
-        key: "lastName",
-      },
-      {
-        title: "Teléfono",
-        key: "phoneNumber",
-      },
-      {
-        title: "Acción",
-        key: "action",
-      },
-    ];
-
     const fieldsForm = [
       {
-        key: "name",
-        label: "Nombre",
+        key: "firstName",
+        label: "Nombres",
         required: true,
         maxLength: 50,
         type: "text",
+      },
+      {
+        key: "lastName",
+        label: "Apellidos",
+        required: true,
+        maxLength: 50,
+        type: "text",
+      },
+      {
+        key: "activities",
+        label: "Actividades",
+        required: true,
+        maxLength: null,
+        type: "multipleSelect",
+      },
+      {
+        key: "phoneNumber",
+        label: "Teléfono",
+        required: true,
+        maxLength: 20,
+        type: "phone",
+      },
+      {
+        key: "social",
+        label: "Red social",
+        required: false,
+        maxLength: 50,
+        type: "url",
       },
       {
         key: "username",
@@ -450,65 +415,32 @@ class SupportGroup extends React.Component {
       },
     ];
 
-    const fieldsFormMember = [
-      {
-        key: "firstName",
-        label: "Nombres",
-        required: true,
-        maxLength: 50,
-        type: "text",
-      },
-      {
-        key: "lastName",
-        label: "Apellidos",
-        required: true,
-        maxLength: 50,
-        type: "text",
-      },
-      {
-        key: "phoneNumber",
-        label: "Teléfono",
-        required: true,
-        maxLength: 20,
-        type: "phone",
-      },
-    ];
-
     return (
       <Row>
-        <h3>Grupos de apoyo</h3>
+        <h3>Voluntarios</h3>
         <CrudTable
           columns={columns}
           data={data}
           fieldsForm={fieldsForm}
-          title="Grupos de apoyo"
-          add={this.addSupportGroup}
-          edit={this.editSupportGroup}
+          title="Voluntario"
+          add={this.addVoluteer}
+          edit={this.editVolunteer}
           delete={this.deleteSupportGroup}
           loading={loading}
           includesMap={false}
-          includesContacts={true}
+          includesContacts={false}
           includesPassword={true}
-          visibleContacts={visibleMembers}
-          showContacts={this.showMember}
-          closeContacts={this.closeMembers}
-          columnsContacts={columnsMembers}
-          dataContacts={dataMembers}
-          provider={provider}
-          fieldsFormContact={fieldsFormMember}
-          addContact={this.addMember}
-          editContact={this.editMember}
-          deleteContact={this.deleteMember}
           visiblePasswordManager={visiblePasswordManager}
           titlePasswordManager={titlePasswordManager}
           fieldsPasswordManager={fieldsPasswordManager}
           showPasswordManager={this.showPasswordManager}
           closePasswordManager={this.closePasswordManager}
           changePassword={this.changePassword}
+          optionsMultipleSelect={dataActivities}
         />
       </Row>
     );
   }
 }
 
-export default SupportGroup;
+export default Volunteer;

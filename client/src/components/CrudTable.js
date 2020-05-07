@@ -57,6 +57,14 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
           message: "Teléfono no válido!",
         });
       }
+      if (field.type === "url") {
+        rules.push({
+          pattern: new RegExp(
+            "^(http://www.|https://www.|http://|https://)?[a-z0-9]+([-.]{1}[a-z0-9]+)*.[a-z]{2,5}(:[0-9]{1,5})?(/.*)?$"
+          ),
+          message: "Url no válida!",
+        });
+      }
       return rules;
     };
 
@@ -110,6 +118,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                     field.type === "text" ||
                       field.type === "phone" ||
                       field.type === "email" ||
+                      field.type === "url" ||
                       field.type === "coordinate" ? (
                       <Input />
                     ) : field.type === "textArea" ? (
@@ -119,10 +128,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                     ) : field.type === "file" ? (
                       <input type="file" accept="image/*" />
                     ) : (
-                      <Select
-                        mode="multiple"
-                        placeholder="Seleccionar la(s) categoría(s)"
-                      >
+                      <Select mode="multiple" placeholder="Seleccionar">
                         {optionsMultipleSelect &&
                           optionsMultipleSelect.map((option) => (
                             <Option key={option.value} value={option.value}>
@@ -211,9 +217,10 @@ class CrudTable extends React.Component {
           key: c.key,
           render: (item) => (
             <span>
-              {item.tags.map((tag) => {
-                return <Tag key={tag.key}>{tag.label}</Tag>;
-              })}
+              {item.tags &&
+                item.tags.map((tag) => {
+                  return <Tag key={tag.key}>{tag.label}</Tag>;
+                })}
             </span>
           ),
         };

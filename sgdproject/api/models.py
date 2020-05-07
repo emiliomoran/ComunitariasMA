@@ -78,6 +78,15 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+class Activity(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=250, null=True, blank=True)
+    state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 class Volunteer(models.Model):
     firstName = models.CharField(max_length=50)
@@ -85,7 +94,7 @@ class Volunteer(models.Model):
     phoneNumber = models.CharField(max_length=20)
     social = models.TextField(blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    activities = models.CharField(max_length=10)
+    activities = models.ManyToManyField(Activity, related_name="activities")
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)

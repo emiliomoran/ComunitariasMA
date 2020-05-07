@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution, Activity
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -82,10 +82,11 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()        
         return instance
               
-
-class VolunteerSerializer(serializers.ModelSerializer):
-    ACTIVITIES_CHOICES = [("1","Armar kits"),("2","Manejar vehículos"),("3","Actualización de datos"),("4","Servicios(médicos, psicólogos)"),]
-    activities = serializers.MultipleChoiceField(choices=ACTIVITIES_CHOICES)
+class ActivitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Activity
+        fields = "__all__" #Delete field to not show
+class VolunteerSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Volunteer
         fields = "__all__"
