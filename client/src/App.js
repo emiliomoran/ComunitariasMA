@@ -6,9 +6,9 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Category from "./pages/Category";
 import CollectionCenter from "./pages/CollectionCenter";
 import Provider from "./pages/Provider";
-//import Donation from "./pages/Donation";
+import Donation from "./pages/Donation";
 import SupportGroup from "./pages/SupportGroup";
-/* import Distribution from "./pages/Distribution"; */
+import Distribution from "./pages/Distribution";
 import Campaign from "./pages/Campaign";
 import Volunteer from "./pages/Volunteer";
 
@@ -90,9 +90,9 @@ class App extends React.Component {
                   component={CollectionCenter}
                 />
                 <Route exact path="/empresas" component={Provider} />
-                {/* <Route exact path="/donaciones" component={Donation} /> */}
+                <Route exact path="/donaciones" component={Donation} />
                 <Route exact path="/grupos-apoyo" component={SupportGroup} />
-                {/* <Route exact path="/distribuciones" component={Distribution} /> */}
+                <Route exact path="/distribuciones" component={Distribution} />
                 <Route exact path="/campañas" component={Campaign} />
                 <Route exact path="/voluntarios" component={Volunteer} />
               </div>
