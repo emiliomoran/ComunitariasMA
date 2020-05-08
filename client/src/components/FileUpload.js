@@ -23,7 +23,7 @@ class FileUpload extends React.Component {
 
     return (
       <input type="file" accept="image/*" onChange={this.onChange} />
-   ):
+    );
   }
 }
 
