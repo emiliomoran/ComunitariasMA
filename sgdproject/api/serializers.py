@@ -103,7 +103,7 @@ class SupportGroupSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class CampaignSerializer(serializers.ModelSerializer):
-    photo = serializers.ImageField(use_url=True)
+    #photo = serializers.ImageField(use_url=True)
     class Meta:
         model = Campaign
         fields = "__all__"

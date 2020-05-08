@@ -81,6 +81,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         showMapForm,
         hasPoint,
         optionsMultipleSelect,
+        onChangeFileUpload,
       } = this.props;
       const { getFieldDecorator } = form;
       //console.log(editedItem);
@@ -126,7 +127,11 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                     ) : field.type === "password" ? (
                       <Input type="password" />
                     ) : field.type === "file" ? (
-                      <input type="file" accept="image/*" />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={onChangeFileUpload}
+                      />
                     ) : (
                       <Select mode="multiple" placeholder="Seleccionar">
                         {optionsMultipleSelect &&
@@ -171,8 +176,19 @@ class CrudTable extends React.Component {
       previewPoint: undefined,
       hasPoint: false,
       edit: false,
+      file: undefined,
     };
   }
+
+  onChangeFileUpload = (e) => {
+    console.log(e);
+    this.setState(
+      {
+        file: e.target.files[0],
+      },
+      () => console.log(this.state.file)
+    );
+  };
 
   set_columns = (columns) => {
     let arrayColumns = [];
@@ -295,11 +311,13 @@ class CrudTable extends React.Component {
       latitude: item.latitude,
       longitude: item.longitude,
     };
+    let photo = item.photo;
     this.setState({
       editedItem: item,
       visible: true,
       hasPoint: true,
       previewPoint: point,
+      file: photo,
     });
   };
 
@@ -311,13 +329,19 @@ class CrudTable extends React.Component {
       editedItem: undefined,
       readOnlyMap: true,
       visible: true,
+      file: undefined,
     });
   };
 
   handleCancel = () => {
     const { form } = this.formRef.props;
     form.resetFields();
-    this.setState({ visible: false, previewPoint: undefined, hasPoint: false });
+    this.setState({
+      visible: false,
+      previewPoint: undefined,
+      hasPoint: false,
+      file: undefined,
+    });
   };
 
   showMap = (key) => {
@@ -406,6 +430,9 @@ class CrudTable extends React.Component {
         this.props.edit(values);
       } else {
         //console.log("Received values of form new: ", values);
+        if (this.state.file) {
+          values.photo = this.state.file;
+        }
         this.props.add(values);
       }
       form.resetFields();
@@ -415,6 +442,7 @@ class CrudTable extends React.Component {
         previewPoint: undefined,
         hasPoint: false,
         readOnlyMap: true,
+        file: undefined,
       });
     });
   };
@@ -521,6 +549,7 @@ class CrudTable extends React.Component {
             hasPoint={hasPoint}
             showContacts={showContacts}
             optionsMultipleSelect={optionsMultipleSelect}
+            onChangeFileUpload={this.onChangeFileUpload}
           />
         </div>
         <br></br>

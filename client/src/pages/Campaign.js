@@ -49,17 +49,19 @@ class Campaign extends React.Component {
       loading: true,
     });
     console.log(data);
-    let formData = new FormData();
+    const formData = new FormData();
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
     formData.append("description", data.description);
     formData.append("photo", data.photo);
     formData.append("createdBy", "reactclient");
-    Api.post("campaign/", formData, {
+    //console.log(formData);
+    const config = {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "content-type": "multipart/form-data",
       },
-    })
+    };
+    Api.post("campaign/", formData, config)
       .then((response) => {
         console.log(response);
         this.getCampaign();
@@ -76,6 +78,7 @@ class Campaign extends React.Component {
     this.setState({
       loading: true,
     });
+    console.log(data);
     Api.put(`campaign/${data.key}/`, {
       name: data.name,
       contactName: data.contactName,
@@ -182,7 +185,7 @@ class Campaign extends React.Component {
       {
         key: "photo",
         label: "Foto de Campaña",
-        required: false,
+        required: true,
         type: "file",
       },
     ];
