@@ -297,13 +297,13 @@ class CrudTable extends React.Component {
       latitude: item.latitude,
       longitude: item.longitude,
     };
-    let photo = { item.photo };
+    let photo = item.photo;
     this.setState({
       editedItem: item,
       visible: true,
       hasPoint: true,
       previewPoint: point,
-      file: undefined,
+      file: photo,
     });
   };
 
