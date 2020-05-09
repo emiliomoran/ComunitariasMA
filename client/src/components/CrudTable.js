@@ -177,6 +177,8 @@ class CrudTable extends React.Component {
       hasPoint: false,
       edit: false,
       file: undefined,
+      visiblePhoto: false,
+      photoSRC: undefined,
     };
   }
 
@@ -285,7 +287,7 @@ class CrudTable extends React.Component {
                 type="picture"
                 theme="twoTone"
                 twoToneColor="#52c41a"
-                onClick={() => console.log("clicked")}
+                onClick={() => this.showPhotoModal(record.key)}
               />
             </span>
           ),
@@ -484,6 +486,26 @@ class CrudTable extends React.Component {
     });
   };
 
+  showPhotoModal = (key) => {
+    console.log("Foto Abierto");
+    let item = this.props.data.find((obj) => obj.key === key);
+    console.log(item.photo);
+    //document.getElementById("photoTAG").src = item.photo;
+    this.setState({
+      //editedItem: item,
+      visiblePhoto: true,
+      photoSRC: item.photo,
+    });
+  };
+
+  closePhotoModal = () => {
+    console.log("Foto Cerrado");
+    this.setState({
+      //editedItem: undefined,
+      visiblePhoto: false,
+    });
+  };
+
   render() {
     const {
       editedItem,
@@ -493,6 +515,8 @@ class CrudTable extends React.Component {
       previewPoint,
       hasPoint,
       edit,
+      visiblePhoto,
+      photoSRC,
     } = this.state;
 
     const {
@@ -568,6 +592,16 @@ class CrudTable extends React.Component {
           previewPoint={previewPoint}
           edit={edit}
         />
+        <Modal
+          title={title}
+          visible={visiblePhoto}
+          onCancel={this.closePhotoModal}
+          centered={true}
+          footer={null}
+        >
+          <img id="photoTAG" src={this.state.photoSRC} alt="foto de campaña" 
+          width="90%" height="90%" />
+        </Modal>
         {includesContacts && (
           <ListContacts
             provider={provider}
