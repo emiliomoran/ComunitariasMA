@@ -21,15 +21,17 @@ class Campaign extends React.Component {
       .then((response) => {
         let data = [];
         response.data.map((item) => {
-          let campaign = {
-            key: item.id,
-            name: item.name,
-            description: item.description,
-            contactName: item.contactName,
-            photo: item.photo,
-          };
-          data.push(campaign);
-          return true;
+          if(item.state==1){
+            let campaign = {
+              key: item.id,
+              name: item.name,
+              description: item.description,
+              contactName: item.contactName,
+              photo: item.photo,
+            };
+            data.push(campaign);
+            return true;
+          }
         });
         this.setState({
           data: data,
@@ -79,13 +81,19 @@ class Campaign extends React.Component {
       loading: true,
     });
     console.log(data);
-    Api.put(`campaign/${data.key}/`, {
-      name: data.name,
-      contactName: data.contactName,
-      description: data.description,
-      photo: data.photo,
-      createdBy: "reactclient",
-    })
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("contactName", data.contactName);
+    formData.append("description", data.description);
+    formData.append("photo", data.photo);
+    formData.append("createdBy", "reactclient");
+    //console.log(formData);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    Api.put(`campaign/${data.key}/`, formData, config)
       .then((response) => {
         console.log(response);
         this.getCampaign();

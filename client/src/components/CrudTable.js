@@ -82,6 +82,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         hasPoint,
         optionsMultipleSelect,
         onChangeFileUpload,
+        file,
       } = this.props;
       const { getFieldDecorator } = form;
       //console.log(editedItem);
@@ -126,7 +127,11 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       <TextArea rows={5} />
                     ) : field.type === "password" ? (
                       <Input type="password" />
-                    ) : field.type === "file" ? (
+                    ) : field.type === "file" ? ( 
+                      editedItem ? <div><img src={file} width="90%"/>
+                      <br /><br />
+                      <input type="file" accept="image/*" onChange={onChangeFileUpload} />
+                      </div> :
                       <input
                         type="file"
                         accept="image/*"
@@ -429,6 +434,9 @@ class CrudTable extends React.Component {
         values.key = this.state.editedItem.key;
         values.user = this.state.editedItem.user;
         //console.log("Received values of form edit: ", values);
+        if (this.state.file) {
+          values.photo = this.state.file;
+        }
         this.props.edit(values);
       } else {
         //console.log("Received values of form new: ", values);
@@ -574,6 +582,7 @@ class CrudTable extends React.Component {
             showContacts={showContacts}
             optionsMultipleSelect={optionsMultipleSelect}
             onChangeFileUpload={this.onChangeFileUpload}
+            file={this.state.file}
           />
         </div>
         <br></br>
