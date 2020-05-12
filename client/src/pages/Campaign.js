@@ -21,7 +21,7 @@ class Campaign extends React.Component {
       .then((response) => {
         let data = [];
         response.data.map((item) => {
-          if(item.state==1){
+          if(item.state === 1){
             let campaign = {
               key: item.id,
               name: item.name,
@@ -85,7 +85,10 @@ class Campaign extends React.Component {
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
     formData.append("description", data.description);
-    formData.append("photo", data.photo);
+    if(data.photo instanceof File){
+      console.log("ingresa a if de File");
+      formData.append("photo", data.photo);
+    }
     formData.append("createdBy", "reactclient");
     //console.log(formData);
     const config = {
