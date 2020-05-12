@@ -82,6 +82,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         hasPoint,
         optionsMultipleSelect,
         onChangeFileUpload,
+        file,
       } = this.props;
       const { getFieldDecorator } = form;
       //console.log(editedItem);
@@ -126,7 +127,11 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       <TextArea rows={5} />
                     ) : field.type === "password" ? (
                       <Input type="password" />
-                    ) : field.type === "file" ? (
+                    ) : field.type === "file" ? ( 
+                      editedItem ? <div><img src={file} width="90%"/>
+                      <br /><br />
+                      <input type="file" accept="image/*" onChange={onChangeFileUpload} />
+                      </div> :
                       <input
                         type="file"
                         accept="image/*"
@@ -177,6 +182,8 @@ class CrudTable extends React.Component {
       hasPoint: false,
       edit: false,
       file: undefined,
+      visiblePhoto: false,
+      photoSRC: undefined,
     };
   }
 
@@ -285,7 +292,7 @@ class CrudTable extends React.Component {
                 type="picture"
                 theme="twoTone"
                 twoToneColor="#52c41a"
-                onClick={() => console.log("clicked")}
+                onClick={() => this.showPhotoModal(record.key)}
               />
             </span>
           ),
@@ -427,6 +434,9 @@ class CrudTable extends React.Component {
         values.key = this.state.editedItem.key;
         values.user = this.state.editedItem.user;
         //console.log("Received values of form edit: ", values);
+        if (this.state.file) {
+          values.photo = this.state.file;
+        }
         this.props.edit(values);
       } else {
         //console.log("Received values of form new: ", values);
@@ -485,6 +495,26 @@ class CrudTable extends React.Component {
     });
   };
 
+  showPhotoModal = (key) => {
+    console.log("Foto Abierto");
+    let item = this.props.data.find((obj) => obj.key === key);
+    console.log(item.photo);
+    //document.getElementById("photoTAG").src = item.photo;
+    this.setState({
+      //editedItem: item,
+      visiblePhoto: true,
+      photoSRC: item.photo,
+    });
+  };
+
+  closePhotoModal = () => {
+    console.log("Foto Cerrado");
+    this.setState({
+      //editedItem: undefined,
+      visiblePhoto: false,
+    });
+  };
+
   render() {
     const {
       editedItem,
@@ -494,6 +524,8 @@ class CrudTable extends React.Component {
       previewPoint,
       hasPoint,
       edit,
+      visiblePhoto,
+      photoSRC,
     } = this.state;
 
     const {
@@ -551,6 +583,7 @@ class CrudTable extends React.Component {
             showContacts={showContacts}
             optionsMultipleSelect={optionsMultipleSelect}
             onChangeFileUpload={this.onChangeFileUpload}
+            file={this.state.file}
           />
         </div>
         <br></br>
@@ -569,6 +602,16 @@ class CrudTable extends React.Component {
           previewPoint={previewPoint}
           edit={edit}
         />
+        <Modal
+          title={title}
+          visible={visiblePhoto}
+          onCancel={this.closePhotoModal}
+          centered={true}
+          footer={null}
+        >
+          <img id="photoTAG" src={this.state.photoSRC} alt="foto de campaña" 
+          width="90%" height="90%" />
+        </Modal>
         {includesContacts && (
           <ListContacts
             provider={provider}

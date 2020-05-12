@@ -22,33 +22,37 @@ class Donation extends React.Component {
   getDonations = () => {
     Api.get("donation/")
       .then((response) => {
+        console.log(this.state.dataCategories);
         let data = [];
         response.data.map((item) => {
           let category = 
-		    this.state.dataCategories.find(item.category.value);
+        this.state.dataCategories.find(item.category.value);
+        let infoCategory = [];
           if (category) {
-              let infoCategory = {
+              infoCategory.push({
                 key: category.value,
                 label: category.text,
-              };
+              });
             }
           
-          let provider = 
-		    this.state.dataProviders.find(item.provider.value);
+        let provider = 
+        this.state.dataProviders.find(item.provider.value);
+        let infoProvider = [];
           if (provider) {
-              let infoProvider = {
+              infoProvider.push({
                 key: provider.value,
                 label: provider.text,
-              };
+              });
             }
 
           let collectionCenter = 
-		    this.state.dataCollectionCenters.find(item.collectionCenter.value);
+        this.state.dataCollectionCenters.find(item.collectionCenter.value);
+        let infoCollectionCenter = []
           if (collectionCenter) {
-              let infoCollectionCenter = {
+              infoCollectionCenter.push({
                 key: collectionCenter.value,
                 label: collectionCenter.text,
-              };
+              });
             }
           let donation = {
             key: item.id,
@@ -91,7 +95,6 @@ class Donation extends React.Component {
       createdBy: "reactclient",
     })
       .then((response) => {
-        //console.log(response);
         this.getDonations();
       })
       .catch((error) => {
@@ -142,7 +145,7 @@ class Donation extends React.Component {
           {
             dataProviders: data,
           },
-          () => this.getDonations()
+          () => this.getCollectionCenters()
         );
       })
       .catch((error) => {
@@ -175,7 +178,13 @@ class Donation extends React.Component {
   };
 
   render() {
-    const { data, loading } = this.state;
+    const {
+      data,
+      loading,
+      dataCategories,
+      dataCollectionCenters,
+      dataProviders,
+    } = this.state;
 
     const columns = [
       {
@@ -205,10 +214,6 @@ class Donation extends React.Component {
 	  {
         title: "Foto",
         key: "photo",
-      },
-	  {
-        title: "Acción",
-        key: "action",
       },
     ];
 
@@ -274,6 +279,7 @@ class Donation extends React.Component {
           add={this.addDonation}
           loading={loading}
           includesMap={true}
+          //optionsMultipleSelect={dataProviders}
         />
       </Row>
     );

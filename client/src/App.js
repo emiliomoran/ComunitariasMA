@@ -13,9 +13,9 @@ import Store from "./utils/Store";
 import Category from "./pages/Category";
 import CollectionCenter from "./pages/CollectionCenter";
 import Provider from "./pages/Provider";
-//import Donation from "./pages/Donation";
+import Donation from "./pages/Donation";
 import SupportGroup from "./pages/SupportGroup";
-/* import Distribution from "./pages/Distribution"; */
+import Distribution from "./pages/Distribution";
 import Campaign from "./pages/Campaign";
 import Volunteer from "./pages/Volunteer";
 

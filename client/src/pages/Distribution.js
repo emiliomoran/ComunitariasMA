@@ -24,11 +24,12 @@ class Distribution extends React.Component {
             response.data.map((item) => {
               let user = 
                 this.state.dataUsers.find(item.user.value);
+              let infoUser = []
               if (user) {
-                  let infoUser = {
+                  infoUser.push({
                     key: user.value,
                     label: user.text,
-                  };
+                  });
                 }
               let distribution = {
                 key: item.id,
@@ -112,10 +113,9 @@ class Distribution extends React.Component {
                 data.push(user);
                 return true;
             });
-            this.setState(
-                {
-                dataUsers: dataUsers.concat(data),
-                },
+            this.setState((state,data) => ({
+                dataUsers: state.dataUsers.concat(data)
+                }),
                 () => this.getDistributions()
             );
             })
@@ -143,10 +143,6 @@ class Distribution extends React.Component {
           {
             title: "Informacion",
             key: "information",
-          },
-          {
-            title: "Acción",
-            key: "action",
           },
         ];
     
