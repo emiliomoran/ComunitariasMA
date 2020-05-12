@@ -71,6 +71,7 @@ class Donation(models.Model):
 class User(models.Model):
     username = models.CharField(max_length=50, unique=True)
     password = models.TextField()
+    role = models.CharField(max_length=50, default="Admin") #Admin, Group, DataVolunteer, Volunteer
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
