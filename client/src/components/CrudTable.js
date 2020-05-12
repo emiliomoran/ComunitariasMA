@@ -455,8 +455,9 @@ class CrudTable extends React.Component {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
     console.log(item);
+    let name = item.name ? item.name : item.firstName + " " + item.lastName;
     confirm({
-      title: `¿Está seguro de eliminar ${item.name}?`,
+      title: `¿Está seguro de eliminar ${name}?`,
       okText: "Acepar",
       cancelText: "Cancelar",
       onOk: () => {

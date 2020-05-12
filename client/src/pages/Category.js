@@ -92,6 +92,19 @@ class Category extends React.Component {
     this.setState({
       loading: true,
     });
+    /* Api.patch(`category/${data.key}/`, {
+      state: "0",
+    })
+      .then((response) => {
+        //console.log(response);
+        this.getCategory();
+      })
+      .catch((error) => {
+        this.setState({
+          loading: false,
+        });
+        console.log(error);
+      }); */
     //console.log("Request delete");
     Api.delete(`category/${data.key}/`)
       .then((response) => {

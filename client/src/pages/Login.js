@@ -1,0 +1,144 @@
+import React from "react";
+import { Form, Icon, Input, Button, Row, Col, Card, Layout } from "antd";
+import Api from "../utils/Api";
+import Store from "../utils/Store";
+import { Redirect } from "react-router-dom";
+
+const { Header, Footer, Content } = Layout;
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false,
+    };
+  }
+
+  componentDidMount = () => {
+    if (Store.getToken()) {
+      this.setState({
+        redirect: true,
+      });
+    }
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log("Received values of form: ", values);
+        Api.post("login/", {
+          username: values.username,
+          password: values.password,
+        })
+          .then((response) => {
+            console.log(response.data.token);
+            Store.setToken(response.data.token);
+            this.setState({
+              redirect: true,
+            });
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    });
+  };
+
+  render() {
+    const { redirect } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <>
+        {redirect && <Redirect to="/" />}
+        <Layout style={{ height: "100vh" }}>
+          <Header style={{ backgroundColor: "#8AA409" }}></Header>
+          <Content style={{ backgroundColor: "#fff" }}>
+            <br></br>
+            <Row align="middle">
+              <Col
+                lg={{ span: 6, offset: 9 }}
+                md={{ span: 6, offset: 9 }}
+                sm={{ span: 6, offset: 9 }}
+                xs={{ span: 20, offset: 2 }}
+                style={{ backgroundColor: "white" }}
+              >
+                <Row style={{ backgroundColor: "#fff" }}>
+                  <img
+                    src={`${process.env.PUBLIC_URL}/mision-alianza.png`}
+                    alt="mision-alianza"
+                    style={{ width: "100%" }}
+                  ></img>
+                </Row>
+                <br></br>
+                <Card title="Ingreso">
+                  <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form.Item>
+                      {getFieldDecorator("username", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Usuario requerido!",
+                          },
+                        ],
+                      })(
+                        <Input
+                          prefix={
+                            <Icon
+                              type="user"
+                              style={{ color: "rgba(0,0,0,.25)" }}
+                            />
+                          }
+                          placeholder="Username"
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item>
+                      {getFieldDecorator("password", {
+                        rules: [
+                          {
+                            required: true,
+                            message: "Contraseña requerida!",
+                          },
+                        ],
+                      })(
+                        <Input
+                          prefix={
+                            <Icon
+                              type="lock"
+                              style={{ color: "rgba(0,0,0,.25)" }}
+                            />
+                          }
+                          type="password"
+                          placeholder="Password"
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item>
+                      <Button
+                        type="primary"
+                        htmlType="submit"
+                        className="login-form-button"
+                        style={{
+                          backgroundColor: "#8AA409",
+                          borderColor: "#8AA409",
+                        }}
+                      >
+                        Ingresar
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Card>
+              </Col>
+            </Row>
+          </Content>
+          <Footer style={{ textAlign: "center" }}>Misión Alianza ©2020</Footer>
+        </Layout>
+      </>
+    );
+  }
+}
+
+const WrappedLoginForm = Form.create({ name: "login" })(Login);
+
+export default WrappedLoginForm;

@@ -176,11 +176,23 @@ class Volunteer extends React.Component {
       loading: true,
     });
     //console.log("Request post");
-    console.log(data);
+    let role = "Volunteer";
+    data.activities.map((id) => {
+      let activity = this.state.dataActivities.find(
+        (obj) => obj.value === id && obj.text === "Actualización de datos"
+      );
+      if (activity) {
+        role = "DataVolunteer";
+      }
+      return true;
+    });
+    //console.log(role);
+
     //Add new user
     Api.post("user/", {
       username: data.username,
       password: data.password,
+      role: role,
       createdBy: "reactclient",
     })
       .then((response) => {

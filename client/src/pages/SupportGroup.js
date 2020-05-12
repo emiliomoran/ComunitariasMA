@@ -172,6 +172,7 @@ class SupportGroup extends React.Component {
     Api.post("user/", {
       username: data.username,
       password: data.password,
+      role: "Group",
       createdBy: "reactclient",
     })
       .then((response) => {
