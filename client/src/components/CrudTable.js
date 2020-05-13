@@ -83,6 +83,8 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         optionsMultipleSelect,
         onChangeFileUpload,
         file,
+        inputKey,
+        isImgVisible,
       } = this.props;
       const { getFieldDecorator } = form;
       //console.log(editedItem);
@@ -128,14 +130,17 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                     ) : field.type === "password" ? (
                       <Input type="password" />
                     ) : field.type === "file" ? ( 
-                      editedItem ? <div><img src={file} width="90%"/>
+                      editedItem ? <div><img src={file} width="90%"
+                      style={{display: isImgVisible ? "block" : "none"}} />
                       <br /><br />
-                      <input type="file" accept="image/*" onChange={onChangeFileUpload} />
+                      <input type="file" accept="image/*" onChange={onChangeFileUpload} 
+                      key={inputKey} />
                       </div> :
                       <input
                         type="file"
                         accept="image/*"
                         onChange={onChangeFileUpload}
+                        key={inputKey}
                       />
                     ) : (
                       <Select mode="multiple" placeholder="Seleccionar">
@@ -184,6 +189,8 @@ class CrudTable extends React.Component {
       file: undefined,
       visiblePhoto: false,
       photoSRC: undefined,
+      inputKey: Date.now(),
+      isImgVisible: true,
     };
   }
 
@@ -195,6 +202,13 @@ class CrudTable extends React.Component {
       },
       () => console.log(this.state.file)
     );
+    if (this.state.editedItem) {
+      this.setState(
+        {
+          isImgVisible: false,
+        },
+      );
+    }
   };
 
   set_columns = (columns) => {
@@ -325,6 +339,7 @@ class CrudTable extends React.Component {
       hasPoint: true,
       previewPoint: point,
       file: photo,
+      inputKey: Date.now(),
     });
   };
 
@@ -337,6 +352,7 @@ class CrudTable extends React.Component {
       readOnlyMap: true,
       visible: true,
       file: undefined,
+      inputKey: Date.now(),
     });
   };
 
@@ -348,6 +364,7 @@ class CrudTable extends React.Component {
       previewPoint: undefined,
       hasPoint: false,
       file: undefined,
+      inputKey: Date.now(),
     });
   };
 
@@ -453,6 +470,7 @@ class CrudTable extends React.Component {
         hasPoint: false,
         readOnlyMap: true,
         file: undefined,
+        inputKey: Date.now(),
       });
     });
   };
@@ -584,6 +602,8 @@ class CrudTable extends React.Component {
             optionsMultipleSelect={optionsMultipleSelect}
             onChangeFileUpload={this.onChangeFileUpload}
             file={this.state.file}
+            inputKey={this.state.inputKey}
+            isImgVisible={this.state.isImgVisible}
           />
         </div>
         <br></br>
