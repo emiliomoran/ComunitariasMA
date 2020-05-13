@@ -32,23 +32,23 @@ class IsAuthenticated(BasePermission):
 class CategoryViewSet(viewsets.ModelViewSet):
     #permission_classes = (IsAuthenticated,)
 
-    queryset = Category.objects.all().filter(state="1").order_by('name')
+    queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
 
 class CollectionCenterViewSet(viewsets.ModelViewSet):
-    queryset = CollectionCenter.objects.all().filter(state="1").order_by('name')
+    queryset = CollectionCenter.objects.all().order_by('name')
     serializer_class = CollectionCenterSerializer
 	
 class ProviderViewSet(viewsets.ModelViewSet):
-    queryset = Provider.objects.all().filter(state="1").order_by('name')
+    queryset = Provider.objects.all().order_by('name')
     serializer_class = ProviderSerializer
 	
 class ProviderContactViewSet(viewsets.ModelViewSet):
-    queryset = ProviderContact.objects.all().filter(state="1").order_by('lastName')
+    queryset = ProviderContact.objects.all().order_by('lastName')
     serializer_class = ProviderContactSerializer
 	
 class DonationViewSet(viewsets.ModelViewSet):
-    queryset = Donation.objects.all().filter(state="1").order_by('collectionCenter')
+    queryset = Donation.objects.all().order_by('collectionCenter')
     serializer_class = DonationSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
