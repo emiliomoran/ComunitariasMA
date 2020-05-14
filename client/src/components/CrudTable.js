@@ -405,7 +405,6 @@ class CrudTable extends React.Component {
       visible: true,
       file: undefined,
       inputKey: Date.now(),
-      isImgVisible: true,
     });
   };
 
@@ -418,7 +417,6 @@ class CrudTable extends React.Component {
       hasPoint: false,
       file: undefined,
       inputKey: Date.now(),
-      isImgVisible: true,
     });
   };
 
@@ -525,7 +523,6 @@ class CrudTable extends React.Component {
         readOnlyMap: true,
         file: undefined,
         inputKey: Date.now(),
-        isImgVisible: true,
       });
     });
   };
@@ -537,11 +534,14 @@ class CrudTable extends React.Component {
   confirmDelete = (key) => {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
-    console.log(item);
     let name = item.name ? item.name : item.firstName + " " + item.lastName;
+    console.log((name));
+    if (name === 'undefined undefined') {
+      name = "Distribución de " + item.departureAddress + " a " + item.destinationAddress;
+    }
     confirm({
       title: `¿Está seguro de eliminar ${name}?`,
-      okText: "Acepar",
+      okText: "Aceptar",
       cancelText: "Cancelar",
       onOk: () => {
         //console.log(item.key);

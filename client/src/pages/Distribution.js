@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Distribution extends React.Component {
     constructor(props) {
@@ -71,15 +72,36 @@ class Distribution extends React.Component {
           createdBy: "reactclient",
         })
           .then((response) => {
-            console.log(response);
+            //console.log(response);
+            Message.success("Plan de distribución agregado con éxito.");
             this.getDistributions();
           })
           .catch((error) => {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            Message.error("No se pudo agregar el plan de distribución, intente más tarde.");
           });
+    };
+
+    deleteDistribution = (data) => {
+      this.setState({
+        loading: true,
+      });
+      Api.delete(`distribution/${data.key}/`)
+        .then((response) => {
+          //console.log(response);
+          Message.success("Plan de distribución eliminado con éxito.");
+          this.getDistributions();
+        })
+        .catch((error) => {
+          this.setState({
+            loading: false,
+          });
+          Message.error("No se pudo eliminar el plan de distribución, intente más tarde.");
+          //console.log(error);
+        });
     };
     
     getVolunteers = () => {
@@ -153,6 +175,10 @@ class Distribution extends React.Component {
             title: "Informacion",
             key: "information",
           },
+          {
+            title: "Acción",
+            key: "action",
+          },
         ];
         
         const fieldsForm = [
@@ -202,6 +228,7 @@ class Distribution extends React.Component {
               fieldsForm={fieldsForm}
               title="Distribuciones"
               add={this.addDistribution}
+              delete={this.deleteDistribution}
               loading={loading}
               includesMap={false}
               optionsUser={dataUsers}
