@@ -84,6 +84,7 @@ class Donation extends React.Component {
     this.setState({
       loading: true,
     });
+    console.log(data);
     Api.post("donation/", {
       provider: data.provider,
       category: data.category,
