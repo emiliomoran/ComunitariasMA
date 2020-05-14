@@ -3,6 +3,7 @@ import { Form, Icon, Input, Button, Row, Col, Card, Layout } from "antd";
 import Api from "../utils/Api";
 import Store from "../utils/Store";
 import { Redirect } from "react-router-dom";
+import Message from "../utils/Message";
 
 const { Header, Footer, Content } = Layout;
 
@@ -32,14 +33,16 @@ class Login extends React.Component {
           password: values.password,
         })
           .then((response) => {
-            console.log(response.data.token);
+            //console.log(response.data.token);
             Store.setToken(response.data.token);
             this.setState({
               redirect: true,
             });
+            Message.success("Ha iniciado sesión con éxito.");
           })
           .catch((error) => {
-            console.log(error);
+            //console.log(error);
+            Message.error("Se ha producido un error, intente nuevamente.");
           });
       }
     });

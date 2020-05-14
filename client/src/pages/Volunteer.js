@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Volunteer extends React.Component {
   constructor(props) {
@@ -210,21 +211,26 @@ class Volunteer extends React.Component {
         })
           .then((response) => {
             //console.log(response);
+            Message.success("Voluntario agregado con éxito.");
             this.getActivities();
           })
           .catch((error) => {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            Message.error(
+              "No se pudo agregar al voluntario, intente más tarde."
+            );
           });
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         //Error message
         this.setState({
           loading: false,
         });
+        Message.error("No se pudo agregar al voluntario, intente más tarde.");
       });
   };
 
@@ -233,10 +239,23 @@ class Volunteer extends React.Component {
       loading: true,
     });
     //console.log("Request post");
-    console.log(data);
+    //console.log(data);
     //Edit user
+    let role = "Volunteer";
+    data.activities.map((id) => {
+      let activity = this.state.dataActivities.find(
+        (obj) => obj.value === id && obj.text === "Actualización de datos"
+      );
+      if (activity) {
+        role = "DataVolunteer";
+      }
+      return true;
+    });
+    console.log(role);
+
     Api.patch(`user/${data.user}/`, {
       username: data.username,
+      role: role,
       //password: data.password,
       //createdBy: "reactclient",
     })
@@ -253,21 +272,26 @@ class Volunteer extends React.Component {
         })
           .then((response) => {
             //console.log(response);
+            Message.success("Voluntario editado con éxito.");
             this.getActivities();
           })
           .catch((error) => {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            Message.error(
+              "No se pudo editar al voluntario, intente más tarde."
+            );
           });
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         //Error message
         this.setState({
           loading: false,
         });
+        Message.error("No se pudo editar al voluntario, intente más tarde.");
       });
   };
 
@@ -283,21 +307,26 @@ class Volunteer extends React.Component {
         //this.getUsers();
         Api.delete(`user/${data.user}/`)
           .then((response) => {
-            console.log(response);
+            //console.log(response);
+            Message.success("Voluntario eliminado con éxito.");
             this.getUsers();
           })
           .catch((error) => {
-            console.log(error);
+            //console.log(error);
             this.setState({
               loading: false,
             });
+            Message.error(
+              "No se pudo eliminar al voluntario, intente más tarde."
+            );
           });
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo eliminar al voluntario, intente más tarde.");
       });
   };
 
@@ -319,6 +348,7 @@ class Volunteer extends React.Component {
           fieldsPasswordManager: [],
           user_id: undefined,
         });
+        Message.success("Contraseña cambiada con éxito.");
         this.getUsers();
       })
       .catch((error) => {
@@ -327,6 +357,7 @@ class Volunteer extends React.Component {
         this.setState({
           loading: false,
         });
+        Message.error("No se pudo cambiar la contraseña, intente más tarde.");
       });
   };
 

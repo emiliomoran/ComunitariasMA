@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Category extends React.Component {
   constructor(props) {
@@ -55,14 +56,16 @@ class Category extends React.Component {
       createdBy: "reactclient",
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Categoría agregada con éxito.");
         this.getCategory();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo agregar la categoría, intente más tarde.");
       });
   };
 
@@ -71,20 +74,22 @@ class Category extends React.Component {
       loading: true,
     });
     //console.log("Request put");
-    Api.put(`category/${data.key}/`, {
+    Api.patch(`category/${data.key}/`, {
       name: data.name,
       description: data.description ? data.description : "",
-      createdBy: "reactclient",
+      //createdBy: "reactclient",
     })
       .then((response) => {
         //console.log(response);
+        Message.success("Categoría editada con éxito.");
         this.getCategory();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo editar la categoría, intente más tarde.");
       });
   };
 
@@ -92,30 +97,18 @@ class Category extends React.Component {
     this.setState({
       loading: true,
     });
-    /* Api.patch(`category/${data.key}/`, {
-      state: "0",
-    })
-      .then((response) => {
-        //console.log(response);
-        this.getCategory();
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
-        console.log(error);
-      }); */
-    //console.log("Request delete");
     Api.delete(`category/${data.key}/`)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Categoría eliminada con éxito.");
         this.getCategory();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        Message.error("No se pudo eliminar la categoría, intente más tarde.");
+        //console.log(error);
       });
   };
 

@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class SupportGroup extends React.Component {
   constructor(props) {
@@ -186,13 +187,17 @@ class SupportGroup extends React.Component {
         })
           .then((response) => {
             //console.log(response);
+            Message.success("Grupo de apoyo agregado con éxito.");
             this.getUsers();
           })
           .catch((error) => {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            Message.error(
+              "No se pudo agregar el grupo de apoyo, intente más tarde."
+            );
           });
       })
       .catch((error) => {
@@ -201,6 +206,9 @@ class SupportGroup extends React.Component {
         this.setState({
           loading: false,
         });
+        Message.error(
+          "No se pudo agregar el grupo de apoyo, intente más tarde."
+        );
       });
   };
 
@@ -227,13 +235,17 @@ class SupportGroup extends React.Component {
         })
           .then((response) => {
             //console.log(response);
+            Message.success("Grupo de apoyo editado con éxito.");
             this.getUsers();
           })
           .catch((error) => {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            Message.error(
+              "No se pudo editar el grupo de apoyo, intente más tarde."
+            );
           });
       })
       .catch((error) => {
@@ -242,6 +254,9 @@ class SupportGroup extends React.Component {
         this.setState({
           loading: false,
         });
+        Message.error(
+          "No se pudo editar el grupo de apoyo, intente más tarde."
+        );
       });
   };
 
@@ -249,7 +264,7 @@ class SupportGroup extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     //Delete support group first
     Api.delete(`support-group/${data.key}/`)
       .then((response) => {
@@ -257,21 +272,28 @@ class SupportGroup extends React.Component {
         //this.getUsers();
         Api.delete(`user/${data.user}/`)
           .then((response) => {
-            console.log(response);
+            //console.log(response);
+            Message.success("Grupo de apoyo eliminado con éxito.");
             this.getUsers();
           })
           .catch((error) => {
-            console.log(error);
+            //console.log(error);
             this.setState({
               loading: false,
             });
+            Message.error(
+              "No se pudo eliminar el grupo de apoyo, intente más tarde."
+            );
           });
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error(
+          "No se pudo eliminar el grupo de apoyo, intente más tarde."
+        );
       });
   };
 
@@ -292,10 +314,12 @@ class SupportGroup extends React.Component {
         this.setState({
           visibleMembers: false,
         });
+        Message.success("Integrante agregado con éxito.");
         this.getSupportGroups();
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo agregar al integrante, intente más tarde.");
       });
   };
 
@@ -315,10 +339,12 @@ class SupportGroup extends React.Component {
         this.setState({
           visibleMembers: false,
         });
+        Message.success("Integrante editado con éxito.");
         this.getSupportGroups();
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo editar al integrante, intente más tarde.");
       });
   };
 
@@ -333,13 +359,15 @@ class SupportGroup extends React.Component {
         this.setState({
           visibleMembers: false,
         });
+        Message.success("Integrante eliminado con éxito.");
         this.getSupportGroups();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo eliminar al integrante, intente más tarde.");
       });
   };
 
@@ -361,6 +389,7 @@ class SupportGroup extends React.Component {
           fieldsPasswordManager: [],
           user_id: undefined,
         });
+        Message.success("Contraseña cambiada con éxito.");
         this.getUsers();
       })
       .catch((error) => {
@@ -369,6 +398,7 @@ class SupportGroup extends React.Component {
         this.setState({
           loading: false,
         });
+        Message.error("No se pudo cambiar la contraseña, intente más tarde.");
       });
   };
 
