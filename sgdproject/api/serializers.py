@@ -65,7 +65,8 @@ class UserSerializer(serializers.ModelSerializer):
         #print(instance.password)
         if validated_data.get("username"): 
             print(validated_data)
-            instance.username = validated_data.get('username', instance.username)        
+            instance.username = validated_data.get('username', instance.username)
+            instance.role = validated_data.get('role', instance.role)
 
         if validated_data.get("password"):
             if validated_data.get("currentPassword"):
