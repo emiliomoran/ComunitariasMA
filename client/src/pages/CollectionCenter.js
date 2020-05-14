@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class CollectionCenters extends React.Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class CollectionCenters extends React.Component {
       loading: true,
     });
     //console.log("Request post");
-    console.log(data);
+    //console.log(data);
     Api.post("collection-center/", {
       name: data.name,
       address: data.address,
@@ -60,14 +61,18 @@ class CollectionCenters extends React.Component {
       createdBy: "reactclient",
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Centro de acopio agregado con éxito.");
         this.getCollectionCenter();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.success(
+          "No se pudo agregar el centro de acopio, intente más tarde."
+        );
       });
   };
 
@@ -75,23 +80,27 @@ class CollectionCenters extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log("Request put");
-    Api.put(`collection-center/${data.key}/`, {
+    //console.log("Request put");
+    Api.patch(`collection-center/${data.key}/`, {
       name: data.name,
       address: data.address,
       latitude: data.latitude,
       longitude: data.longitude,
-      createdBy: "reactclient",
+      //createdBy: "reactclient",
     })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Centro de acopio editado con éxito.");
         this.getCollectionCenter();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.success(
+          "No se pudo editar el centro de acopio, intente más tarde."
+        );
       });
   };
 
@@ -102,14 +111,18 @@ class CollectionCenters extends React.Component {
     //console.log("Request delete");
     Api.delete(`collection-center/${data.key}/`)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Centro de acopio eliminado con éxito.");
         this.getCollectionCenter();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.success(
+          "No se pudo eliminar el centro de acopio, intente más tarde."
+        );
       });
   };
 

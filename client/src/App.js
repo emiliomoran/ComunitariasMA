@@ -78,7 +78,9 @@ class App extends React.Component {
               </div>
               <Menu theme="dark" mode="inline">
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="1">
                       <Icon type="tags" />
                       <span className="nav-text">Categorías</span>
@@ -86,7 +88,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="2">
                       <Icon type="gold" />
                       <span className="nav-text">Centros de acopio</span>
@@ -94,7 +98,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="3">
                       <Icon type="shop" />
                       <span className="nav-text">Empresas</span>
@@ -102,7 +108,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="4">
                       <Icon type="medicine-box" />
                       <span className="nav-text">Donaciones</span>
@@ -110,7 +118,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="5">
                       <Icon type="team" />
                       <span className="nav-text">Grupos de apoyo</span>
@@ -118,7 +128,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="6">
                       <Icon type="team" />
                       <span className="nav-text">Voluntarios</span>
@@ -126,7 +138,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="7">
                       <Icon type="car" />
                       <span className="nav-text">Distribuciones</span>
@@ -134,7 +148,9 @@ class App extends React.Component {
                     </Menu.Item>
                   )}
                 {user &&
-                  (user.role === "Admin" || user.role === "DataVolunteer") && (
+                  (user.role === "Admin" ||
+                    user.role === "DataVolunteer" ||
+                    user.role === "Group") && (
                     <Menu.Item key="8">
                       <Icon type="notification" />
                       <span className="nav-text">Campañas</span>
