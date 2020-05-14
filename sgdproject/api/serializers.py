@@ -32,15 +32,15 @@ class DonationSerializer(serializers.ModelSerializer):
     #provider = ProviderSerializer(many=False, read_only=False)
     #category = CategorySerializer(many=False, read_only=False)
     #collectionCenter = CollectionCenterSerializer(many=False, read_only=False)
-    photo_url = serializers.SerializerMethodField()
+    #photo_url = serializers.SerializerMethodField()
     class Meta:
         model = Donation
         fields = "__all__"
     
-    def get_photo_url(self, donation):
+    """def get_photo_url(self, donation):
         request = self.context.get('request')
         photo_url = donation.photo.url
-        return request.build_absolute_uri(photo_url)
+        return request.build_absolute_uri(photo_url)"""
 
 class UserSerializer(serializers.ModelSerializer):
     """ username = serializers.CharField(validators=[UniqueValidator(queryset=User.objects.all())])

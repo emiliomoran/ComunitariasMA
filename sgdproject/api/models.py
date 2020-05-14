@@ -59,7 +59,7 @@ class Donation(models.Model):
     collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE)
     beginDate = models.DateTimeField(blank=True, null=True)
     expirationDate = models.DateTimeField(blank=True, null=True)
-    photo = models.ImageField(upload_to = 'donation/')
+    photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
