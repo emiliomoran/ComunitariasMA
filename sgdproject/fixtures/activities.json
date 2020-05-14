@@ -1,0 +1,45 @@
+[
+	{
+		"model":"api.Activity",
+		"pk": 1,
+		"fields": {
+			"name":"Armar kits",
+			"state": 1,
+			"createdAt":"2020-05-13T16:30:00+00:00",
+			"createdBy":"reactclient"
+		}
+	},
+	
+	{
+		"model":"api.Activity",
+		"pk": 2,
+		"fields": {
+			"name":"Manejar vehículos",
+			"state": 1,
+			"createdAt":"2020-05-13T16:30:00+00:00",
+			"createdBy":"reactclient"
+		}
+	},
+	
+	{
+		"model":"api.Activity",
+		"pk": 3,
+		"fields": {
+			"name":"Actualización de datos",
+			"state": 1,
+			"createdAt":"2020-05-13T16:30:00+00:00",
+			"createdBy":"reactclient"
+		}
+	},
+	
+	{
+		"model":"api.Activity",
+		"pk": 4,
+		"fields": {
+			"name":"Servicios(médicos, psicólogos)",
+			"state": 1,
+			"createdAt":"2020-05-13T16:30:00+00:00",
+			"createdBy":"reactclient"
+		}
+	}
+]

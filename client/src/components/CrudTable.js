@@ -353,6 +353,7 @@ class CrudTable extends React.Component {
       visible: true,
       file: undefined,
       inputKey: Date.now(),
+      isImgVisible: true,
     });
   };
 
@@ -365,6 +366,7 @@ class CrudTable extends React.Component {
       hasPoint: false,
       file: undefined,
       inputKey: Date.now(),
+      isImgVisible: true,
     });
   };
 
@@ -471,6 +473,7 @@ class CrudTable extends React.Component {
         readOnlyMap: true,
         file: undefined,
         inputKey: Date.now(),
+        isImgVisible: true,
       });
     });
   };

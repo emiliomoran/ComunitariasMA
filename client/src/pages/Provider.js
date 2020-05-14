@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Provider extends React.Component {
   constructor(props) {
@@ -117,13 +118,15 @@ class Provider extends React.Component {
     })
       .then((response) => {
         //console.log(response);
+        Message.success("Empresa agregada con éxito.");
         this.getCategories();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo agregar la empresa, intente más tarde.");
       });
   };
 
@@ -132,23 +135,25 @@ class Provider extends React.Component {
       loading: true,
     });
     //console.log("Request put", data);
-    Api.put(`provider/${data.key}/`, {
+    Api.patch(`provider/${data.key}/`, {
       name: data.name,
       address: data.address,
       phoneNumber: data.phoneNumber,
       email: data.email,
       categories: data.categories,
-      createdBy: "reactclient",
+      //createdBy: "reactclient",
     })
       .then((response) => {
         //console.log(response);
+        Message.success("Empresa editada con éxito.");
         this.getProvider();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo editar la empresa, intente más tarde.");
       });
   };
 
@@ -160,13 +165,15 @@ class Provider extends React.Component {
     Api.delete(`provider/${data.key}/`)
       .then((response) => {
         //console.log(response);
+        Message.success("Empresa eliminada con éxito.");
         this.getProvider();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo eliminar la empresa, intente más tarde.");
       });
   };
 
@@ -188,10 +195,12 @@ class Provider extends React.Component {
         this.setState({
           visibleContacts: false,
         });
+        Message.success("Contacto agregado con éxito.");
         this.getCategories();
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo agregar al contacto, intente más tarde.");
       });
   };
 
@@ -199,23 +208,25 @@ class Provider extends React.Component {
     this.setState({
       loading: true,
     });
-    Api.put(`provider-contact/${data.key}/`, {
+    Api.patch(`provider-contact/${data.key}/`, {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
       social: data.social,
-      provider: data.provider,
-      createdBy: "reactclient",
+      //provider: data.provider,
+      //createdBy: "reactclient",
     })
       .then((response) => {
         //console.log(response);
         this.setState({
           visibleContacts: false,
         });
+        Message.success("Contacto editado con éxito.");
         this.getCategories();
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo editar al contacto, intente más tarde.");
       });
   };
 
@@ -230,13 +241,15 @@ class Provider extends React.Component {
         this.setState({
           visibleContacts: false,
         });
+        Message.success("Contacto eliminado con éxito.");
         this.getCategories();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo eliminar al contacto, intente más tarde.");
       });
   };
 
