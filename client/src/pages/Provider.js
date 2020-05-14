@@ -88,6 +88,7 @@ class Provider extends React.Component {
           data.push(provider);
           return true;
         });
+        console.log(data);
         this.setState({
           data: data,
           loading: false,
@@ -106,7 +107,7 @@ class Provider extends React.Component {
       loading: true,
     });
     //console.log("Request post");
-    //console.log(data);
+    console.log(data);
     Api.post("provider/", {
       name: data.name,
       address: data.address,

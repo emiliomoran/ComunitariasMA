@@ -39,6 +39,7 @@ class Login extends React.Component {
             });
           })
           .catch((error) => {
+            alert("Usuario y/o contraseña incorrecta");
             console.log(error);
           });
       }

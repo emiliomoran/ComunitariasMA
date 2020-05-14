@@ -81,6 +81,11 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         showMapForm,
         hasPoint,
         optionsMultipleSelect,
+        optionsProvider,
+        optionsCategory,
+        optionsCollectionCenter,
+        optionsUser,
+        optionsManagerType,
         onChangeFileUpload,
         file,
         inputKey,
@@ -129,6 +134,53 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       <TextArea rows={5} />
                     ) : field.type === "password" ? (
                       <Input type="password" />
+                    ): field.type === "date" ? (
+                      <Input type="date" />
+                    ): field.type ==="select" && field.key==="provider"? (
+                      <Select placeholder="Seleccionar">
+                        {optionsProvider &&
+                          optionsProvider.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
+                    ) : field.type ==="select" && field.key==="category"? (
+                      <Select placeholder="Seleccionar">
+                        {optionsCategory &&
+                          optionsCategory.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
+                    ) : field.type ==="select" && field.key==="collectionCenter"? (
+                      <Select placeholder="Seleccionar">
+                        {optionsCollectionCenter &&
+                          optionsCollectionCenter.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
+                    ) : field.type ==="select" && field.key==="user"? (
+                      <Select placeholder="Seleccionar">
+                        {optionsUser &&
+                          optionsUser.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
+                    ) : field.type ==="select" && field.key==="manager_type"? (
+                      <Select placeholder="Seleccionar">
+                        {optionsManagerType &&
+                          optionsManagerType.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
                     ) : field.type === "file" ? ( 
                       editedItem ? <div><img src={file} width="90%"
                       style={{display: isImgVisible ? "block" : "none"}} />
@@ -566,6 +618,11 @@ class CrudTable extends React.Component {
       editContact,
       deleteContact,
       optionsMultipleSelect,
+      optionsCategory,
+      optionsCollectionCenter,
+      optionsManagerType,
+      optionsProvider,
+      optionsUser,
       visiblePasswordManager,
       titlePasswordManager,
       fieldsPasswordManager,
@@ -600,6 +657,11 @@ class CrudTable extends React.Component {
             hasPoint={hasPoint}
             showContacts={showContacts}
             optionsMultipleSelect={optionsMultipleSelect}
+            optionsCategory={optionsCategory}
+            optionsCollectionCenter={optionsCollectionCenter}
+            optionsManagerType={optionsManagerType}
+            optionsProvider={optionsProvider}
+            optionsUser={optionsUser}
             onChangeFileUpload={this.onChangeFileUpload}
             file={this.state.file}
             inputKey={this.state.inputKey}

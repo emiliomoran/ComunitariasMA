@@ -22,7 +22,7 @@ class Donation extends React.Component {
   getDonations = () => {
     Api.get("donation/")
       .then((response) => {
-        console.log(this.state.dataCategories);
+        console.log(this.state.dataProviders);
         let data = [];
         response.data.map((item) => {
           let category = 
@@ -222,15 +222,15 @@ class Donation extends React.Component {
         key: "provider",
         label: "Proveedor",
         required: true,
-        maxLength: 50,
-        type: "number",
+        maxLength: null,
+        type: "select",
       },
       {
         key: "category",
         label: "Categoría",
         required: true,
-        maxLength: 500,
-        type: "number",
+        maxLength: null,
+        type: "select",
       },
       {
         key: "description",
@@ -244,7 +244,7 @@ class Donation extends React.Component {
         label: "Centro de Acopio",
         required: true,
         maxLength: null,
-        type: "number",
+        type: "select",
       },
       {
         key: "beginDate",
@@ -278,8 +278,10 @@ class Donation extends React.Component {
           title="Donaciones"
           add={this.addDonation}
           loading={loading}
-          includesMap={true}
-          //optionsMultipleSelect={dataProviders}
+          includesMap={false}
+          optionsProvider={dataProviders}
+          optionsCollectionCenter={dataCollectionCenters}
+          optionsCategory={dataCategories}
         />
       </Row>
     );

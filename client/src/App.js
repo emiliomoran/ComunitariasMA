@@ -169,9 +169,9 @@ class App extends React.Component {
                     component={CollectionCenter}
                   />
                   <Route exact path="/empresas" component={Provider} />
-                  {/* <Route exact path="/donaciones" component={Donation} /> */}
+                  <Route exact path="/donaciones" component={Donation} />
                   <Route exact path="/grupos-apoyo" component={SupportGroup} />
-                  {/* <Route exact path="/distribuciones" component={Distribution} /> */}
+                  <Route exact path="/distribuciones" component={Distribution} />
                   <Route exact path="/campañas" component={Campaign} />
                   <Route exact path="/voluntarios" component={Volunteer} />
                 </div>

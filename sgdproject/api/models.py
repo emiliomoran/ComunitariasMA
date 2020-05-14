@@ -152,8 +152,6 @@ class Distribution(models.Model):
     destinationAddress = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     manager_type = models.CharField(max_length=2, choices=MANAGER_TYPE_CHOICES)
-    managerSG = models.ForeignKey(SupportGroup, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Manager")
-    managerVO = models.ForeignKey(Volunteer, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Manager")
     information = models.TextField()
     state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
