@@ -1,4 +1,5 @@
 import React from "react";
+import Message from "../utils/Message";
 import {
   Table,
   Divider,
@@ -513,6 +514,7 @@ class CrudTable extends React.Component {
           values.photo = this.state.file;
         }
         this.props.add(values);
+        console.log(this.props)
       }
       form.resetFields();
       this.setState({
@@ -569,15 +571,19 @@ class CrudTable extends React.Component {
   };
 
   showPhotoModal = (key) => {
-    console.log("Foto Abierto");
     let item = this.props.data.find((obj) => obj.key === key);
-    console.log(item.photo);
-    //document.getElementById("photoTAG").src = item.photo;
-    this.setState({
-      //editedItem: item,
-      visiblePhoto: true,
-      photoSRC: item.photo,
-    });
+    if (item.photo === null) {
+      Message.error("No se ha subido una foto con esta donación")
+    }
+    else {
+      console.log("Foto Abierto");
+      //document.getElementById("photoTAG").src = item.photo;
+      this.setState({
+        //editedItem: item,
+        visiblePhoto: true,
+        photoSRC: item.photo,
+      });
+    }
   };
 
   closePhotoModal = () => {

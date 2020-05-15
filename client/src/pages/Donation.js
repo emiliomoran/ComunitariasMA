@@ -56,7 +56,6 @@ class Donation extends React.Component {
               expirationDate: item.expirationDate,
               photo: item.photo,
             };
-            //console.log(donation)
             data.push(donation);
             return true;
         });
@@ -77,17 +76,28 @@ class Donation extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
-    Api.post("donation/", {
-      provider: data.provider,
-      category: data.category,
-      description: data.description,
-      collectionCenter: data.collectionCenter,
-      beginDate: data.beginDate,
-      expirationDate: data.expirationDate,
-      photo: data.photo,
-      createdBy: "reactclient",
-    })
+    const formData = new FormData();
+    formData.append("provider", data.provider);
+    formData.append("category", data.category);
+    formData.append("description", data.description);
+    formData.append("collectionCenter", data.collectionCenter);
+    if (typeof(data.beginDate)==="undefined")
+      formData.append("beginDate", "");
+    else formData.append("beginDate", data.beginDate);
+    if (typeof(data.expirationDate)==="undefined")
+      formData.append("expirationDate", "");
+    else formData.append("expirationDate", data.expirationDate);
+    console.log(data.photo);
+    formData.append("photo", data.photo);
+    formData.append("createdBy", "reactclient");
+
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+
+    Api.post("donation/",formData, config)
       .then((response) => {
         Message.success("Donación agregada con éxito.");
         this.getDonations();
@@ -96,7 +106,7 @@ class Donation extends React.Component {
         this.setState({
           loading: false,
         });
-        //console.log(error);
+        console.log(error.response.data);
         Message.error("No se pudo agregar la donación, intente más tarde.");
       });
   };
@@ -259,7 +269,7 @@ class Donation extends React.Component {
 	  {
         key: "photo",
         label: "Foto",
-        required: false,
+        required: true,
         type: "file",
       },
     ];
@@ -271,7 +281,7 @@ class Donation extends React.Component {
           columns={columns}
           data={data}
           fieldsForm={fieldsForm}
-          title="Donaciones"
+          title="Donación"
           add={this.addDonation}
           loading={loading}
           includesMap={false}

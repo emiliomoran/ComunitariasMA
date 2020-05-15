@@ -33,6 +33,7 @@ class DonationSerializer(serializers.ModelSerializer):
     #category = CategorySerializer(many=False, read_only=False)
     #collectionCenter = CollectionCenterSerializer(many=False, read_only=False)
     #photo_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = Donation
         fields = "__all__"
