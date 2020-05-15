@@ -91,9 +91,9 @@ class Donation(SafeDeleteModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.CharField(max_length=500, )
     collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE)
-    beginDate = models.DateTimeField(blank=True, null=True)
-    expirationDate = models.DateTimeField(blank=True, null=True)
-    photo = models.ImageField(upload_to = 'donation/')
+    beginDate = models.DateField(blank=True, null=True)
+    expirationDate = models.DateField(blank=True, null=True)
+    photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')
     #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
@@ -194,13 +194,11 @@ class Campaign(SafeDeleteModel):
 
 class Distribution(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE
-    #MANAGER_TYPE_CHOICES = [(None,"---------"),("1","Grupo de Apoyo"), ("2","Voluntario"),]
+    MANAGER_TYPE_CHOICES = [(None,"---------"),("1","Grupo de Apoyo"), ("2","Voluntario"),]
     departureAddress = models.CharField(max_length=50)
     destinationAddress = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    #manager_type = models.CharField(max_length=2, choices=MANAGER_TYPE_CHOICES)
-    #managerSG = models.ForeignKey(SupportGroup, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Manager")
-    #managerVO = models.ForeignKey(Volunteer, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Manager")
+    manager_type = models.CharField(max_length=2, choices=MANAGER_TYPE_CHOICES)
     information = models.TextField()
     #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)

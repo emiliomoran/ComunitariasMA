@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Campaign extends React.Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class Campaign extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
       });
   };
 
@@ -50,7 +51,7 @@ class Campaign extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
@@ -65,14 +66,16 @@ class Campaign extends React.Component {
     };
     Api.post("campaign/", formData, config)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Campaña agregada con éxito.");
         this.getCampaign();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo agregar la campaña, intente más tarde.");
       });
   };
 
@@ -80,7 +83,7 @@ class Campaign extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     const formData = new FormData();
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
@@ -96,16 +99,18 @@ class Campaign extends React.Component {
         "content-type": "multipart/form-data",
       },
     };
-    Api.put(`campaign/${data.key}/`, formData, config)
+    Api.patch(`campaign/${data.key}/`, formData, config)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Campaña editada con éxito.");
         this.getCampaign();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo editar la campaña, intente más tarde.");
       });
   };
 
@@ -115,33 +120,16 @@ class Campaign extends React.Component {
     });
     Api.delete(`campaign/${data.key}/`)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
+        Message.success("Campaña eliminada con éxito.");
         this.getCampaign();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
-      });
-  };
-
-  deleteLogicCampaign = (data) => {
-    this.setState({
-      loading: true,
-    });
-    Api.put(`campaign/${data.key}/`, {
-      state: 0,
-    })
-      .then((response) => {
-        console.log(response);
-        this.getCampaign();
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo eliminar la campaña, intente más tarde.");
       });
   };
 
@@ -190,7 +178,7 @@ class Campaign extends React.Component {
         key: "description",
         label: "Descripción",
         required: true,
-        maxLength: 50,
+        maxLength: 500,
         type: "textArea",
       },
       {

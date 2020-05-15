@@ -2,14 +2,17 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Distribution extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        data: [],
         loading: true,
+        data: [],
         dataUsers: [],
+        dataManagerTypes: [{"value": 1, "text": "Grupo de Apoyo"},
+          {"value": 2, "text": "Voluntario"}],
       };
     }
 
@@ -22,9 +25,8 @@ class Distribution extends React.Component {
           .then((response) => {
             let data = [];
             response.data.map((item) => {
-              let user = 
-                this.state.dataUsers.find(item.user.value);
-              let infoUser = []
+              let user = this.state.dataUsers.find(userId => userId.value === item.user);
+              let infoUser = [];
               if (user) {
                   infoUser.push({
                     key: user.value,
@@ -35,12 +37,14 @@ class Distribution extends React.Component {
                 key: item.id,
                 departureAddress: item.departureAddress,
                 destinationAddress: item.destinationAddress,
-                user: infoUser,
+                user: item.user,
+                tags: infoUser,
                 information: item.information,
               };
               data.push(distribution);
               return true;
             });
+            console.log(data);
             this.setState({
               data: data,
               loading: false,
@@ -61,20 +65,42 @@ class Distribution extends React.Component {
         Api.post("distribution/", {
           departureAddress: data.departureAddress,
           destinationAddress: data.destinationAddress,
+          manager_type: data.manager_type,
           user: data.user,
           information: data.information,
           createdBy: "reactclient",
         })
           .then((response) => {
             //console.log(response);
+            Message.success("Plan de distribución agregado con éxito.");
             this.getDistributions();
           })
           .catch((error) => {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            Message.error("No se pudo agregar el plan de distribución, intente más tarde.");
           });
+    };
+
+    deleteDistribution = (data) => {
+      this.setState({
+        loading: true,
+      });
+      Api.delete(`distribution/${data.key}/`)
+        .then((response) => {
+          //console.log(response);
+          Message.success("Plan de distribución eliminado con éxito.");
+          this.getDistributions();
+        })
+        .catch((error) => {
+          this.setState({
+            loading: false,
+          });
+          Message.error("No se pudo eliminar el plan de distribución, intente más tarde.");
+          //console.log(error);
+        });
     };
     
     getVolunteers = () => {
@@ -84,7 +110,7 @@ class Distribution extends React.Component {
             response.data.map((item) => {
                 let user = {
                 value: item.user,
-                text: item.first_name.concat(' ', item.last_name),
+                text: item.firstName.concat(' ', item.lastName),
                 };
                 data.push(user);
                 return true;
@@ -113,9 +139,13 @@ class Distribution extends React.Component {
                 data.push(user);
                 return true;
             });
-            this.setState((state,data) => ({
-                dataUsers: state.dataUsers.concat(data)
-                }),
+            
+            data = this.state.dataUsers.concat(data);
+            //console.log(data);
+            this.setState(
+              {
+                dataUsers: data,
+                },
                 () => this.getDistributions()
             );
             })
@@ -125,7 +155,7 @@ class Distribution extends React.Component {
     };
 
     render() {
-        const { data, loading } = this.state;
+        const { data, loading, dataUsers, dataManagerTypes} = this.state;
     
         const columns = [
           {
@@ -138,14 +168,18 @@ class Distribution extends React.Component {
           },
           {
             title: "Encargado",
-            key: "user",
+            key: "tags",
           },
           {
             title: "Informacion",
             key: "information",
           },
+          {
+            title: "Acción",
+            key: "action",
+          },
         ];
-    
+        
         const fieldsForm = [
           {
             key: "departureAddress",
@@ -162,11 +196,18 @@ class Distribution extends React.Component {
             type: "text",
           },
           {
+            key: "manager_type",
+            label: "Tipo de Encargado",
+            required: true,
+            max_length: null,
+            type: "select",
+          },
+          {
             key: "user",
             label: "Encargado",
             required: true,
             maxLength: null,
-            type: "number",
+            type: "select",
           },
           {
             key: "information",
@@ -186,8 +227,11 @@ class Distribution extends React.Component {
               fieldsForm={fieldsForm}
               title="Distribuciones"
               add={this.addDistribution}
+              delete={this.deleteDistribution}
               loading={loading}
-              includesMap={true}
+              includesMap={false}
+              optionsUser={dataUsers}
+              optionsManagerType={dataManagerTypes}
             />
           </Row>
         );
