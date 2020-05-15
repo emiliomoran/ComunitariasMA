@@ -53,7 +53,7 @@ class App extends React.Component {
 
   render() {
     const { redirect, user } = this.state;
-    console.log(user);
+    //console.log(user);
     return (
       <>
         {redirect && <Redirect to="/login" />}

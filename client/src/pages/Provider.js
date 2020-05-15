@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class Provider extends React.Component {
   constructor(props) {
@@ -114,7 +115,7 @@ class Provider extends React.Component {
       phoneNumber: data.phoneNumber,
       email: data.email,
       categories: data.categories,
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);
@@ -188,7 +189,7 @@ class Provider extends React.Component {
       phoneNumber: data.phoneNumber,
       social: data.social,
       provider: data.provider,
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);

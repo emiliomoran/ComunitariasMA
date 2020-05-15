@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class CollectionCenters extends React.Component {
   constructor(props) {
@@ -58,7 +59,7 @@ class CollectionCenters extends React.Component {
       address: data.address,
       latitude: data.latitude,
       longitude: data.longitude,
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);

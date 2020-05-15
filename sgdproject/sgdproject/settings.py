@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import datetime
+from corsheaders.defaults import default_headers
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     'corsheaders',
+    'safedelete',
 ]
 
 MIDDLEWARE = [
@@ -133,7 +135,9 @@ STATIC_URL = '/static/'
 
 #CORS Configuration
 CORS_ORIGIN_ALLOW_ALL = False
-
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'token'
+]
 CORS_ORIGIN_WHITELIST = ['http://localhost:3000']    
 
 #MEDIA Configuration

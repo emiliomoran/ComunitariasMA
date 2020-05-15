@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class Category extends React.Component {
   constructor(props) {
@@ -19,7 +20,13 @@ class Category extends React.Component {
 
   getCategory = () => {
     //console.log("Request get");
-    Api.get("category/")
+    Api.get(
+      "category/" /* , {
+      headers: {
+        token: Store.getToken(),
+      },
+    } */
+    )
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -53,7 +60,7 @@ class Category extends React.Component {
     Api.post("category/", {
       name: data.name,
       description: data.description ? data.description : "",
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);

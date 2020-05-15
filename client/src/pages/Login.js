@@ -27,13 +27,13 @@ class Login extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log("Received values of form: ", values);
+        //console.log("Received values of form: ", values);
         Api.post("login/", {
           username: values.username,
           password: values.password,
         })
           .then((response) => {
-            //console.log(response.data.token);
+            console.log(response);
             Store.setToken(response.data.token);
             this.setState({
               redirect: true,
@@ -41,8 +41,21 @@ class Login extends React.Component {
             Message.success("Ha iniciado sesión con éxito.");
           })
           .catch((error) => {
-            //console.log(error);
-            Message.error("Se ha producido un error, intente nuevamente.");
+            console.log(error);
+            if (error) {
+              const status = error.response.status;
+              if (status === 401) {
+                Message.error(
+                  "Las credenciales no son válidas, intente nuevamente."
+                );
+              } else if (status === 404) {
+                Message.error("El usuario no se encuentra registrado.");
+              } else {
+                Message.error("Se ha producido un error, intente nuevamente.");
+              }
+            } else {
+              Message.error("Se ha producido un error, intente nuevamente.");
+            }
           });
       }
     });

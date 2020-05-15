@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class SupportGroup extends React.Component {
   constructor(props) {
@@ -174,7 +175,7 @@ class SupportGroup extends React.Component {
       username: data.username,
       password: data.password,
       role: "Group",
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);
@@ -183,7 +184,7 @@ class SupportGroup extends React.Component {
         Api.post("support-group/", {
           name: data.name,
           user: user_id,
-          createdBy: "reactclient",
+          createdBy: Store.getUsername(),
         })
           .then((response) => {
             //console.log(response);
@@ -268,23 +269,9 @@ class SupportGroup extends React.Component {
     //Delete support group first
     Api.delete(`support-group/${data.key}/`)
       .then((response) => {
-        //console.log(response);
-        //this.getUsers();
-        Api.delete(`user/${data.user}/`)
-          .then((response) => {
-            //console.log(response);
-            Message.success("Grupo de apoyo eliminado con éxito.");
-            this.getUsers();
-          })
-          .catch((error) => {
-            //console.log(error);
-            this.setState({
-              loading: false,
-            });
-            Message.error(
-              "No se pudo eliminar el grupo de apoyo, intente más tarde."
-            );
-          });
+        console.log(response);
+        Message.success("Grupo de apoyo eliminado con éxito.");
+        this.getUsers();
       })
       .catch((error) => {
         this.setState({
@@ -307,7 +294,7 @@ class SupportGroup extends React.Component {
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
       supportgroup: data.provider, //provider in this case is supportGroup id
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);

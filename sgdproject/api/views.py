@@ -16,16 +16,16 @@ from rest_framework_jwt.utils import jwt_decode_handler
 class IsAuthenticated(BasePermission):
     def has_permission(self, request, view):
         try:
-            print("request", request.headers['Token'])
+            #print("request", request.headers['Token'])
             decoded_payload = jwt_decode_handler(request.headers['Token'])
-            print(decoded_payload)
+            #print(decoded_payload)
             user = User.objects.get(id=decoded_payload['user_id'])
             #print(user)
             if user is not None:
                 return True
             return False            
         except:
-            print("ERROR")
+            #print("ERROR")
             #return Response(status=status.HTTP_401_UNAUTHORIZED)
             return False
 
@@ -85,7 +85,10 @@ class UserLogin(viewsets.ViewSet):
     def create(self, request):
         username = request.data.get('username', '')
         password = request.data.get('password', '')
-        user = User.objects.get(username=username)
+        try:
+            user = User.objects.get(username=username, deleted=None)
+        except User.DoesNotExist:
+            user = None        
         #print(user)
         if user is not None:
             if check_password(password, user.password):
@@ -93,10 +96,11 @@ class UserLogin(viewsets.ViewSet):
                 jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
 
                 payload = jwt_payload_handler(user)
-                print(payload)
+                #print(payload)
                 payload['role'] = user.role
                 token = jwt_encode_handler(payload)
                 return Response({'token': token,
                         'username': user.username})
 
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        return Response(status=status.HTTP_404_NOT_FOUND)

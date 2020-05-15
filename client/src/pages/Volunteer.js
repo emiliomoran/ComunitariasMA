@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class Volunteer extends React.Component {
   constructor(props) {
@@ -194,7 +195,7 @@ class Volunteer extends React.Component {
       username: data.username,
       password: data.password,
       role: role,
-      createdBy: "reactclient",
+      createdBy: Store.getUsername(),
     })
       .then((response) => {
         //console.log(response);
@@ -207,7 +208,7 @@ class Volunteer extends React.Component {
           phoneNumber: data.phoneNumber,
           social: data.social,
           user: user_id,
-          createdBy: "reactclient",
+          createdBy: Store.getUsername(),
         })
           .then((response) => {
             //console.log(response);
@@ -295,31 +296,18 @@ class Volunteer extends React.Component {
       });
   };
 
-  deleteSupportGroup = (data) => {
+  deleteVolunteer = (data) => {
     this.setState({
       loading: true,
     });
     console.log(data);
     //Delete support group first
-    Api.delete(`support-group/${data.key}/`)
+    Api.delete(`volunteer/${data.key}/`)
       .then((response) => {
         //console.log(response);
         //this.getUsers();
-        Api.delete(`user/${data.user}/`)
-          .then((response) => {
-            //console.log(response);
-            Message.success("Voluntario eliminado con éxito.");
-            this.getUsers();
-          })
-          .catch((error) => {
-            //console.log(error);
-            this.setState({
-              loading: false,
-            });
-            Message.error(
-              "No se pudo eliminar al voluntario, intente más tarde."
-            );
-          });
+        Message.success("Voluntario eliminado con éxito.");
+        this.getUsers();
       })
       .catch((error) => {
         this.setState({
@@ -468,7 +456,7 @@ class Volunteer extends React.Component {
           title="Voluntario"
           add={this.addVoluteer}
           edit={this.editVolunteer}
-          delete={this.deleteSupportGroup}
+          delete={this.deleteVolunteer}
           loading={loading}
           includesMap={false}
           includesContacts={false}
