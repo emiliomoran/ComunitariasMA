@@ -301,7 +301,7 @@ class Volunteer extends React.Component {
     });
     console.log(data);
     //Delete support group first
-    Api.delete(`support-group/${data.key}/`)
+    Api.delete(`volunteer/${data.key}/`)
       .then((response) => {
         //console.log(response);
         //this.getUsers();
