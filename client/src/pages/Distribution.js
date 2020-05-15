@@ -24,8 +24,6 @@ class Distribution extends React.Component {
         Api.get("distribution/")
           .then((response) => {
             let data = [];
-            console.log(this.state.dataManagerTypes);
-            console.log(this.state.dataUsers);
             response.data.map((item) => {
               let user = this.state.dataUsers.find(userId => userId.value === item.user);
               let infoUser = [];
@@ -46,6 +44,7 @@ class Distribution extends React.Component {
               data.push(distribution);
               return true;
             });
+            console.log(data);
             this.setState({
               data: data,
               loading: false,

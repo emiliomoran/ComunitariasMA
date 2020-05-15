@@ -2,6 +2,7 @@ import React from "react";
 import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
+import Message from "../utils/Message";
 
 class Donation extends React.Component {
   constructor(props) {
@@ -22,50 +23,42 @@ class Donation extends React.Component {
   getDonations = () => {
     Api.get("donation/")
       .then((response) => {
-        console.log(this.state.dataProviders);
         let data = [];
         response.data.map((item) => {
-          let category = 
-        this.state.dataCategories.find(item.category.value);
-        let infoCategory = [];
-          if (category) {
-              infoCategory.push({
-                key: category.value,
-                label: category.text,
-              });
-            }
           
-        let provider = 
-        this.state.dataProviders.find(item.provider.value);
-        let infoProvider = [];
-          if (provider) {
-              infoProvider.push({
-                key: provider.value,
-                label: provider.text,
-              });
+          let category = this.state.dataCategories.find(
+            categoryId => categoryId.value === item.category);
+          let infoCategory = [];
+            if (category) {
+                infoCategory = category.text;
+              }
+           
+          let provider = this.state.dataProviders.find(
+            providerId => providerId.value === item.provider);
+          let infoProvider = undefined;
+            if (provider) {
+                infoProvider = provider.text;
             }
 
-          let collectionCenter = 
-        this.state.dataCollectionCenters.find(item.collectionCenter.value);
-        let infoCollectionCenter = []
-          if (collectionCenter) {
-              infoCollectionCenter.push({
-                key: collectionCenter.value,
-                label: collectionCenter.text,
-              });
+          let collectionCenter = this.state.dataCollectionCenters.find(
+            collectionCenterId => collectionCenterId.value === item.collectionCenter);
+          let infoCollectionCenter = undefined;
+            if (collectionCenter) {
+              infoCollectionCenter = collectionCenter.text;
             }
-          let donation = {
-            key: item.id,
-            provider: infoProvider,
-            category: infoCategory,
-            description: item.description,
-            collectionCenter: infoCollectionCenter,
-            beginDate: item.beginDate,
-            expirationDate: item.expirationDate,
-            photo: item.photo,
-          };
-          data.push(donation);
-          return true;
+            let donation = {
+              key: item.id,
+              provider: infoProvider,
+              category: infoCategory,
+              description: item.description,
+              collectionCenter: infoCollectionCenter,
+              beginDate: item.beginDate,
+              expirationDate: item.expirationDate,
+              photo: item.photo,
+            };
+            //console.log(donation)
+            data.push(donation);
+            return true;
         });
         this.setState({
           data: data,
@@ -96,13 +89,15 @@ class Donation extends React.Component {
       createdBy: "reactclient",
     })
       .then((response) => {
+        Message.success("Donación agregada con éxito.");
         this.getDonations();
       })
       .catch((error) => {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        Message.error("No se pudo agregar la donación, intente más tarde.");
       });
   };
   
