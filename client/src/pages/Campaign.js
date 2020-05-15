@@ -178,7 +178,7 @@ class Campaign extends React.Component {
         key: "description",
         label: "Descripción",
         required: true,
-        maxLength: 50,
+        maxLength: 500,
         type: "textArea",
       },
       {

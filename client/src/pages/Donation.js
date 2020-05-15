@@ -81,14 +81,12 @@ class Donation extends React.Component {
     formData.append("category", data.category);
     formData.append("description", data.description);
     formData.append("collectionCenter", data.collectionCenter);
-    if (typeof(data.beginDate)==="undefined")
-      formData.append("beginDate", "");
-    else formData.append("beginDate", data.beginDate);
-    if (typeof(data.expirationDate)==="undefined")
-      formData.append("expirationDate", "");
-    else formData.append("expirationDate", data.expirationDate);
-    console.log(data.photo);
-    formData.append("photo", data.photo);
+    if (typeof(data.beginDate)!=="undefined")
+      formData.append("beginDate", data.beginDate);
+    if (typeof(data.expirationDate)!=="undefined")
+      formData.append("expirationDate", data.expirationDate);
+    if (typeof(data.photo)!=="undefined")
+      formData.append("photo", data.photo);
     formData.append("createdBy", "reactclient");
 
     const config = {
@@ -269,7 +267,7 @@ class Donation extends React.Component {
 	  {
         key: "photo",
         label: "Foto",
-        required: true,
+        required: false,
         type: "file",
       },
     ];
