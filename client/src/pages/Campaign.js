@@ -22,17 +22,15 @@ class Campaign extends React.Component {
       .then((response) => {
         let data = [];
         response.data.map((item) => {
-          if(item.state === 1){
-            let campaign = {
+          let campaign = {
               key: item.id,
               name: item.name,
               description: item.description,
               contactName: item.contactName,
               photo: item.photo,
-            };
-            data.push(campaign);
-            return true;
-          }
+          };
+          data.push(campaign);
+          return true;
         });
         this.setState({
           data: data,
