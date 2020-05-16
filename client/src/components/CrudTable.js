@@ -679,7 +679,7 @@ class CrudTable extends React.Component {
         </div>
         <br></br>
         <br></br>
-        <Table columns={columns_table} dataSource={data} loading={loading} />
+        <Table columns={columns_table} dataSource={data} loading={loading} tableLayout="fixed" scroll={{y: 290}} />
         <Map
           key={`map-${Math.random()}`}
           visible={visibleMap}

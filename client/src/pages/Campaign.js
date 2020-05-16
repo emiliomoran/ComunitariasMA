@@ -23,11 +23,11 @@ class Campaign extends React.Component {
         let data = [];
         response.data.map((item) => {
           let campaign = {
-              key: item.id,
-              name: item.name,
-              description: item.description,
-              contactName: item.contactName,
-              photo: item.photo,
+            key: item.id,
+            name: item.name,
+            description: item.description,
+            contactName: item.contactName,
+            photo: item.photo,
           };
           data.push(campaign);
           return true;
@@ -142,6 +142,7 @@ class Campaign extends React.Component {
       {
         title: "Descripción",
         key: "description",
+        ellipsis: true,
       },
       {
         title: "Contacto",
