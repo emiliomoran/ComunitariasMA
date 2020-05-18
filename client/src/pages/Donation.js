@@ -4,6 +4,16 @@ import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
 
+function getTodayDate() {
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = today.getFullYear();
+
+  today = dd + '/' + mm + '/' + yyyy;
+  return today;
+}
+
 class Donation extends React.Component {
   constructor(props) {
     super(props);
@@ -13,12 +23,20 @@ class Donation extends React.Component {
       dataCategories: [],
       dataProviders: [],
       dataCollectionCenters: [],
+      todayDate: getTodayDate(),
     };
   }
 
   componentDidMount = () => {
     this.getCategories();
   };
+
+  setDate =  () => {
+    this.props.form.setFieldsValue({
+      beginDate: getTodayDate(),
+    }, () => console.log('after'));
+    console.log('before');
+  }
   
   getDonations = () => {
     Api.get("donation/")
@@ -80,7 +98,8 @@ class Donation extends React.Component {
     formData.append("provider", data.provider);
     formData.append("category", data.category);
     formData.append("description", data.description);
-    formData.append("collectionCenter", data.collectionCenter);
+    if (typeof(data.collectionCenter)!=="undefined")
+      formData.append("collectionCenter", data.collectionCenter);
     if (typeof(data.beginDate)!=="undefined")
       formData.append("beginDate", data.beginDate);
     if (typeof(data.expirationDate)!=="undefined")
@@ -188,6 +207,7 @@ class Donation extends React.Component {
       dataCategories,
       dataCollectionCenters,
       dataProviders,
+      todayDate,
     } = this.state;
 
     const columns = [
@@ -246,7 +266,7 @@ class Donation extends React.Component {
 	  {
         key: "collectionCenter",
         label: "Centro de Acopio",
-        required: true,
+        required: false,
         maxLength: null,
         type: "select",
       },
@@ -286,6 +306,7 @@ class Donation extends React.Component {
           optionsProvider={dataProviders}
           optionsCollectionCenter={dataCollectionCenters}
           optionsCategory={dataCategories}
+          todayDate={todayDate}
         />
       </Row>
     );

@@ -90,7 +90,7 @@ class Donation(SafeDeleteModel):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.CharField(max_length=500, )
-    collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE)
+    collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE, blank=True, null=True)
     beginDate = models.DateField(blank=True, null=True)
     expirationDate = models.DateField(blank=True, null=True)
     photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')
