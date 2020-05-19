@@ -12,6 +12,7 @@ class Login extends React.Component {
     super(props);
     this.state = {
       redirect: false,
+      loading: false,
     };
   }
 
@@ -27,6 +28,9 @@ class Login extends React.Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
+        this.setState({
+          loading: true,
+        });
         //console.log("Received values of form: ", values);
         Api.post("login/", {
           username: values.username,
@@ -37,12 +41,13 @@ class Login extends React.Component {
             Store.setToken(response.data.token);
             this.setState({
               redirect: true,
+              loading: false,
             });
             Message.success("Ha iniciado sesión con éxito.");
           })
           .catch((error) => {
-            console.log(error);
-            if (error) {
+            //console.log(error);
+            if (error.response) {
               const status = error.response.status;
               if (status === 401) {
                 Message.error(
@@ -56,6 +61,9 @@ class Login extends React.Component {
             } else {
               Message.error("Se ha producido un error, intente nuevamente.");
             }
+            this.setState({
+              loading: false,
+            });
           });
       }
     });
@@ -81,7 +89,7 @@ class Login extends React.Component {
               >
                 <Row style={{ backgroundColor: "#fff" }}>
                   <img
-                    src={`${process.env.PUBLIC_URL}/mision-alianza.png`}
+                    src={`${process.env.PUBLIC_URL}/imagen1.png`}
                     alt="mision-alianza"
                     style={{ width: "100%" }}
                   ></img>
