@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class Distribution extends React.Component {
     constructor(props) {
@@ -68,7 +69,7 @@ class Distribution extends React.Component {
           manager_type: data.manager_type,
           user: data.user,
           information: data.information,
-          createdBy: "reactclient",
+          createdBy: Store.getUsername(),
         })
           .then((response) => {
             //console.log(response);

@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 function getTodayDate() {
   var today = new Date();
@@ -106,7 +107,7 @@ class Donation extends React.Component {
       formData.append("expirationDate", data.expirationDate);
     if (typeof(data.photo)!=="undefined")
       formData.append("photo", data.photo);
-    formData.append("createdBy", "reactclient");
+    formData.append("createdBy", Store.getUsername());
 
     const config = {
       headers: {
