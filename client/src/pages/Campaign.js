@@ -3,6 +3,7 @@ import CrudTable from "../components/CrudTable";
 import { Row } from "antd";
 import Api from "../utils/Api";
 import Message from "../utils/Message";
+import Store from "../utils/Store";
 
 class Campaign extends React.Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class Campaign extends React.Component {
     formData.append("contactName", data.contactName);
     formData.append("description", data.description);
     formData.append("photo", data.photo);
-    formData.append("createdBy", "reactclient");
+    formData.append("createdBy", Store.getUsername());
     //console.log(formData);
     const config = {
       headers: {
@@ -90,7 +91,7 @@ class Campaign extends React.Component {
       console.log("ingresa a if de File");
       formData.append("photo", data.photo);
     }
-    formData.append("createdBy", "reactclient");
+    //formData.append("createdBy", "reactclient");
     //console.log(formData);
     const config = {
       headers: {
