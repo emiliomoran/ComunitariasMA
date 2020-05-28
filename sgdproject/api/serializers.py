@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution, Activity
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution, Activity, Scope
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -102,6 +102,11 @@ class SupportGroupSerializer(serializers.ModelSerializer):
     members = GroupMemberSerializer(many=True, read_only=True)
     class Meta:
         model = SupportGroup
+        fields = "__all__"
+
+class ScopeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Scope
         fields = "__all__"
 
 class CampaignSerializer(serializers.ModelSerializer):

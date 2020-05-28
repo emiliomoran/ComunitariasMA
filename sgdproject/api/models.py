@@ -173,12 +173,22 @@ class GroupMember(SafeDeleteModel):
     def __str__(self):
         return self.firstName + '' + self.lastName
 
+class Scope(SafeDeleteModel):
+    _safedelete_policy = SOFT_DELETE
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=250, null=True, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
 
 class Campaign(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE
     name = models.CharField(max_length=50)
     contactName = models.CharField(max_length=50)
     description = models.TextField()
+    scope = models.ForeignKey(Scope, on_delete=models.CASCADE)
     photo = models.ImageField(blank=True, null=True, upload_to = 'campaigns/')
     #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)

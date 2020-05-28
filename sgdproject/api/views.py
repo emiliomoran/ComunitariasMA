@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.views import APIView
-from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer, UserSerializer,VolunteerSerializer, SupportGroupSerializer, GroupMemberSerializer, CampaignSerializer, DistributionSerializer, ActivitySerializer
-from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution, Activity
+from .serializers import CategorySerializer, CollectionCenterSerializer, ProviderSerializer, ProviderContactSerializer, DonationSerializer, UserSerializer,VolunteerSerializer, SupportGroupSerializer, GroupMemberSerializer, CampaignSerializer, DistributionSerializer, ActivitySerializer, ScopeSerializer
+from .models import Category, CollectionCenter, Provider, ProviderContact, Donation, User, Volunteer, SupportGroup, GroupMember, Campaign, Distribution, Activity, Scope
 from rest_framework_jwt.settings import api_settings
 from django.contrib.auth.hashers import make_password, check_password
 from rest_framework import status
@@ -69,6 +69,10 @@ class SupportGroupViewSet(viewsets.ModelViewSet):
 class GroupMemberViewSet(viewsets.ModelViewSet):
     queryset = GroupMember.objects.all().order_by('lastName')
     serializer_class = GroupMemberSerializer
+
+class ScopeViewSet(viewsets.ModelViewSet):
+    queryset = Scope.objects.all().order_by('name')
+    serializer_class = ScopeSerializer
 
 class CampaignViewSet(viewsets.ModelViewSet):
     queryset = Campaign.objects.all().order_by('name')

@@ -11,11 +11,36 @@ class Campaign extends React.Component {
     this.state = {
       data: [],
       loading: true,
+      dataScopes: [],
     };
   }
 
   componentDidMount = () => {
-    this.getCampaign();
+    this.getScopes();
+  };
+
+  getScopes = () => {
+    //console.log("scopes");
+    Api.get("scope/")
+      .then((response) => {
+        let data = [];
+        response.data.map((item) => {
+          data.push({
+            value: item.id,
+            text: item.name,
+          });
+          return true;
+        });
+        this.setState(
+          {
+            dataScopes: data,
+          },
+          () => this.getCampaign()
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   getCampaign = () => {
@@ -23,12 +48,20 @@ class Campaign extends React.Component {
       .then((response) => {
         let data = [];
         response.data.map((item) => {
+          let scope = this.state.dataScopes.find(
+            (obj) => obj.value === item.scope);
+          let infoScope = undefined;
+          if (scope) {
+            infoScope = scope.text;
+            console.log("Scope: "+scope.text);
+          }
           let campaign = {
             key: item.id,
             name: item.name,
             description: item.description,
             contactName: item.contactName,
             photo: item.photo,
+            scope: infoScope,
           };
           data.push(campaign);
           return true;
@@ -55,6 +88,7 @@ class Campaign extends React.Component {
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
     formData.append("description", data.description);
+    formData.append("scope", data.scope);
     formData.append("photo", data.photo);
     formData.append("createdBy", Store.getUsername());
     //console.log(formData);
@@ -87,8 +121,9 @@ class Campaign extends React.Component {
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
     formData.append("description", data.description);
+    formData.append("scope", data.scope);
     if(data.photo instanceof File){
-      console.log("ingresa a if de File");
+      //console.log("ingresa a if de File");
       formData.append("photo", data.photo);
     }
     //formData.append("createdBy", "reactclient");
@@ -133,7 +168,11 @@ class Campaign extends React.Component {
   };
 
   render() {
-    const { data, loading } = this.state;
+    const { 
+      data, 
+      loading,
+      dataScopes
+    } = this.state;
 
     const columns = [
       {
@@ -148,6 +187,10 @@ class Campaign extends React.Component {
       {
         title: "Contacto",
         key: "contactName",
+      },
+      {
+        title: "Alcance",
+        key: "scope",
       },
       {
         title: "Acción",
@@ -173,6 +216,13 @@ class Campaign extends React.Component {
         required: true,
         maxLength: 50,
         type: "text",
+      },
+      {
+        key: "scope",
+        label: "Alcance",
+        required: true,
+        maxLength: null,
+        type: "select",
       },
       {
         key: "description",
@@ -202,6 +252,7 @@ class Campaign extends React.Component {
           delete={this.deleteCampaign}
           loading={loading}
           includesMap={false}
+          optionsScope={dataScopes}
         />
       </Row>
     );

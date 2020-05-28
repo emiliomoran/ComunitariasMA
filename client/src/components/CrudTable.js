@@ -87,6 +87,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
         optionsCollectionCenter,
         optionsUser,
         optionsManagerType,
+        optionsScope,
         onChangeFileUpload,
         file,
         inputKey,
@@ -182,7 +183,16 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                    ) : field.type === "file" ? ( 
+                    ) : field.type ==="select" && field.key==="scope"? (
+                      <Select placeholder="Seleccionar">
+                        {optionsScope &&
+                          optionsScope.map((option) => (
+                            <Option key={option.value} value={option.value}>
+                              {option.text}
+                            </Option>
+                          ))}
+                      </Select>
+                      ) : field.type === "file" ? ( 
                       editedItem ? <div><img src={file} width="90%"
                       style={{display: isImgVisible ? "block" : "none"}} />
                       <br /><br />
@@ -632,6 +642,7 @@ class CrudTable extends React.Component {
       optionsManagerType,
       optionsProvider,
       optionsUser,
+      optionsScope,
       visiblePasswordManager,
       titlePasswordManager,
       fieldsPasswordManager,
@@ -671,6 +682,7 @@ class CrudTable extends React.Component {
             optionsManagerType={optionsManagerType}
             optionsProvider={optionsProvider}
             optionsUser={optionsUser}
+            optionsScope={optionsScope}
             onChangeFileUpload={this.onChangeFileUpload}
             file={this.state.file}
             inputKey={this.state.inputKey}
