@@ -29,6 +29,9 @@ class CollectionCenters extends React.Component {
             key: item.id,
             name: item.name,
             address: item.address,
+            contactName: item.contactName,
+            contactPhone: item.contactPhone,
+            photo: item.photo,
             latitude: item.latitude,
             longitude: item.longitude,
           };
@@ -54,13 +57,22 @@ class CollectionCenters extends React.Component {
     });
     //console.log("Request post");
     //console.log(data);
-    Api.post("collection-center/", {
-      name: data.name,
-      address: data.address,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      createdBy: Store.getUsername(),
-    })
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("address", data.address);
+    formData.append("contactName", data.contactName);
+    formData.append("contactPhone", data.contactPhone);
+    data.photo && formData.append("photo", data.photo);
+    formData.append("latitude", data.latitude);
+    formData.append("longitude", data.longitude);
+    formData.append("createdBy", Store.getUsername());
+    console.log(formData);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    Api.post("collection-center/", formData, config)
       .then((response) => {
         //console.log(response);
         Message.success("Centro de acopio agregado con éxito.");
@@ -140,12 +152,24 @@ class CollectionCenters extends React.Component {
         key: "address",
       },
       {
-        title: "Acción",
-        key: "action",
+        title: "Contacto",
+        key: "contactName",
+      },
+      {
+        title: "Teléfono de contacto",
+        key: "contactPhone",
       },
       {
         title: "Ubicación",
         key: "ubication",
+      },
+      {
+        title: "Foto",
+        key: "photo",
+      },
+      {
+        title: "Acción",
+        key: "action",
       },
     ];
 
@@ -165,6 +189,20 @@ class CollectionCenters extends React.Component {
         type: "text",
       },
       {
+        key: "contactName",
+        label: "Nombre de contacto",
+        required: true,
+        maxLength: 50,
+        type: "text",
+      },
+      {
+        key: "contactPhone",
+        label: "Teléfono de contacto",
+        required: true,
+        maxLength: 20,
+        type: "phone",
+      },
+      {
         key: "latitude",
         label: "Latitud",
         required: true,
@@ -177,6 +215,13 @@ class CollectionCenters extends React.Component {
         required: true,
         maxLength: null,
         type: "coordinate",
+      },
+      {
+        key: "photo",
+        label: "Foto del Centro de Acopio",
+        required: false,
+        maxLength: null,
+        type: "file",
       },
     ];
 

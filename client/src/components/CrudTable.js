@@ -136,9 +136,9 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       <TextArea rows={5} />
                     ) : field.type === "password" ? (
                       <Input type="password" />
-                    ): field.type === "date" ? (
+                    ) : field.type === "date" ? (
                       <Input type="date" />
-                    ): field.type ==="select" && field.key==="provider"? (
+                    ) : field.type === "select" && field.key === "provider" ? (
                       <Select placeholder="Seleccionar">
                         {optionsProvider &&
                           optionsProvider.map((option) => (
@@ -147,7 +147,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                    ) : field.type ==="select" && field.key==="category"? (
+                    ) : field.type === "select" && field.key === "category" ? (
                       <Select placeholder="Seleccionar">
                         {optionsCategory &&
                           optionsCategory.map((option) => (
@@ -156,7 +156,8 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                    ) : field.type ==="select" && field.key==="collectionCenter"? (
+                    ) : field.type === "select" &&
+                      field.key === "collectionCenter" ? (
                       <Select placeholder="Seleccionar">
                         {optionsCollectionCenter &&
                           optionsCollectionCenter.map((option) => (
@@ -165,7 +166,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                    ) : field.type ==="select" && field.key==="user"? (
+                    ) : field.type === "select" && field.key === "user" ? (
                       <Select placeholder="Seleccionar">
                         {optionsUser &&
                           optionsUser.map((option) => (
@@ -174,7 +175,8 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                    ) : field.type ==="select" && field.key==="manager_type"? (
+                    ) : field.type === "select" &&
+                      field.key === "manager_type" ? (
                       <Select placeholder="Seleccionar">
                         {optionsManagerType &&
                           optionsManagerType.map((option) => (
@@ -183,7 +185,7 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                    ) : field.type ==="select" && field.key==="scope"? (
+                    ) : field.type === "select" && field.key === "scope" ? (
                       <Select placeholder="Seleccionar">
                         {optionsScope &&
                           optionsScope.map((option) => (
@@ -192,19 +194,32 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                             </Option>
                           ))}
                       </Select>
-                      ) : field.type === "file" ? ( 
-                      editedItem ? <div><img src={file} width="90%"
-                      style={{display: isImgVisible ? "block" : "none"}} />
-                      <br /><br />
-                      <input type="file" accept="image/*" onChange={onChangeFileUpload} 
-                      key={inputKey} />
-                      </div> :
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={onChangeFileUpload}
-                        key={inputKey}
-                      />
+                    ) : field.type === "file" ? (
+                      editedItem ? (
+                        <div>
+                          <img
+                            src={file}
+                            width="90%"
+                            alt="foto"
+                            style={{ display: isImgVisible ? "block" : "none" }}
+                          />
+                          <br />
+                          <br />
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={onChangeFileUpload}
+                            key={inputKey}
+                          />
+                        </div>
+                      ) : (
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={onChangeFileUpload}
+                          key={inputKey}
+                        />
+                      )
                     ) : (
                       <Select mode="multiple" placeholder="Seleccionar">
                         {optionsMultipleSelect &&
@@ -266,11 +281,9 @@ class CrudTable extends React.Component {
       () => console.log(this.state.file)
     );
     if (this.state.editedItem) {
-      this.setState(
-        {
-          isImgVisible: false,
-        },
-      );
+      this.setState({
+        isImgVisible: false,
+      });
     }
   };
 
@@ -364,14 +377,20 @@ class CrudTable extends React.Component {
           title: c.title,
           key: c.key,
           render: (text, record) => (
-            <span>
-              <Icon
-                type="picture"
-                theme="twoTone"
-                twoToneColor="#52c41a"
-                onClick={() => this.showPhotoModal(record.key)}
-              />
-            </span>
+            <>
+              {record.photo ? (
+                <span>
+                  <Icon
+                    type="picture"
+                    theme="twoTone"
+                    twoToneColor="#52c41a"
+                    onClick={() => this.showPhotoModal(record.key)}
+                  />
+                </span>
+              ) : (
+                <span>Sin foto</span>
+              )}
+            </>
           ),
         };
       } else {
@@ -524,7 +543,7 @@ class CrudTable extends React.Component {
           values.photo = this.state.file;
         }
         this.props.add(values);
-        console.log(this.props)
+        console.log(this.props);
       }
       form.resetFields();
       this.setState({
@@ -547,9 +566,13 @@ class CrudTable extends React.Component {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
     let name = item.name ? item.name : item.firstName + " " + item.lastName;
-    console.log((name));
-    if (name === 'undefined undefined') {
-      name = "Distribución de " + item.departureAddress + " a " + item.destinationAddress;
+    console.log(name);
+    if (name === "undefined undefined") {
+      name =
+        "Distribución de " +
+        item.departureAddress +
+        " a " +
+        item.destinationAddress;
     }
     confirm({
       title: `¿Está seguro de eliminar ${name}?`,
@@ -583,9 +606,8 @@ class CrudTable extends React.Component {
   showPhotoModal = (key) => {
     let item = this.props.data.find((obj) => obj.key === key);
     if (item.photo === null) {
-      Message.error("No se ha subido una foto con esta donación")
-    }
-    else {
+      Message.error("No existe una foto asociada al registro");
+    } else {
       console.log("Foto Abierto");
       //document.getElementById("photoTAG").src = item.photo;
       this.setState({
@@ -691,7 +713,13 @@ class CrudTable extends React.Component {
         </div>
         <br></br>
         <br></br>
-        <Table columns={columns_table} dataSource={data} loading={loading} tableLayout="fixed" scroll={{y: 290}} />
+        <Table
+          columns={columns_table}
+          dataSource={data}
+          loading={loading}
+          tableLayout="fixed"
+          scroll={{ y: 290 }}
+        />
         <Map
           key={`map-${Math.random()}`}
           visible={visibleMap}
@@ -712,8 +740,13 @@ class CrudTable extends React.Component {
           centered={true}
           footer={null}
         >
-          <img id="photoTAG" src={this.state.photoSRC} alt="foto de campaña" 
-          width="90%" height="90%" />
+          <img
+            id="photoTAG"
+            src={photoSRC}
+            alt="foto de campaña"
+            width="90%"
+            height="90%"
+          />
         </Modal>
         {includesContacts && (
           <ListContacts
