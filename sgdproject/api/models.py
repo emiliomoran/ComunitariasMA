@@ -42,9 +42,12 @@ class CollectionCenter(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=500)
+    contactName = models.CharField(max_length=50)
+    contactPhone = models.CharField(max_length=20)
+    photo = models.ImageField(blank=True, null=True, upload_to = 'collectioncenter/')    
     latitude = models.FloatField()
-    longitude = models.FloatField()
-    #state = models.IntegerField(blank=True, default=1)
+    longitude = models.FloatField()    
+    #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
 
