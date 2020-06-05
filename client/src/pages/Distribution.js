@@ -39,6 +39,7 @@ class Distribution extends React.Component {
                 departureAddress: item.departureAddress,
                 destinationAddress: item.destinationAddress,
                 user: item.user,
+                destination_photo: item.destination_photo,
                 tags: infoUser,
                 information: item.information,
               };
@@ -69,6 +70,7 @@ class Distribution extends React.Component {
           manager_type: data.manager_type,
           user: data.user,
           information: data.information,
+          destination_photo: data.destination_photo,
           createdBy: Store.getUsername(),
         })
           .then((response) => {
@@ -176,6 +178,10 @@ class Distribution extends React.Component {
             key: "information",
           },
           {
+            title: "Foto Lugar de llegada",
+            key: "destination_photo",
+          },
+          {
             title: "Acción",
             key: "action",
           },
@@ -217,6 +223,12 @@ class Distribution extends React.Component {
             maxLength: 250,
             type: "text",
           },
+          {
+            key: "destination_photo",
+            label: "Foto Lugar de llegada",
+            required: false,
+            type: "file",
+          }
         ];
     
         return (
