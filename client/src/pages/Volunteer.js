@@ -127,6 +127,7 @@ class Volunteer extends React.Component {
             user: item.user,
             activities: item.activities,
             tags: activities,
+            schedule: item.schedule,
           };
           data.push(volunteer);
           return true;
@@ -188,7 +189,7 @@ class Volunteer extends React.Component {
       }
       return true;
     });
-    //console.log(role);
+    console.log(data);
 
     //Add new user
     Api.post("user/", {
@@ -207,6 +208,7 @@ class Volunteer extends React.Component {
           activities: data.activities,
           phoneNumber: data.phoneNumber,
           social: data.social,
+          schedule: data.schedule,
           user: user_id,
           createdBy: Store.getUsername(),
         })
@@ -373,6 +375,10 @@ class Volunteer extends React.Component {
         key: "tags",
       },
       {
+        title: "Disponibilidad",
+        key: "schedule",
+      },
+      {
         title: "Usuario",
         key: "username",
       },
@@ -415,6 +421,14 @@ class Volunteer extends React.Component {
         required: true,
         maxLength: null,
         type: "multipleSelect",
+      },
+      {
+        key: "schedule",
+        label: "Disponibilidad",
+        required: true,
+        maxLength: null,
+        type: "textArea",
+        placeholder: "Ej:\nLunes: 10:00 - 12:00 \nMartes: 08:00 - 09:00",
       },
       {
         key: "phoneNumber",

@@ -136,6 +136,7 @@ class Volunteer(SafeDeleteModel):
     lastName = models.CharField(max_length=50)
     phoneNumber = models.CharField(max_length=20)
     social = models.TextField(blank=True)
+    schedule = models.TextField(null=False, blank=False)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     activities = models.ManyToManyField(Activity, related_name="activities")
     #state = models.IntegerField(default=1, blank=True)

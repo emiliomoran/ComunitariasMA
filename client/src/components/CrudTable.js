@@ -133,7 +133,10 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                       field.type === "coordinate" ? (
                       <Input />
                     ) : field.type === "textArea" ? (
-                      <TextArea rows={5} />
+                      <TextArea
+                        rows={5}
+                        placeholder={field.placeholder ? field.placeholder : ""}
+                      />
                     ) : field.type === "password" ? (
                       <Input type="password" />
                     ) : field.type === "date" ? (
