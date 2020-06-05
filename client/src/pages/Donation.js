@@ -24,6 +24,7 @@ class Donation extends React.Component {
       dataCategories: [],
       dataProviders: [],
       dataCollectionCenters: [],
+      dataUsers: [],
       todayDate: getTodayDate(),
     };
   }
@@ -44,7 +45,14 @@ class Donation extends React.Component {
       .then((response) => {
         let data = [];
         response.data.map((item) => {
-          
+          let user = this.state.dataUsers.find(userId => userId.value === item.user);
+          let infoUser = [];
+          if (user) {
+              infoUser.push({
+                key: user.value,
+                label: user.text,
+              });
+            }
           let category = this.state.dataCategories.find(
             categoryId => categoryId.value === item.category);
           let infoCategory = [];
@@ -71,6 +79,8 @@ class Donation extends React.Component {
               category: infoCategory,
               description: item.description,
               collectionCenter: infoCollectionCenter,
+              user: item.user,
+              tags: infoUser,
               beginDate: item.beginDate,
               expirationDate: item.expirationDate,
               photo: item.photo,
@@ -99,6 +109,7 @@ class Donation extends React.Component {
     formData.append("provider", data.provider);
     formData.append("category", data.category);
     formData.append("description", data.description);
+    formData.append("user", data.user);
     if (typeof(data.collectionCenter)!=="undefined")
       formData.append("collectionCenter", data.collectionCenter);
     if (typeof(data.beginDate)!=="undefined")
@@ -193,13 +204,64 @@ class Donation extends React.Component {
           {
             dataCollectionCenters: data,
           },
-          () => this.getDonations()
+          () => this.getVolunteers()
         );
       })
       .catch((error) => {
         console.log(error);
       });
   };
+
+  getVolunteers = () => {
+    Api.get("volunteer/")
+        .then((response) => {
+        let data = [];
+        response.data.map((item) => {
+            let user = {
+            value: item.user,
+            text: item.firstName.concat(' ', item.lastName),
+            };
+            data.push(user);
+            return true;
+        });
+        this.setState(
+            {
+            dataUsers: data,
+            },
+            () => this.getSupportGroups()
+        );
+        })
+        .catch((error) => {
+        console.log(error);
+        });
+};
+
+getSupportGroups = () => {
+    Api.get("support-group/")
+        .then((response) => {
+        let data = [];
+        response.data.map((item) => {
+            let user = {
+            value: item.user,
+            text: item.name,
+            };
+            data.push(user);
+            return true;
+        });
+        
+        data = this.state.dataUsers.concat(data);
+        //console.log(data);
+        this.setState(
+          {
+            dataUsers: data,
+            },
+            () => this.getDonations()
+        );
+        })
+        .catch((error) => {
+        console.log(error);
+        });
+};
 
   render() {
     const {
@@ -208,6 +270,7 @@ class Donation extends React.Component {
       dataCategories,
       dataCollectionCenters,
       dataProviders,
+      dataUsers,
       todayDate,
     } = this.state;
 
@@ -228,15 +291,19 @@ class Donation extends React.Component {
         title: "Centro de Acopio",
         key: "collectionCenter",
       },
-	  {
+      {
+        title: "Encargado",
+        key: "tags",
+      },
+	    {
         title: "Comienzo de uso",
         key: "beginDate",
       },
-	  {
+	    {
         title: "Fecha de Expiración",
         key: "expirationDate",
       },
-	  {
+	    {
         title: "Foto",
         key: "photo",
       },
@@ -268,6 +335,13 @@ class Donation extends React.Component {
         key: "collectionCenter",
         label: "Centro de Acopio",
         required: false,
+        maxLength: null,
+        type: "select",
+      },
+      {
+        key: "user",
+        label: "Encargado",
+        required: true,
         maxLength: null,
         type: "select",
       },
@@ -307,6 +381,7 @@ class Donation extends React.Component {
           optionsProvider={dataProviders}
           optionsCollectionCenter={dataCollectionCenters}
           optionsCategory={dataCategories}
+          optionsUser={dataUsers}
           todayDate={todayDate}
         />
       </Row>

@@ -87,24 +87,6 @@ class ProviderContact(SafeDeleteModel):
     def __str__(self):
         return self.firstName + " " + self.lastName
 
-		
-class Donation(SafeDeleteModel):
-    _safedelete_policy = SOFT_DELETE
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    description = models.CharField(max_length=500, )
-    collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE, blank=True, null=True)
-    beginDate = models.DateField(blank=True, null=True)
-    expirationDate = models.DateField(blank=True, null=True)
-    photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')
-    #state = models.IntegerField(default=1, blank=True)
-    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
-    createdBy = models.CharField(max_length=50)
-    
-    def __str__(self):
-        return self.description
-
-
 class User(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE
     username = models.CharField(max_length=50, unique=True)
@@ -118,6 +100,23 @@ class User(SafeDeleteModel):
 
     def __str__(self):
         return self.username
+
+class Donation(SafeDeleteModel):
+    _safedelete_policy = SOFT_DELETE
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    description = models.CharField(max_length=500, )
+    collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    beginDate = models.DateField(blank=True, null=True)
+    expirationDate = models.DateField(blank=True, null=True)
+    photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')
+    #state = models.IntegerField(default=1, blank=True)
+    createdAt = models.DateTimeField(auto_now_add=True, blank=True)
+    createdBy = models.CharField(max_length=50)
+    
+    def __str__(self):
+        return self.description
 
 class Activity(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE
@@ -213,6 +212,7 @@ class Distribution(SafeDeleteModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     manager_type = models.CharField(max_length=2, choices=MANAGER_TYPE_CHOICES)
     information = models.TextField()
+    destination_photo = models.ImageField(blank=True, null=True, upload_to = 'distribution/')
     #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
