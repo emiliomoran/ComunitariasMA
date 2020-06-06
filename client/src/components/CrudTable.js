@@ -12,6 +12,7 @@ import {
   Tag,
   Select,
 } from "antd";
+import Highlighter from "react-highlight-words";
 import Map from "../components/Map";
 import ListContacts from "../components/ListContact";
 import PasswordManager from "./PasswordManager";
@@ -272,6 +273,8 @@ class CrudTable extends React.Component {
       photoSRC: undefined,
       inputKey: Date.now(),
       isImgVisible: true,
+      searchText: "",
+      searchedColumn: "",
     };
   }
 
@@ -288,6 +291,85 @@ class CrudTable extends React.Component {
         isImgVisible: false,
       });
     }
+  };
+
+  /**
+   * Filter Search Columns
+   */
+  getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
+      <div style={{ padding: 8 }}>
+        <Input
+          ref={(node) => {
+            this.searchInput = node;
+          }}
+          placeholder={"Buscar"}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            this.handleSearch(selectedKeys, confirm, dataIndex)
+          }
+          style={{ width: 188, marginBottom: 8, display: "block" }}
+        />
+        <Button
+          type="primary"
+          onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+          icon="search"
+          size="small"
+          style={{ width: 90, marginRight: 8 }}
+        >
+          Buscar
+        </Button>
+        <Button
+          onClick={() => this.handleReset(clearFilters)}
+          size="small"
+          style={{ width: 90 }}
+        >
+          Limpiar
+        </Button>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => this.searchInput.select());
+      }
+    },
+    render: (text) =>
+      this.state.searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[this.state.searchText]}
+          autoEscape
+          textToHighlight={text.toString()}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    this.setState({
+      searchText: selectedKeys[0],
+      searchedColumn: dataIndex,
+    });
+  };
+
+  handleReset = (clearFilters) => {
+    clearFilters();
+    this.setState({ searchText: "" });
   };
 
   set_columns = (columns) => {
@@ -397,12 +479,22 @@ class CrudTable extends React.Component {
           ),
         };
       } else {
-        item = {
-          title: c.title,
-          dataIndex: c.key,
-          key: c.key,
-          item: c,
-        };
+        if (c.search) {
+          item = {
+            title: c.title,
+            dataIndex: c.key,
+            key: c.key,
+            item: c,
+            ...this.getColumnSearchProps(c.key),
+          };
+        } else {
+          item = {
+            title: c.title,
+            dataIndex: c.key,
+            key: c.key,
+            item: c,
+          };
+        }
       }
       arrayColumns.push(item);
       return true;

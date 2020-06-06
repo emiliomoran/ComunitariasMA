@@ -7,11 +7,11 @@ import Store from "../utils/Store";
 
 function getTodayDate() {
   var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var dd = String(today.getDate()).padStart(2, "0");
+  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
   var yyyy = today.getFullYear();
 
-  today = dd + '/' + mm + '/' + yyyy;
+  today = dd + "/" + mm + "/" + yyyy;
   return today;
 }
 
@@ -33,60 +33,69 @@ class Donation extends React.Component {
     this.getCategories();
   };
 
-  setDate =  () => {
-    this.props.form.setFieldsValue({
-      beginDate: getTodayDate(),
-    }, () => console.log('after'));
-    console.log('before');
-  }
-  
+  setDate = () => {
+    this.props.form.setFieldsValue(
+      {
+        beginDate: getTodayDate(),
+      },
+      () => console.log("after")
+    );
+    console.log("before");
+  };
+
   getDonations = () => {
     Api.get("donation/")
       .then((response) => {
         let data = [];
         response.data.map((item) => {
-          let user = this.state.dataUsers.find(userId => userId.value === item.user);
+          let user = this.state.dataUsers.find(
+            (userId) => userId.value === item.user
+          );
           let infoUser = [];
           if (user) {
-              infoUser.push({
-                key: user.value,
-                label: user.text,
-              });
-            }
+            infoUser.push({
+              key: user.value,
+              label: user.text,
+            });
+          }
           let category = this.state.dataCategories.find(
-            categoryId => categoryId.value === item.category);
+            (categoryId) => categoryId.value === item.category
+          );
           let infoCategory = [];
-            if (category) {
-                infoCategory = category.text;
-              }
-           
+          if (category) {
+            infoCategory = category.text;
+          }
+
           let provider = this.state.dataProviders.find(
-            providerId => providerId.value === item.provider);
+            (providerId) => providerId.value === item.provider
+          );
           let infoProvider = undefined;
-            if (provider) {
-                infoProvider = provider.text;
-            }
+          if (provider) {
+            infoProvider = provider.text;
+          }
 
           let collectionCenter = this.state.dataCollectionCenters.find(
-            collectionCenterId => collectionCenterId.value === item.collectionCenter);
+            (collectionCenterId) =>
+              collectionCenterId.value === item.collectionCenter
+          );
           let infoCollectionCenter = undefined;
-            if (collectionCenter) {
-              infoCollectionCenter = collectionCenter.text;
-            }
-            let donation = {
-              key: item.id,
-              provider: infoProvider,
-              category: infoCategory,
-              description: item.description,
-              collectionCenter: infoCollectionCenter,
-              user: item.user,
-              tags: infoUser,
-              beginDate: item.beginDate,
-              expirationDate: item.expirationDate,
-              photo: item.photo,
-            };
-            data.push(donation);
-            return true;
+          if (collectionCenter) {
+            infoCollectionCenter = collectionCenter.text;
+          }
+          let donation = {
+            key: item.id,
+            provider: infoProvider,
+            category: infoCategory,
+            description: item.description,
+            collectionCenter: infoCollectionCenter,
+            user: item.user,
+            tags: infoUser,
+            beginDate: item.beginDate,
+            expirationDate: item.expirationDate,
+            photo: item.photo,
+          };
+          data.push(donation);
+          return true;
         });
         this.setState({
           data: data,
@@ -100,7 +109,7 @@ class Donation extends React.Component {
         console.log(error);
       });
   };
-  
+
   addDonation = (data) => {
     this.setState({
       loading: true,
@@ -110,14 +119,13 @@ class Donation extends React.Component {
     formData.append("category", data.category);
     formData.append("description", data.description);
     formData.append("user", data.user);
-    if (typeof(data.collectionCenter)!=="undefined")
+    if (typeof data.collectionCenter !== "undefined")
       formData.append("collectionCenter", data.collectionCenter);
-    if (typeof(data.beginDate)!=="undefined")
+    if (typeof data.beginDate !== "undefined")
       formData.append("beginDate", data.beginDate);
-    if (typeof(data.expirationDate)!=="undefined")
+    if (typeof data.expirationDate !== "undefined")
       formData.append("expirationDate", data.expirationDate);
-    if (typeof(data.photo)!=="undefined")
-      formData.append("photo", data.photo);
+    if (typeof data.photo !== "undefined") formData.append("photo", data.photo);
     formData.append("createdBy", Store.getUsername());
 
     const config = {
@@ -126,7 +134,7 @@ class Donation extends React.Component {
       },
     };
 
-    Api.post("donation/",formData, config)
+    Api.post("donation/", formData, config)
       .then((response) => {
         Message.success("Donación agregada con éxito.");
         this.getDonations();
@@ -139,7 +147,7 @@ class Donation extends React.Component {
         Message.error("No se pudo agregar la donación, intente más tarde.");
       });
   };
-  
+
   getCategories = () => {
     Api.get("category/")
       .then((response) => {
@@ -163,7 +171,7 @@ class Donation extends React.Component {
         console.log(error);
       });
   };
-  
+
   getProviders = () => {
     Api.get("provider/")
       .then((response) => {
@@ -187,7 +195,7 @@ class Donation extends React.Component {
         console.log(error);
       });
   };
-  
+
   getCollectionCenters = () => {
     Api.get("collection-center/")
       .then((response) => {
@@ -214,54 +222,54 @@ class Donation extends React.Component {
 
   getVolunteers = () => {
     Api.get("volunteer/")
-        .then((response) => {
+      .then((response) => {
         let data = [];
         response.data.map((item) => {
-            let user = {
+          let user = {
             value: item.user,
-            text: item.firstName.concat(' ', item.lastName),
-            };
-            data.push(user);
-            return true;
+            text: item.firstName.concat(" ", item.lastName),
+          };
+          data.push(user);
+          return true;
         });
         this.setState(
-            {
+          {
             dataUsers: data,
-            },
-            () => this.getSupportGroups()
+          },
+          () => this.getSupportGroups()
         );
-        })
-        .catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
-        });
-};
+      });
+  };
 
-getSupportGroups = () => {
+  getSupportGroups = () => {
     Api.get("support-group/")
-        .then((response) => {
+      .then((response) => {
         let data = [];
         response.data.map((item) => {
-            let user = {
+          let user = {
             value: item.user,
             text: item.name,
-            };
-            data.push(user);
-            return true;
+          };
+          data.push(user);
+          return true;
         });
-        
+
         data = this.state.dataUsers.concat(data);
         //console.log(data);
         this.setState(
           {
             dataUsers: data,
-            },
-            () => this.getDonations()
+          },
+          () => this.getDonations()
         );
-        })
-        .catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
-        });
-};
+      });
+  };
 
   render() {
     const {
@@ -290,20 +298,21 @@ getSupportGroups = () => {
       {
         title: "Centro de Acopio",
         key: "collectionCenter",
+        search: true,
       },
       {
         title: "Encargado",
         key: "tags",
       },
-	    {
+      {
         title: "Comienzo de uso",
         key: "beginDate",
       },
-	    {
+      {
         title: "Fecha de Expiración",
         key: "expirationDate",
       },
-	    {
+      {
         title: "Foto",
         key: "photo",
       },
@@ -331,7 +340,7 @@ getSupportGroups = () => {
         maxLength: null,
         type: "text",
       },
-	  {
+      {
         key: "collectionCenter",
         label: "Centro de Acopio",
         required: false,
@@ -352,14 +361,14 @@ getSupportGroups = () => {
         maxLength: null,
         type: "date",
       },
-	  {
+      {
         key: "expirationDate",
         label: "Fecha de Expiración",
         required: false,
         maxLength: null,
         type: "date",
       },
-	  {
+      {
         key: "photo",
         label: "Foto",
         required: false,
