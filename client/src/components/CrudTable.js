@@ -393,6 +393,21 @@ class CrudTable extends React.Component {
             </>
           ),
         };
+      } else if (c.key === "change_state") {
+        item = {
+          title: c.title,
+          key: c.key,
+          render: (text, record) => (
+            <span>
+              <Button
+                type="link"
+                onClick={() => this.changeDonationState(record.key)}
+              >
+                Cambiar a utilizado
+              </Button>
+            </span>
+          ),
+        };
       } else {
         item = {
           title: c.title,
@@ -581,6 +596,26 @@ class CrudTable extends React.Component {
       onOk: () => {
         //console.log(item.key);
         this.props.delete({
+          key: item.key,
+          user: item.user,
+        });
+      },
+      onCancel() {},
+    });
+  };
+
+  changeDonationState = (key) => {
+    //console.log(this.props.data);
+    let item = this.props.data.find((obj) => obj.key === key);
+    let name = item.name ? item.name : item.firstName + " " + item.lastName;
+    console.log(name);
+    confirm({
+      title: `¿Está seguro de alterar ${name}?`,
+      okText: "Aceptar",
+      cancelText: "Cancelar",
+      onOk: () => {
+        //console.log(item.key);
+        this.props.patch({
           key: item.key,
           user: item.user,
         });

@@ -73,6 +73,13 @@ class Donation extends React.Component {
             if (collectionCenter) {
               infoCollectionCenter = collectionCenter.text;
             }
+          let stateName = "";
+            if (item.state == 1){
+              stateName = "Sin utilizar";
+            }
+            else {
+              stateName = "Utilizada";
+            }
             let donation = {
               key: item.id,
               provider: infoProvider,
@@ -84,6 +91,7 @@ class Donation extends React.Component {
               beginDate: item.beginDate,
               expirationDate: item.expirationDate,
               photo: item.photo,
+              state: stateName
             };
             data.push(donation);
             return true;
@@ -263,6 +271,29 @@ getSupportGroups = () => {
         });
 };
 
+editDonationState = (data) => {
+  this.setState({
+    loading: true,
+  });
+  //console.log("Request put", data);
+  Api.patch(`donation/${data.key}/`, {
+    state: 0,
+    //createdBy: "reactclient",
+  })
+    .then((response) => {
+      //console.log(response);
+      Message.success("Estado de donación modificado con éxito.");
+      this.getCategories();
+    })
+    .catch((error) => {
+      this.setState({
+        loading: false,
+      });
+      //console.log(error);
+      Message.error("No se pudo modificar el estado de la donación, intente más tarde.");
+    });
+};
+
   render() {
     const {
       data,
@@ -306,6 +337,14 @@ getSupportGroups = () => {
 	    {
         title: "Foto",
         key: "photo",
+      },
+      {
+        title: "Estado",
+        key: "state"
+      },
+      {
+        title: "Modificar estado",
+        key: "change_state"
       },
     ];
 
@@ -376,6 +415,7 @@ getSupportGroups = () => {
           fieldsForm={fieldsForm}
           title="Donación"
           add={this.addDonation}
+          patch={this.editDonationState}
           loading={loading}
           includesMap={false}
           optionsProvider={dataProviders}

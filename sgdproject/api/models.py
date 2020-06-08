@@ -111,7 +111,7 @@ class Donation(SafeDeleteModel):
     beginDate = models.DateField(blank=True, null=True)
     expirationDate = models.DateField(blank=True, null=True)
     photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')
-    #state = models.IntegerField(default=1, blank=True)
+    state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
     
