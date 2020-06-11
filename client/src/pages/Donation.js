@@ -83,7 +83,7 @@ class Donation extends React.Component {
               infoCollectionCenter = collectionCenter.text;
             }
           let stateName = "";
-            if (item.state == 1){
+            if (item.state === 1){
               stateName = "Sin utilizar";
             }
             else {

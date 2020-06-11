@@ -49,7 +49,7 @@ class UserSerializer(serializers.ModelSerializer):
     currentPassword = serializers.CharField(required=False, write_only=True)
     class Meta:
         model = User
-        fields = ('id', 'username', 'role','password', 'createdAt', 'createdBy', 'currentPassword', 'deleted')
+        fields = ('id', 'username', 'role','password', 'email','createdAt', 'createdBy', 'currentPassword', 'deleted')
         extra_kwargs = {            
             'password': {'write_only': True},
             'currentPassword': {'write_only': True}
@@ -67,6 +67,7 @@ class UserSerializer(serializers.ModelSerializer):
         if validated_data.get("username"): 
             print(validated_data)
             instance.username = validated_data.get('username', instance.username)
+            instance.email = validated_data.get('email', instance.email)
             instance.role = validated_data.get('role', instance.role)
 
         if validated_data.get("password"):

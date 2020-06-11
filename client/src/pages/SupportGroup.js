@@ -118,6 +118,7 @@ class SupportGroup extends React.Component {
             username: user.username,
             user: item.user,
             members: item.members,
+            email: user.email,
           };
           data.push(supportGroup);
           return true;
@@ -144,6 +145,7 @@ class SupportGroup extends React.Component {
           let user = {
             key: item.id,
             username: item.username,
+            email: item.email,
           };
           data.push(user);
           return true;
@@ -174,6 +176,7 @@ class SupportGroup extends React.Component {
     Api.post("user/", {
       username: data.username,
       password: data.password,
+      email: data.email,
       role: "Group",
       createdBy: Store.getUsername(),
     })
@@ -222,6 +225,7 @@ class SupportGroup extends React.Component {
     //Edit user
     Api.patch(`user/${data.user}/`, {
       username: data.username,
+      email: data.email,
       //password: data.password,
       //createdBy: "reactclient",
     })
@@ -458,6 +462,13 @@ class SupportGroup extends React.Component {
         required: true,
         maxLength: 50,
         type: "text",
+      },
+      {
+        key: "email",
+        label: "Correo",
+        required: true,
+        maxLength: 50,
+        type: "email",
       },
       {
         key: "password",
