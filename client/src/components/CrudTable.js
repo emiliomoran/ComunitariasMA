@@ -848,7 +848,7 @@ class CrudTable extends React.Component {
           dataSource={data}
           loading={loading}
           tableLayout="fixed"
-          scroll={{ y: 290 }}
+          scroll={{ y: 500 }}
         />
         <Map
           key={`map-${Math.random()}`}
