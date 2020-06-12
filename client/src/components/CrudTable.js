@@ -702,10 +702,8 @@ class CrudTable extends React.Component {
   changeDonationState = (key) => {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
-    let name = item.name ? item.name : item.firstName + " " + item.lastName;
-    console.log(name);
     confirm({
-      title: `¿Está seguro de alterar ${name}?`,
+      title: `¿Está seguro de alterar el estado de la donación?`,
       okText: "Aceptar",
       cancelText: "Cancelar",
       onOk: () => {

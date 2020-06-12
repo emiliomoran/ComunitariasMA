@@ -107,7 +107,7 @@ class Donation(SafeDeleteModel):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.CharField(max_length=500, )
     collectionCenter = models.ForeignKey(CollectionCenter, on_delete=models.CASCADE, blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    users = models.ManyToManyField(User, related_name="users")
     beginDate = models.DateField(blank=True, null=True)
     expirationDate = models.DateField(blank=True, null=True)
     photo = models.ImageField(blank=True, null=True, upload_to = 'donation/')

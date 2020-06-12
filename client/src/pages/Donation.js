@@ -387,11 +387,11 @@ editDonationState = (data) => {
         type: "select",
       },
       {
-        key: "user",
-        label: "Encargado",
+        key: "users",
+        label: "Encargados",
         required: true,
         maxLength: null,
-        type: "select",
+        type: "multipleSelect",
       },
       {
         key: "beginDate",
@@ -430,8 +430,8 @@ editDonationState = (data) => {
           optionsProvider={dataProviders}
           optionsCollectionCenter={dataCollectionCenters}
           optionsCategory={dataCategories}
-          optionsUser={dataUsers}
           todayDate={todayDate}
+          optionsMultipleSelect={dataUsers}
         />
       </Row>
     );
