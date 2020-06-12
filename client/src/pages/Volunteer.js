@@ -128,6 +128,7 @@ class Volunteer extends React.Component {
             activities: item.activities,
             tags: activities,
             schedule: item.schedule,
+            email: user.email,
           };
           data.push(volunteer);
           return true;
@@ -154,6 +155,7 @@ class Volunteer extends React.Component {
           let user = {
             key: item.id,
             username: item.username,
+            email: item.email,
           };
           data.push(user);
           return true;
@@ -195,6 +197,7 @@ class Volunteer extends React.Component {
     Api.post("user/", {
       username: data.username,
       password: data.password,
+      email: data.email,
       role: role,
       createdBy: Store.getUsername(),
     })
@@ -258,6 +261,7 @@ class Volunteer extends React.Component {
 
     Api.patch(`user/${data.user}/`, {
       username: data.username,
+      email: data.email,
       role: role,
       //password: data.password,
       //createdBy: "reactclient",
@@ -450,6 +454,13 @@ class Volunteer extends React.Component {
         required: true,
         maxLength: 50,
         type: "text",
+      },
+      {
+        key: "email",
+        label: "Correo",
+        required: true,
+        maxLength: 50,
+        type: "email",
       },
       {
         key: "password",

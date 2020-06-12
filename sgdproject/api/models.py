@@ -91,6 +91,7 @@ class User(SafeDeleteModel):
     _safedelete_policy = SOFT_DELETE
     username = models.CharField(max_length=50, unique=True)
     password = models.TextField()
+    email = models.CharField(max_length=50, unique=True)
     role = models.CharField(max_length=50, default="Admin") #Admin, Group, DataVolunteer, Volunteer
     #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
