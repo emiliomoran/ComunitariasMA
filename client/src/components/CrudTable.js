@@ -24,6 +24,19 @@ const { Option } = Select;
 const CategoryForm = Form.create({ name: "form_in_modal" })(
   // eslint-disable-next-line
   class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        visiblePassword: false,
+      };
+    }
+
+    handleVisiblePassword = () => {
+      this.setState({
+        visiblePassword: !this.state.visiblePassword,
+      });
+    };
+
     setRules = (field) => {
       let rules = [];
 
@@ -71,6 +84,8 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
     };
 
     render() {
+      const { visiblePassword } = this.state;
+
       const {
         visible,
         onCancel,
@@ -139,7 +154,15 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                         placeholder={field.placeholder ? field.placeholder : ""}
                       />
                     ) : field.type === "password" ? (
-                      <Input type="password" />
+                      <Input
+                        type={visiblePassword ? "text" : "password"}
+                        prefix={
+                          <Icon
+                            type={visiblePassword ? "eye" : "eye-invisible"}
+                            onClick={this.handleVisiblePassword}
+                          />
+                        }
+                      />
                     ) : field.type === "date" ? (
                       <Input type="date" />
                     ) : field.type === "select" && field.key === "provider" ? (

@@ -416,6 +416,10 @@ class SupportGroup extends React.Component {
         key: "username",
       },
       {
+        title: "Correo",
+        key: "email",
+      },
+      {
         title: "Integrantes",
         key: "members",
       },
@@ -457,18 +461,18 @@ class SupportGroup extends React.Component {
         type: "text",
       },
       {
-        key: "username",
-        label: "Usuario",
-        required: true,
-        maxLength: 50,
-        type: "text",
-      },
-      {
         key: "email",
         label: "Correo",
         required: true,
         maxLength: 50,
         type: "email",
+      },
+      {
+        key: "username",
+        label: "Usuario",
+        required: true,
+        maxLength: 50,
+        type: "text",
       },
       {
         key: "password",

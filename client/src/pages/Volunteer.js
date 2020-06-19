@@ -383,6 +383,10 @@ class Volunteer extends React.Component {
         key: "schedule",
       },
       {
+        title: "Correo",
+        key: "email",
+      },
+      {
         title: "Usuario",
         key: "username",
       },
@@ -449,18 +453,18 @@ class Volunteer extends React.Component {
         type: "url",
       },
       {
-        key: "username",
-        label: "Usuario",
-        required: true,
-        maxLength: 50,
-        type: "text",
-      },
-      {
         key: "email",
         label: "Correo",
         required: true,
         maxLength: 50,
         type: "email",
+      },
+      {
+        key: "username",
+        label: "Usuario",
+        required: true,
+        maxLength: 50,
+        type: "text",
       },
       {
         key: "password",
