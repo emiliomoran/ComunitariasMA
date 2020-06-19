@@ -5,16 +5,6 @@ import Api from "../utils/Api";
 import Message from "../utils/Message";
 import Store from "../utils/Store";
 
-function getTodayDate() {
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, "0");
-  var mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-  var yyyy = today.getFullYear();
-
-  today = dd + "/" + mm + "/" + yyyy;
-  return today;
-}
-
 class Donation extends React.Component {
   constructor(props) {
     super(props);
@@ -25,7 +15,6 @@ class Donation extends React.Component {
       dataProviders: [],
       dataCollectionCenters: [],
       dataUsers: [],
-      todayDate: getTodayDate(),
     };
   }
 
@@ -33,31 +22,24 @@ class Donation extends React.Component {
     this.getCategories();
   };
 
-  setDate = () => {
-    this.props.form.setFieldsValue(
-      {
-        beginDate: getTodayDate(),
-      },
-      () => console.log("after")
-    );
-    console.log("before");
-  };
-
   getDonations = () => {
     Api.get("donation/")
       .then((response) => {
         let data = [];
         response.data.map((item) => {
-          let user = this.state.dataUsers.find(
-            (userId) => userId.value === item.user
-          );
-          let infoUser = [];
-          if (user) {
-            infoUser.push({
-              key: user.value,
-              label: user.text,
-            });
-          }
+          let users = [];
+          item.users.map((id) => {
+            let user = this.state.dataUsers.find(
+              (userId) => userId.value === item.user
+            );
+            if (user) {
+              users.push({
+                key: user.value,
+                label: user.text,
+              });
+            }
+            return true;
+          });
           let category = this.state.dataCategories.find(
             (categoryId) => categoryId.value === item.category
           );
@@ -95,8 +77,8 @@ class Donation extends React.Component {
               category: infoCategory,
               description: item.description,
               collectionCenter: infoCollectionCenter,
-              user: item.user,
-              tags: infoUser,
+              users: item.users,
+              tags: users,
               beginDate: item.beginDate,
               expirationDate: item.expirationDate,
               photo: item.photo,
@@ -126,7 +108,7 @@ class Donation extends React.Component {
     formData.append("provider", data.provider);
     formData.append("category", data.category);
     formData.append("description", data.description);
-    formData.append("user", data.user);
+    formData.append("users", data.users);
     if (typeof data.collectionCenter !== "undefined")
       formData.append("collectionCenter", data.collectionCenter);
     if (typeof data.beginDate !== "undefined")
@@ -310,7 +292,6 @@ editDonationState = (data) => {
       dataCollectionCenters,
       dataProviders,
       dataUsers,
-      todayDate,
     } = this.state;
 
     const columns = [
@@ -430,7 +411,6 @@ editDonationState = (data) => {
           optionsProvider={dataProviders}
           optionsCollectionCenter={dataCollectionCenters}
           optionsCategory={dataCategories}
-          todayDate={todayDate}
           optionsMultipleSelect={dataUsers}
         />
       </Row>
