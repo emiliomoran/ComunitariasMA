@@ -505,16 +505,17 @@ class CrudTable extends React.Component {
         item = {
           title: c.title,
           key: c.key,
-          render: (text, record) => (
-            <span>
-              <Button
-                type="link"
-                onClick={() => this.changeDonationState(record.key)}
-              >
-                Cambiar a utilizado
-              </Button>
-            </span>
-          ),
+          render: (text, record) =>
+            record.state_code === 1 && (
+              <span>
+                <Button
+                  type="link"
+                  onClick={() => this.changeDonationState(record.key)}
+                >
+                  Cambiar a utilizado
+                </Button>
+              </span>
+            ),
         };
       } else {
         if (c.search) {
@@ -725,9 +726,6 @@ class CrudTable extends React.Component {
   changeDonationState = (key) => {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
-    if (item.state === 0) {
-      Message.error("La donación ya ha sido utilizada");
-    } else {
     confirm({
       title: `¿Está seguro de alterar el estado de la donación?`,
       okText: "Aceptar",

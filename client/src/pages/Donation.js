@@ -23,14 +23,16 @@ class Donation extends React.Component {
   };
 
   getDonations = () => {
+    console.log(this.state.dataUsers);
     Api.get("donation/")
       .then((response) => {
+        console.log(response);
         let data = [];
         response.data.map((item) => {
           let users = [];
           item.users.map((id) => {
             let user = this.state.dataUsers.find(
-              (userId) => userId.value === item.user
+              (userId) => userId.value === id
             );
             if (user) {
               users.push({
@@ -61,32 +63,33 @@ class Donation extends React.Component {
               collectionCenterId.value === item.collectionCenter
           );
           let infoCollectionCenter = undefined;
-            if (collectionCenter) {
-              infoCollectionCenter = collectionCenter.text;
-            }
+          if (collectionCenter) {
+            infoCollectionCenter = collectionCenter.text;
+          }
           let stateName = "";
-            if (item.state === 1){
-              stateName = "Sin utilizar";
-            }
-            else {
-              stateName = "Utilizada";
-            }
-            let donation = {
-              key: item.id,
-              provider: infoProvider,
-              category: infoCategory,
-              description: item.description,
-              collectionCenter: infoCollectionCenter,
-              users: item.users,
-              tags: users,
-              beginDate: item.beginDate,
-              expirationDate: item.expirationDate,
-              photo: item.photo,
-              state: stateName
-            };
-            data.push(donation);
-            return true;
+          if (item.state === 1) {
+            stateName = "Sin utilizar";
+          } else {
+            stateName = "Utilizada";
+          }
+          let donation = {
+            key: item.id,
+            provider: infoProvider,
+            category: infoCategory,
+            description: item.description,
+            collectionCenter: infoCollectionCenter,
+            users: item.users,
+            tags: users,
+            beginDate: item.beginDate,
+            expirationDate: item.expirationDate,
+            photo: item.photo,
+            state: stateName,
+            state_code: item.state,
+          };
+          data.push(donation);
+          return true;
         });
+        console.log(data);
         this.setState({
           data: data,
           loading: false,
@@ -108,7 +111,9 @@ class Donation extends React.Component {
     formData.append("provider", data.provider);
     formData.append("category", data.category);
     formData.append("description", data.description);
-    formData.append("users", data.users);
+    let users = data.users ? data.users : [];
+    users.map((user) => formData.append("users", user));
+    console.log(formData.get("users"));
     if (typeof data.collectionCenter !== "undefined")
       formData.append("collectionCenter", data.collectionCenter);
     if (typeof data.beginDate !== "undefined")
@@ -261,28 +266,30 @@ class Donation extends React.Component {
       });
   };
 
-editDonationState = (data) => {
-  this.setState({
-    loading: true,
-  });
-  //console.log("Request put", data);
-  Api.patch(`donation/${data.key}/`, {
-    state: 0,
-    //createdBy: "reactclient",
-  })
-    .then((response) => {
-      //console.log(response);
-      Message.success("Estado de donación modificado con éxito.");
-      this.getCategories();
-    })
-    .catch((error) => {
-      this.setState({
-        loading: false,
-      });
-      //console.log(error);
-      Message.error("No se pudo modificar el estado de la donación, intente más tarde.");
+  editDonationState = (data) => {
+    this.setState({
+      loading: true,
     });
-};
+    //console.log("Request put", data);
+    Api.patch(`donation/${data.key}/`, {
+      state: 0,
+      //createdBy: "reactclient",
+    })
+      .then((response) => {
+        //console.log(response);
+        Message.success("Estado de donación modificado con éxito.");
+        this.getCategories();
+      })
+      .catch((error) => {
+        this.setState({
+          loading: false,
+        });
+        //console.log(error);
+        Message.error(
+          "No se pudo modificar el estado de la donación, intente más tarde."
+        );
+      });
+  };
 
   render() {
     const {
@@ -330,11 +337,11 @@ editDonationState = (data) => {
       },
       {
         title: "Estado",
-        key: "state"
+        key: "state",
       },
       {
         title: "Modificar estado",
-        key: "change_state"
+        key: "change_state",
       },
     ];
 
