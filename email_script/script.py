@@ -9,7 +9,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # Sender account
-FROM_MA = "ma_reminder20@outlook.com"
+FROM_MA = ""
 CLAVE = ""
 
 api_url_base = "http://127.0.0.1:8000/api/"
