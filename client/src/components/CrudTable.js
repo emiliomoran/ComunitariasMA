@@ -360,7 +360,12 @@ class CrudTable extends React.Component {
       </div>
     ),
     filterIcon: (filtered) => (
-      <Icon type="search" style={{ color: filtered ? "#1890ff" : undefined }} />
+      <span style={{ textAlign: "center", paddingTop: 25 }}>
+        <Icon
+          type="search"
+          style={{ fontSize: 26, color: filtered ? "#1890ff" : undefined }}
+        />
+      </span>
     ),
     onFilter: (value, record) =>
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
