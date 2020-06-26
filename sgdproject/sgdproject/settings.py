@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import datetime
 from corsheaders.defaults import default_headers
+from decouple import config, Csv
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,12 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'b)51_y0z*l16@(xog!+&5+sjskm&)%w(7dfs4wj-!=ul&gx8es'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 
 
 # Application definition
@@ -83,11 +84,11 @@ WSGI_APPLICATION = 'sgdproject.wsgi.application'
 DATABASES = {
  'default': {
         'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'sgdma',
-        'USER': 'sgduser',
-        'PASSWORD': 'M@C0V1d19',
-        'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
-        'PORT': '3306',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),   # Or an IP Address that your DB is hosted on
+        'PORT': config('DB_PORT'),
     }
 }
 
@@ -138,7 +139,7 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_HEADERS = list(default_headers) + [
     'token'
 ]
-CORS_ORIGIN_WHITELIST = ['http://localhost:3000']    
+CORS_ORIGIN_WHITELIST = config('CORS_ORIGIN_WHITELIST', cast=Csv())
 
 #MEDIA Configuration
 MEDIA_URL = '/media/'
