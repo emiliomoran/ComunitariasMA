@@ -39,7 +39,7 @@ class Distribution extends React.Component {
                 departureAddress: item.departureAddress,
                 destinationAddress: item.destinationAddress,
                 user: item.user,
-                destination_photo: item.destination_photo,
+                photo: item.photo,
                 tags: infoUser,
                 information: item.information,
               };
@@ -64,15 +64,24 @@ class Distribution extends React.Component {
         this.setState({
           loading: true,
         });
-        Api.post("distribution/", {
-          departureAddress: data.departureAddress,
-          destinationAddress: data.destinationAddress,
-          manager_type: data.manager_type,
-          user: data.user,
-          information: data.information,
-          destination_photo: data.destination_photo,
-          createdBy: Store.getUsername(),
-        })
+        //console.log(data);
+        const formData = new FormData();
+        formData.append("departureAddress", data.departureAddress);
+        formData.append("destinationAddress", data.destinationAddress);
+        formData.append("manager_type", data.manager_type);
+        formData.append("user", data.user);
+        formData.append("information", data.information);
+        if (typeof data.photo !== "undefined"){
+          //console.log("if de photo");
+          formData.append("photo", data.photo);
+        }
+        formData.append("createdBy", Store.getUsername());
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        Api.post("distribution/", formData, config)
           .then((response) => {
             //console.log(response);
             Message.success("Plan de distribución agregado con éxito.");
@@ -179,7 +188,7 @@ class Distribution extends React.Component {
           },
           {
             title: "Foto Lugar de llegada",
-            key: "destination_photo",
+            key: "photo",
           },
           {
             title: "Acción",
@@ -224,7 +233,7 @@ class Distribution extends React.Component {
             type: "text",
           },
           {
-            key: "destination_photo",
+            key: "photo",
             label: "Foto Lugar de llegada",
             required: false,
             type: "file",

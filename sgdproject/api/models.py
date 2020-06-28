@@ -214,7 +214,7 @@ class Distribution(SafeDeleteModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     manager_type = models.CharField(max_length=2, choices=MANAGER_TYPE_CHOICES)
     information = models.TextField()
-    destination_photo = models.ImageField(blank=True, null=True, upload_to = 'distribution/')
+    photo = models.ImageField(blank=True, null=True, upload_to = 'distribution/')
     #state = models.IntegerField(default=1, blank=True)
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
     createdBy = models.CharField(max_length=50)
