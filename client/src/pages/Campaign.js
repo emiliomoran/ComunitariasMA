@@ -53,7 +53,7 @@ class Campaign extends React.Component {
           let infoScope = undefined;
           if (scope) {
             infoScope = scope.text;
-            console.log("Scope: "+scope.text);
+            //console.log("Scope: "+scope.text);
           }
           let campaign = {
             key: item.id,
@@ -121,7 +121,10 @@ class Campaign extends React.Component {
     formData.append("name", data.name);
     formData.append("contactName", data.contactName);
     formData.append("description", data.description);
-    formData.append("scope", data.scope);
+    if(typeof data.scope === "number"){
+      //console.log("if para scope");
+      formData.append("scope", data.scope);
+    }
     if(data.photo instanceof File){
       //console.log("ingresa a if de File");
       formData.append("photo", data.photo);
@@ -193,12 +196,12 @@ class Campaign extends React.Component {
         key: "scope",
       },
       {
-        title: "Acción",
-        key: "action",
-      },
-      {
         title: "Foto",
         key: "photo",
+      },
+      {
+        title: "Acción",
+        key: "action",
       },
     ];
 
