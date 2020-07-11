@@ -71,7 +71,11 @@ class Volunteer extends React.Component {
 
   getActivities = () => {
     //console.log("categories");
-    Api.get("activity/")
+    Api.get("activity/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -89,20 +93,25 @@ class Volunteer extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getVolunteers = () => {
     //console.log("Request get");
     //console.log(this.state.dataUsers);
-    Api.get("volunteer/")
+    Api.get("volunteer/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         let data = [];
         response.data.map((item) => {
           let activities = [];
-          console.log(item.activities);
+          //console.log(item.activities);
           item.activities.map((id) => {
             let activity = this.state.dataActivities.find(
               (obj) => obj.value === id
@@ -142,12 +151,17 @@ class Volunteer extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getUsers = () => {
-    Api.get("user/")
+    Api.get("user/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         let data = [];
@@ -172,7 +186,8 @@ class Volunteer extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -191,7 +206,7 @@ class Volunteer extends React.Component {
       }
       return true;
     });
-    console.log(data);
+    //console.log(data);
 
     //Add new user
     Api.post("user/", {
@@ -200,6 +215,10 @@ class Volunteer extends React.Component {
       email: data.email,
       role: role,
       createdBy: Store.getUsername(),
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -214,6 +233,10 @@ class Volunteer extends React.Component {
           schedule: data.schedule,
           user: user_id,
           createdBy: Store.getUsername(),
+        }, {
+          headers: {
+            token: Store.getToken(),
+          },
         })
           .then((response) => {
             //console.log(response);
@@ -228,6 +251,7 @@ class Volunteer extends React.Component {
             Message.error(
               "No se pudo agregar al voluntario, intente más tarde."
             );
+            this.props.handleErrorResponse(error, false);
           });
       })
       .catch((error) => {
@@ -237,6 +261,7 @@ class Volunteer extends React.Component {
           loading: false,
         });
         Message.error("No se pudo agregar al voluntario, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -257,14 +282,18 @@ class Volunteer extends React.Component {
       }
       return true;
     });
-    console.log(role);
+    //console.log(role);
 
     Api.patch(`user/${data.user}/`, {
       username: data.username,
       email: data.email,
-      role: role,
+      role: role,      
       //password: data.password,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -276,6 +305,11 @@ class Volunteer extends React.Component {
           activities: data.activities,
           phoneNumber: data.phoneNumber,
           social: data.social,
+          schedule: data.schedule,
+        }, {
+          headers: {
+            token: Store.getToken(),
+          },
         })
           .then((response) => {
             //console.log(response);
@@ -290,6 +324,7 @@ class Volunteer extends React.Component {
             Message.error(
               "No se pudo editar al voluntario, intente más tarde."
             );
+            this.props.handleErrorResponse(error, false);
           });
       })
       .catch((error) => {
@@ -299,6 +334,7 @@ class Volunteer extends React.Component {
           loading: false,
         });
         Message.error("No se pudo editar al voluntario, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -306,9 +342,13 @@ class Volunteer extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     //Delete support group first
-    Api.delete(`volunteer/${data.key}/`)
+    Api.delete(`volunteer/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         //this.getUsers();
@@ -321,6 +361,7 @@ class Volunteer extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo eliminar al voluntario, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -328,11 +369,15 @@ class Volunteer extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     //Edit user
     Api.patch(`user/${this.state.user_id}/`, {
       currentPassword: data.currentPassword,
       password: data.newPassword,
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -346,12 +391,13 @@ class Volunteer extends React.Component {
         this.getUsers();
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         //Error message
         this.setState({
           loading: false,
         });
         Message.error("No se pudo cambiar la contraseña, intente más tarde.");
+        this.props.handleErrorResponse(error, true);
       });
   };
 

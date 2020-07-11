@@ -232,14 +232,14 @@ def remove_provider(sender, instance, **kwargs):
 def remove_support_group(sender, instance, **kwargs):
     supportGroup_id = instance.id
     user_id = instance.user.id
-    print("id", supportGroup_id)
-    print("user", user_id)
+    #print("id", supportGroup_id)
+    #print("user", user_id)
     GroupMember.objects.filter(supportgroup=supportGroup_id).delete()
     User.objects.filter(id=user_id).delete()
 
 def remove_volunteer(sender, instance, **kwargs):
     user_id = instance.user.id
-    print("user", user_id)
+    #print("user", user_id)
     User.objects.filter(id=user_id).delete()
 
 

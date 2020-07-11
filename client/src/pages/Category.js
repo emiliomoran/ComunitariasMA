@@ -10,7 +10,7 @@ class Category extends React.Component {
     super(props);
     this.state = {
       data: [],
-      loading: true,
+      loading: true,      
     };
   }
 
@@ -18,14 +18,13 @@ class Category extends React.Component {
     this.getCategory();
   };
 
-  getCategory = () => {
-    //console.log("Request get");
+  getCategory = () => {    
     Api.get(
-      "category/" /* , {
+      "category/" , {
       headers: {
         token: Store.getToken(),
       },
-    } */
+    }
     )
       .then((response) => {
         let data = [];
@@ -46,8 +45,9 @@ class Category extends React.Component {
       .catch((error) => {
         this.setState({
           loading: false,
-        });
-        console.log(error);
+        });        
+        //console.error(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -57,10 +57,14 @@ class Category extends React.Component {
     });
     //console.log("Request post");
     //console.log(data);
-    Api.post("category/", {
+    Api.post("category/",  {
       name: data.name,
       description: data.description ? data.description : "",
       createdBy: Store.getUsername(),
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -73,6 +77,7 @@ class Category extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo agregar la categoría, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -85,6 +90,10 @@ class Category extends React.Component {
       name: data.name,
       description: data.description ? data.description : "",
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -97,6 +106,7 @@ class Category extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo editar la categoría, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -104,7 +114,11 @@ class Category extends React.Component {
     this.setState({
       loading: true,
     });
-    Api.delete(`category/${data.key}/`)
+    Api.delete(`category/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         Message.success("Categoría eliminada con éxito.");
@@ -115,6 +129,7 @@ class Category extends React.Component {
           loading: false,
         });
         Message.error("No se pudo eliminar la categoría, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
         //console.log(error);
       });
   };
@@ -154,7 +169,7 @@ class Category extends React.Component {
       },
     ];
 
-    return (
+    return (            
       <Row>
         <h3>Categorías</h3>
         <CrudTable
@@ -168,7 +183,7 @@ class Category extends React.Component {
           loading={loading}
           includesMap={false}
         />
-      </Row>
+      </Row>      
     );
   }
 }

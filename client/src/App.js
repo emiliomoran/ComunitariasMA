@@ -51,6 +51,15 @@ class App extends React.Component {
     });
   };
 
+  handleErrorResponse = (error, isChangePassword) => {
+    if (error.response) {
+      if (error.response.status === 403 && !isChangePassword) {
+        this.logout();
+      }
+    }
+    //error.response && error.response.status === 403 ? this.logout();
+  }
+
   render() {
     const { redirect, user } = this.state;
     //console.log(user);
@@ -62,12 +71,12 @@ class App extends React.Component {
             <Sider
               breakpoint="lg"
               collapsedWidth="0"
-              onBreakpoint={(broken) => {
+              /* onBreakpoint={(broken) => {
                 console.log(broken);
               }}
               onCollapse={(collapsed, type) => {
                 console.log(collapsed, type);
-              }}
+              }} */
             >
               <div className="logo">
                 <img
@@ -178,18 +187,18 @@ class App extends React.Component {
                     background: "#fff",
                   }}
                 >
-                  <Route exact path="/categorias" component={Category} />
+                  <Route exact path="/categorias" component={() => <Category handleErrorResponse={this.handleErrorResponse} />} />
                   <Route
                     exact
                     path="/centros-acopio"
-                    component={CollectionCenter}
+                    component={() => <CollectionCenter handleErrorResponse={this.handleErrorResponse}/>}
                   />
-                  <Route exact path="/empresas" component={Provider} />
-                  <Route exact path="/donaciones" component={Donation} />
-                  <Route exact path="/grupos-apoyo" component={SupportGroup} />
-                  <Route exact path="/distribuciones" component={Distribution} />
-                  <Route exact path="/campañas" component={Campaign} />
-                  <Route exact path="/voluntarios" component={Volunteer} />
+                  <Route exact path="/empresas" component={() => <Provider handleErrorResponse={this.handleErrorResponse} />} />
+                  <Route exact path="/donaciones" component={() => <Donation handleErrorResponse={this.handleErrorResponse} />} />
+                  <Route exact path="/grupos-apoyo" component={() => <SupportGroup handleErrorResponse={this.handleErrorResponse} />} />
+                  <Route exact path="/distribuciones" component={() => <Distribution handleErrorResponse={this.handleErrorResponse}/>} />
+                  <Route exact path="/campañas" component={() => <Campaign handleErrorResponse={this.handleErrorResponse}/>} />
+                  <Route exact path="/voluntarios" component={() => <Volunteer handleErrorResponse={this.handleErrorResponse}/>} />
                 </div>
               </Content>
               <Footer style={{ textAlign: "center" }}>

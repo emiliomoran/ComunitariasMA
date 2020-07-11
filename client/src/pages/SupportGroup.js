@@ -106,7 +106,11 @@ class SupportGroup extends React.Component {
   getSupportGroups = () => {
     //console.log("Request get");
     //console.log(this.state.dataUsers);
-    Api.get("support-group/")
+    Api.get("support-group/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         let data = [];
@@ -132,12 +136,17 @@ class SupportGroup extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getUsers = () => {
-    Api.get("user/")
+    Api.get("user/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         let data = [];
@@ -162,7 +171,8 @@ class SupportGroup extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -179,6 +189,10 @@ class SupportGroup extends React.Component {
       email: data.email,
       role: "Group",
       createdBy: Store.getUsername(),
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -188,6 +202,10 @@ class SupportGroup extends React.Component {
           name: data.name,
           user: user_id,
           createdBy: Store.getUsername(),
+        }, {
+          headers: {
+            token: Store.getToken(),
+          },
         })
           .then((response) => {
             //console.log(response);
@@ -202,10 +220,11 @@ class SupportGroup extends React.Component {
             Message.error(
               "No se pudo agregar el grupo de apoyo, intente más tarde."
             );
+            this.props.handleErrorResponse(error, false);
           });
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         //Error message
         this.setState({
           loading: false,
@@ -213,6 +232,7 @@ class SupportGroup extends React.Component {
         Message.error(
           "No se pudo agregar el grupo de apoyo, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -221,13 +241,17 @@ class SupportGroup extends React.Component {
       loading: true,
     });
     //console.log("Request post");
-    console.log(data);
+    //console.log(data);
     //Edit user
     Api.patch(`user/${data.user}/`, {
       username: data.username,
       email: data.email,
       //password: data.password,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -237,6 +261,10 @@ class SupportGroup extends React.Component {
           name: data.name,
           //user: user_id,
           //createdBy: "reactclient",
+        }, {
+          headers: {
+            token: Store.getToken(),
+          },
         })
           .then((response) => {
             //console.log(response);
@@ -251,10 +279,11 @@ class SupportGroup extends React.Component {
             Message.error(
               "No se pudo editar el grupo de apoyo, intente más tarde."
             );
+            this.props.handleErrorResponse(error, false);
           });
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         //Error message
         this.setState({
           loading: false,
@@ -262,6 +291,7 @@ class SupportGroup extends React.Component {
         Message.error(
           "No se pudo editar el grupo de apoyo, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -271,9 +301,13 @@ class SupportGroup extends React.Component {
     });
     //console.log(data);
     //Delete support group first
-    Api.delete(`support-group/${data.key}/`)
+    Api.delete(`support-group/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         Message.success("Grupo de apoyo eliminado con éxito.");
         this.getUsers();
       })
@@ -285,6 +319,7 @@ class SupportGroup extends React.Component {
         Message.error(
           "No se pudo eliminar el grupo de apoyo, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -292,13 +327,17 @@ class SupportGroup extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     Api.post("group-member/", {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
       supportgroup: data.provider, //provider in this case is supportGroup id
       createdBy: Store.getUsername(),
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -311,6 +350,7 @@ class SupportGroup extends React.Component {
       .catch((error) => {
         //console.log(error);
         Message.error("No se pudo agregar al integrante, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -324,6 +364,10 @@ class SupportGroup extends React.Component {
       phoneNumber: data.phoneNumber,
       supportgroup: data.provider,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -336,6 +380,7 @@ class SupportGroup extends React.Component {
       .catch((error) => {
         //console.log(error);
         Message.error("No se pudo editar al integrante, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -344,7 +389,11 @@ class SupportGroup extends React.Component {
       loading: true,
     });
     //console.log("Request delete", key);
-    Api.delete(`group-member/${key}/`)
+    Api.delete(`group-member/${key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         this.setState({
@@ -359,6 +408,7 @@ class SupportGroup extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo eliminar al integrante, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -366,11 +416,15 @@ class SupportGroup extends React.Component {
     this.setState({
       loading: true,
     });
-    console.log(data);
+    //console.log(data);
     //Edit user
     Api.patch(`user/${this.state.user_id}/`, {
       currentPassword: data.currentPassword,
       password: data.newPassword,
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -384,12 +438,13 @@ class SupportGroup extends React.Component {
         this.getUsers();
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
         //Error message
         this.setState({
           loading: false,
         });
         Message.error("No se pudo cambiar la contraseña, intente más tarde.");
+        this.props.handleErrorResponse(error, true);
       });
   };
 

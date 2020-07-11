@@ -23,10 +23,14 @@ class Donation extends React.Component {
   };
 
   getDonations = () => {
-    console.log(this.state.dataUsers);
-    Api.get("donation/")
+    //console.log(this.state.dataUsers);
+    Api.get("donation/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         let data = [];
         response.data.map((item) => {
           let users = [];
@@ -89,7 +93,7 @@ class Donation extends React.Component {
           data.push(donation);
           return true;
         });
-        console.log(data);
+        //console.log(data);
         this.setState({
           data: data,
           loading: false,
@@ -99,7 +103,8 @@ class Donation extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -113,7 +118,7 @@ class Donation extends React.Component {
     formData.append("description", data.description);
     let users = data.users ? data.users : [];
     users.map((user) => formData.append("users", user));
-    console.log(formData.get("users"));
+    //console.log(formData.get("users"));
     if (typeof data.collectionCenter !== "undefined")
       formData.append("collectionCenter", data.collectionCenter);
     if (typeof data.beginDate !== "undefined")
@@ -125,7 +130,8 @@ class Donation extends React.Component {
 
     const config = {
       headers: {
-        "content-type": "multipart/form-data",
+        "content-type": "multipart/form-data",        
+        token: Store.getToken(),
       },
     };
 
@@ -138,8 +144,9 @@ class Donation extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error.response.data);
+        //console.log(error.response.data);
         Message.error("No se pudo agregar la donación, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -164,7 +171,8 @@ class Donation extends React.Component {
 
     const config = {
       headers: {
-        "content-type": "multipart/form-data",
+        "content-type": "multipart/form-data",        
+        token: Store.getToken(),        
       },
     };
     Api.patch(`donation/${data.key}/`, formData, config)
@@ -179,6 +187,7 @@ class Donation extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo editar la donación, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -186,7 +195,11 @@ class Donation extends React.Component {
     this.setState({
       loading: true,
     });
-    Api.delete(`donation/${data.key}/`)
+    Api.delete(`donation/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         Message.success("Donación eliminada con éxito.");
@@ -198,11 +211,16 @@ class Donation extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo eliminar la donación, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getCategories = () => {
-    Api.get("category/")
+    Api.get("category/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -220,13 +238,18 @@ class Donation extends React.Component {
           () => this.getProviders()
         );
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error) => {        
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getProviders = () => {
-    Api.get("provider/")
+    Api.get("provider/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -245,12 +268,17 @@ class Donation extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getCollectionCenters = () => {
-    Api.get("collection-center/")
+    Api.get("collection-center/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -269,12 +297,17 @@ class Donation extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getVolunteers = () => {
-    Api.get("volunteer/")
+    Api.get("volunteer/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -293,12 +326,17 @@ class Donation extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getSupportGroups = () => {
-    Api.get("support-group/")
+    Api.get("support-group/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -320,7 +358,8 @@ class Donation extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -332,6 +371,10 @@ class Donation extends React.Component {
     Api.patch(`donation/${data.key}/`, {
       state: 0,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -346,6 +389,7 @@ class Donation extends React.Component {
         Message.error(
           "No se pudo modificar el estado de la donación, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 
