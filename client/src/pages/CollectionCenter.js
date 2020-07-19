@@ -20,7 +20,11 @@ class CollectionCenters extends React.Component {
 
   getCollectionCenter = () => {
     //console.log("Request get");
-    Api.get("collection-center/")
+    Api.get("collection-center/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         let data = [];
@@ -47,7 +51,8 @@ class CollectionCenters extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -66,12 +71,13 @@ class CollectionCenters extends React.Component {
     formData.append("latitude", data.latitude);
     formData.append("longitude", data.longitude);
     formData.append("createdBy", Store.getUsername());
-    console.log(formData);
+    //console.log(formData);
     const config = {
       headers: {
         "content-type": "multipart/form-data",
+        token: Store.getToken(),
       },
-    };
+    };    
     Api.post("collection-center/", formData, config)
       .then((response) => {
         //console.log(response);
@@ -86,6 +92,7 @@ class CollectionCenters extends React.Component {
         Message.success(
           "No se pudo agregar el centro de acopio, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -100,6 +107,10 @@ class CollectionCenters extends React.Component {
       latitude: data.latitude,
       longitude: data.longitude,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -114,6 +125,7 @@ class CollectionCenters extends React.Component {
         Message.success(
           "No se pudo editar el centro de acopio, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -122,7 +134,11 @@ class CollectionCenters extends React.Component {
       loading: true,
     });
     //console.log("Request delete");
-    Api.delete(`collection-center/${data.key}/`)
+    Api.delete(`collection-center/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         Message.success("Centro de acopio eliminado con éxito.");
@@ -136,6 +152,7 @@ class CollectionCenters extends React.Component {
         Message.success(
           "No se pudo eliminar el centro de acopio, intente más tarde."
         );
+        this.props.handleErrorResponse(error, false);
       });
   };
 

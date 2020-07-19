@@ -302,12 +302,12 @@ class CrudTable extends React.Component {
   }
 
   onChangeFileUpload = (e) => {
-    console.log(e);
+    //console.log(e);
     this.setState(
       {
         file: e.target.files[0],
       },
-      () => console.log(this.state.file)
+      //() => console.log(this.state.file)
     );
     if (this.state.editedItem) {
       this.setState({
@@ -682,7 +682,7 @@ class CrudTable extends React.Component {
           values.photo = this.state.file;
         }
         this.props.add(values);
-        console.log(this.props);
+        //console.log(this.props);
       }
       form.resetFields();
       this.setState({
@@ -705,7 +705,7 @@ class CrudTable extends React.Component {
     //console.log(this.props.data);
     let item = this.props.data.find((obj) => obj.key === key);
     let name = item.name ? item.name : item.firstName + " " + item.lastName;
-    console.log(name);
+    //console.log(name);
     if (name === "undefined undefined") {
       name =
         "Distribución de " +
@@ -765,7 +765,7 @@ class CrudTable extends React.Component {
     if (item.photo === null) {
       Message.error("No existe una foto asociada al registro");
     } else {
-      console.log("Foto Abierto");
+      //console.log("Foto Abierto");
       //document.getElementById("photoTAG").src = item.photo;
       this.setState({
         //editedItem: item,
@@ -776,7 +776,7 @@ class CrudTable extends React.Component {
   };
 
   closePhotoModal = () => {
-    console.log("Foto Cerrado");
+    //console.log("Foto Cerrado");
     this.setState({
       //editedItem: undefined,
       visiblePhoto: false,

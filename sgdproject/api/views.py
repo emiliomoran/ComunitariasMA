@@ -8,9 +8,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from rest_framework import status
 from rest_framework.response import Response
 #from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
+from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS, IsAdminUser, AllowAny
 from rest_framework_jwt.serializers import VerifyJSONWebTokenSerializer
 from rest_framework_jwt.utils import jwt_decode_handler
+from rest_condition import Or
 # Create your views here.
 
 class IsAuthenticated(BasePermission):
@@ -30,60 +31,84 @@ class IsAuthenticated(BasePermission):
             return False
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    #permission_classes = (IsAuthenticated,)
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
 
     queryset = Category.objects.all().order_by('name')
     serializer_class = CategorySerializer
 
 class CollectionCenterViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = CollectionCenter.objects.all().order_by('name')
     serializer_class = CollectionCenterSerializer
 	
 class ProviderViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Provider.objects.all().order_by('name')
     serializer_class = ProviderSerializer
 	
 class ProviderContactViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = ProviderContact.objects.all().order_by('lastName')
     serializer_class = ProviderContactSerializer
 	
 class DonationViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Donation.objects.all().order_by('collectionCenter')
     serializer_class = DonationSerializer
 
 class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = User.objects.all().order_by('username')
     serializer_class = UserSerializer
 
 class ActivityViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Activity.objects.all().order_by('name')
     serializer_class = ActivitySerializer
 class VolunteerViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Volunteer.objects.all().order_by('lastName')
     serializer_class = VolunteerSerializer
 
 class SupportGroupViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = SupportGroup.objects.all().order_by('name')
     serializer_class = SupportGroupSerializer
 
 class GroupMemberViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = GroupMember.objects.all().order_by('lastName')
     serializer_class = GroupMemberSerializer
 
 class ScopeViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Scope.objects.all().order_by('name')
     serializer_class = ScopeSerializer
 
 class CampaignViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Campaign.objects.all().order_by('name')
     serializer_class = CampaignSerializer
 
 class DistributionViewSet(viewsets.ModelViewSet):
+    permission_classes = (Or(IsAuthenticated, IsAdminUser),)
+
     queryset = Distribution.objects.all()
     serializer_class = DistributionSerializer
 
 class UserLogin(viewsets.ViewSet):    
-    #permission_classes = (permissions.AllowAny,)
+    permission_classes = (AllowAny,)
     #queryset = None
     
     def create(self, request):

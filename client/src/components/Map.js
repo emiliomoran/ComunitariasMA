@@ -21,13 +21,13 @@ class MapComponent extends React.Component {
   };
 
   handleOk = () => {
-    console.log("ok");
+    //console.log("ok");
     this.state.newPoint && this.props.save(this.state.newPoint);
     //this.props.close();
   };
 
   handleClick = (e) => {
-    console.log(e);
+    //console.log(e);
     let point = {
       latitude: e.latlng.lat,
       longitude: e.latlng.lng,

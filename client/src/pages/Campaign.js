@@ -21,7 +21,11 @@ class Campaign extends React.Component {
 
   getScopes = () => {
     //console.log("scopes");
-    Api.get("scope/")
+    Api.get("scope/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -39,12 +43,17 @@ class Campaign extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getCampaign = () => {
-    Api.get("campaign/")
+    Api.get("campaign/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -76,6 +85,7 @@ class Campaign extends React.Component {
           loading: false,
         });
         //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -91,10 +101,11 @@ class Campaign extends React.Component {
     formData.append("scope", data.scope);
     formData.append("photo", data.photo);
     formData.append("createdBy", Store.getUsername());
-    //console.log(formData);
+    //console.log(formData);    
     const config = {
       headers: {
         "content-type": "multipart/form-data",
+        token: Store.getToken(),
       },
     };
     Api.post("campaign/", formData, config)
@@ -109,6 +120,7 @@ class Campaign extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo agregar la campaña, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -133,7 +145,8 @@ class Campaign extends React.Component {
     //console.log(formData);
     const config = {
       headers: {
-        "content-type": "multipart/form-data",
+        "content-type": "multipart/form-data",        
+        token: Store.getToken(),        
       },
     };
     Api.patch(`campaign/${data.key}/`, formData, config)
@@ -148,6 +161,7 @@ class Campaign extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo editar la campaña, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -155,7 +169,11 @@ class Campaign extends React.Component {
     this.setState({
       loading: true,
     });
-    Api.delete(`campaign/${data.key}/`)
+    Api.delete(`campaign/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         Message.success("Campaña eliminada con éxito.");
@@ -167,6 +185,7 @@ class Campaign extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo eliminar la campaña, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 

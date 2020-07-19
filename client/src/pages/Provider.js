@@ -58,7 +58,11 @@ class Provider extends React.Component {
 
   getProvider = () => {
     //console.log("Request get");
-    Api.get("provider/")
+    Api.get("provider/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         let data = [];
@@ -100,7 +104,8 @@ class Provider extends React.Component {
         this.setState({
           loading: false,
         });
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -117,6 +122,10 @@ class Provider extends React.Component {
       email: data.email,
       categories: data.categories,
       createdBy: Store.getUsername(),
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -129,6 +138,7 @@ class Provider extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo agregar la empresa, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -144,6 +154,10 @@ class Provider extends React.Component {
       email: data.email,
       categories: data.categories,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -156,6 +170,7 @@ class Provider extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo editar la empresa, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -164,7 +179,11 @@ class Provider extends React.Component {
       loading: true,
     });
     //console.log("Request delete");
-    Api.delete(`provider/${data.key}/`)
+    Api.delete(`provider/${data.key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         Message.success("Empresa eliminada con éxito.");
@@ -176,6 +195,7 @@ class Provider extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo eliminar la empresa, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -191,6 +211,10 @@ class Provider extends React.Component {
       social: data.social,
       provider: data.provider,
       createdBy: Store.getUsername(),
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -203,6 +227,7 @@ class Provider extends React.Component {
       .catch((error) => {
         //console.log(error);
         Message.error("No se pudo agregar al contacto, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -217,6 +242,10 @@ class Provider extends React.Component {
       social: data.social,
       //provider: data.provider,
       //createdBy: "reactclient",
+    }, {
+      headers: {
+        token: Store.getToken(),
+      },
     })
       .then((response) => {
         //console.log(response);
@@ -229,6 +258,7 @@ class Provider extends React.Component {
       .catch((error) => {
         //console.log(error);
         Message.error("No se pudo editar al contacto, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
@@ -237,7 +267,11 @@ class Provider extends React.Component {
       loading: true,
     });
     //console.log("Request delete", key);
-    Api.delete(`provider-contact/${key}/`)
+    Api.delete(`provider-contact/${key}/`, {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         //console.log(response);
         this.setState({
@@ -252,12 +286,17 @@ class Provider extends React.Component {
         });
         //console.log(error);
         Message.error("No se pudo eliminar al contacto, intente más tarde.");
+        this.props.handleErrorResponse(error, false);
       });
   };
 
   getCategories = () => {
     //console.log("categories");
-    Api.get("category/")
+    Api.get("category/", {
+      headers: {
+        token: Store.getToken(),
+      },
+    })
       .then((response) => {
         let data = [];
         response.data.map((item) => {
@@ -276,7 +315,8 @@ class Provider extends React.Component {
         );
       })
       .catch((error) => {
-        console.log(error);
+        //console.log(error);
+        this.props.handleErrorResponse(error, false);
       });
   };
 

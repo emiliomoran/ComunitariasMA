@@ -22,7 +22,11 @@ class Distribution extends React.Component {
     };
 
     getDistributions = () => {
-        Api.get("distribution/")
+        Api.get("distribution/", {
+          headers: {
+            token: Store.getToken(),
+          },
+        })
           .then((response) => {
             let data = [];
             response.data.map((item) => {
@@ -56,7 +60,8 @@ class Distribution extends React.Component {
             this.setState({
               loading: false,
             });
-            console.log(error);
+            //console.log(error);
+            this.props.handleErrorResponse(error, false);
           });
     };
 
@@ -79,6 +84,7 @@ class Distribution extends React.Component {
         const config = {
           headers: {
             "content-type": "multipart/form-data",
+            token: Store.getToken(),            
           },
         };
         Api.post("distribution/", formData, config)
@@ -93,11 +99,43 @@ class Distribution extends React.Component {
             });
             //console.log(error);
             Message.error("No se pudo agregar el plan de distribución, intente más tarde.");
+            this.props.handleErrorResponse(error, false);
           });
     };
+<<<<<<< HEAD
+=======
+
+    deleteDistribution = (data) => {
+      this.setState({
+        loading: true,
+      });
+      Api.delete(`distribution/${data.key}/`, {
+        headers: {
+          token: Store.getToken(),
+        },
+      })
+        .then((response) => {
+          //console.log(response);
+          Message.success("Plan de distribución eliminado con éxito.");
+          this.getDistributions();
+        })
+        .catch((error) => {
+          this.setState({
+            loading: false,
+          });
+          Message.error("No se pudo eliminar el plan de distribución, intente más tarde.");
+          this.props.handleErrorResponse(error, false);
+          //console.log(error);
+        });
+    };
+>>>>>>> c72017172d1dd0ce592094e8a89cd7879e396673
     
     getVolunteers = () => {
-        Api.get("volunteer/")
+        Api.get("volunteer/", {
+          headers: {
+            token: Store.getToken(),
+          },
+        })
             .then((response) => {
             let data = [];
             response.data.map((item) => {
@@ -116,12 +154,17 @@ class Distribution extends React.Component {
             );
             })
             .catch((error) => {
-            console.log(error);
+            //console.log(error);
+            this.props.handleErrorResponse(error, false);
             });
     };
 
     getSupportGroups = () => {
-        Api.get("support-group/")
+        Api.get("support-group/", {
+          headers: {
+            token: Store.getToken(),
+          },
+        })
             .then((response) => {
             let data = [];
             response.data.map((item) => {
@@ -143,7 +186,8 @@ class Distribution extends React.Component {
             );
             })
             .catch((error) => {
-            console.log(error);
+            //console.log(error);
+            this.props.handleErrorResponse(error, false);
             });
     };
 

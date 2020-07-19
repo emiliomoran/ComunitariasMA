@@ -37,7 +37,7 @@ class Login extends React.Component {
           password: values.password,
         })
           .then((response) => {
-            console.log(response);
+            //console.log(response);
             Store.setToken(response.data.token);
             this.setState({
               redirect: true,
