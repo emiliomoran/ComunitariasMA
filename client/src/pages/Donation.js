@@ -143,64 +143,6 @@ class Donation extends React.Component {
       });
   };
 
-  editDonation = (data) => {
-    this.setState({
-      loading: true,
-    });
-    //console.log(data);
-    const formData = new FormData();
-    formData.append("provider", data.provider);
-    formData.append("category", data.category);
-    formData.append("description", data.description);
-    let users = data.users ? data.users : [];
-    users.map((user) => formData.append("users", user));
-    if (typeof data.collectionCenter !== "undefined")
-      formData.append("collectionCenter", data.collectionCenter);
-    if (typeof data.beginDate !== "undefined")
-      formData.append("beginDate", data.beginDate);
-    if (typeof data.expirationDate !== "undefined")
-      formData.append("expirationDate", data.expirationDate);
-    if (typeof data.photo !== "undefined") formData.append("photo", data.photo);
-
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    Api.patch(`donation/${data.key}/`, formData, config)
-      .then((response) => {
-        //console.log(response);
-        Message.success("Donación editada con éxito.");
-        this.getDonations();
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
-        //console.log(error);
-        Message.error("No se pudo editar la donación, intente más tarde.");
-      });
-  };
-
-  deleteDonation = (data) => {
-    this.setState({
-      loading: true,
-    });
-    Api.delete(`donation/${data.key}/`)
-      .then((response) => {
-        //console.log(response);
-        Message.success("Donación eliminada con éxito.");
-        this.getDonations();
-      })
-      .catch((error) => {
-        this.setState({
-          loading: false,
-        });
-        //console.log(error);
-        Message.error("No se pudo eliminar la donación, intente más tarde.");
-      });
-  };
-
   getCategories = () => {
     Api.get("category/")
       .then((response) => {
@@ -401,10 +343,6 @@ class Donation extends React.Component {
         title: "Modificar estado",
         key: "change_state",
       },
-      {
-        title: "Acción",
-        key: "action",
-      },
     ];
 
     const fieldsForm = [
@@ -474,8 +412,6 @@ class Donation extends React.Component {
           fieldsForm={fieldsForm}
           title="Donación"
           add={this.addDonation}
-          edit={this.editDonation}
-          delete={this.deleteDonation}
           patch={this.editDonationState}
           loading={loading}
           includesMap={false}

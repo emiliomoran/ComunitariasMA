@@ -95,25 +95,6 @@ class Distribution extends React.Component {
             Message.error("No se pudo agregar el plan de distribución, intente más tarde.");
           });
     };
-
-    deleteDistribution = (data) => {
-      this.setState({
-        loading: true,
-      });
-      Api.delete(`distribution/${data.key}/`)
-        .then((response) => {
-          //console.log(response);
-          Message.success("Plan de distribución eliminado con éxito.");
-          this.getDistributions();
-        })
-        .catch((error) => {
-          this.setState({
-            loading: false,
-          });
-          Message.error("No se pudo eliminar el plan de distribución, intente más tarde.");
-          //console.log(error);
-        });
-    };
     
     getVolunteers = () => {
         Api.get("volunteer/")
@@ -190,10 +171,6 @@ class Distribution extends React.Component {
             title: "Foto Lugar de llegada",
             key: "photo",
           },
-          {
-            title: "Acción",
-            key: "action",
-          },
         ];
         
         const fieldsForm = [
@@ -249,7 +226,6 @@ class Distribution extends React.Component {
               fieldsForm={fieldsForm}
               title="Distribuciones"
               add={this.addDistribution}
-              delete={this.deleteDistribution}
               loading={loading}
               includesMap={false}
               optionsUser={dataUsers}
