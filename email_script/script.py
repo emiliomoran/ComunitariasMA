@@ -1,5 +1,6 @@
 import json
 import requests
+import requests.auth
 from datetime import date, datetime
 from string import Template
 # Import smtplib for the actual sending function
@@ -7,12 +8,16 @@ import smtplib
 # Import the email modules we'll need
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from decouple import config
 
 # Sender account
-FROM_MA = ""
-CLAVE = ""
+FROM_MA = config('EMAIL_MA')
+CLAVE = config('PASSWORD_MA')
 
-api_url_base = "http://127.0.0.1:8000/api/"
+apiuser = config('API_USER')
+apipass = config('API_PASS')
+
+api_url_base = config('API_URL')
 
 def read_template(filename):
     with open(filename, 'r') as template_file:
@@ -27,28 +32,28 @@ s.login(FROM_MA, CLAVE)
 message_template = read_template("email_message.txt")
 
 try:
-	donations_r = requests.get(api_url_base+"donation/")
+	donations_r = requests.get(api_url_base+"donation/", auth=(apiuser, apipass))
 	if(donations_r):
 		jDonations = json.loads(donations_r.content)
 		#print(jDonations)
 		actual_date = datetime.now().date()
-		print("FECHA DE HOY: "+str(actual_date)+"\n")
+		#print("FECHA DE HOY: "+str(actual_date)+"\n")
 		for d in jDonations:
-			print("ID Donation: ", d['id'])
+			#print("ID Donation: ", d['id'])
 			end_date = d['expirationDate']
 			userids = d['users']
 			description = d['description']
 			state_d = d['state']
 			if(state_d == 1 and end_date!=None):
-				print(userids)
+				#print(userids)
 				for u in userids:
-					user_r = requests.get(api_url_base+"user/"+str(u))
+					user_r = requests.get(api_url_base+"user/"+str(u), auth=(apiuser, apipass))
 					jUsers = json.loads(user_r.content)
-					print(jUsers)
+					#print(jUsers)
 					email_to = jUsers['email']
-					print("Email: "+email_to)
+					#print("Email: "+email_to)
 					difference_days = (datetime.strptime(end_date,"%Y-%m-%d").date() - actual_date).days
-					print("Diferencia de días = "+str(difference_days)+"\n")
+					#print("Diferencia de días = "+str(difference_days)+"\n")
 					if(difference_days>=1 and difference_days<=14):
 						try:
 							#print("Entra en try de msg\n")
