@@ -150,6 +150,8 @@ class Donation extends React.Component {
       });
   };
 
+<<<<<<< HEAD
+=======
   editDonation = (data) => {
     this.setState({
       loading: true,
@@ -215,6 +217,7 @@ class Donation extends React.Component {
       });
   };
 
+>>>>>>> c72017172d1dd0ce592094e8a89cd7879e396673
   getCategories = () => {
     Api.get("category/", {
       headers: {
@@ -445,10 +448,6 @@ class Donation extends React.Component {
         title: "Modificar estado",
         key: "change_state",
       },
-      {
-        title: "Acción",
-        key: "action",
-      },
     ];
 
     const fieldsForm = [
@@ -518,8 +517,6 @@ class Donation extends React.Component {
           fieldsForm={fieldsForm}
           title="Donación"
           add={this.addDonation}
-          edit={this.editDonation}
-          delete={this.deleteDonation}
           patch={this.editDonationState}
           loading={loading}
           includesMap={false}

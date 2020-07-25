@@ -102,6 +102,8 @@ class Distribution extends React.Component {
             this.props.handleErrorResponse(error, false);
           });
     };
+<<<<<<< HEAD
+=======
 
     deleteDistribution = (data) => {
       this.setState({
@@ -126,6 +128,7 @@ class Distribution extends React.Component {
           //console.log(error);
         });
     };
+>>>>>>> c72017172d1dd0ce592094e8a89cd7879e396673
     
     getVolunteers = () => {
         Api.get("volunteer/", {
@@ -212,10 +215,6 @@ class Distribution extends React.Component {
             title: "Foto Lugar de llegada",
             key: "photo",
           },
-          {
-            title: "Acción",
-            key: "action",
-          },
         ];
         
         const fieldsForm = [
@@ -271,7 +270,6 @@ class Distribution extends React.Component {
               fieldsForm={fieldsForm}
               title="Distribuciones"
               add={this.addDistribution}
-              delete={this.deleteDistribution}
               loading={loading}
               includesMap={false}
               optionsUser={dataUsers}
