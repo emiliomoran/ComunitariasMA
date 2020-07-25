@@ -224,14 +224,19 @@ const CategoryForm = Form.create({ name: "form_in_modal" })(
                     ) : field.type === "file" ? (
                       editedItem ? (
                         <div>
-                          <img
-                            src={file}
-                            width="90%"
-                            alt="foto"
-                            style={{ display: isImgVisible ? "block" : "none" }}
-                          />
-                          <br />
-                          <br />
+                          {file && (
+                            <>
+                              <img
+                                src={file}
+                                width="90%"
+                                alt="foto"
+                                style={{
+                                  display: isImgVisible ? "block" : "none",
+                                }}
+                              />
+                              <br />
+                            </>
+                          )}
                           <input
                             type="file"
                             accept="image/*"
@@ -306,7 +311,7 @@ class CrudTable extends React.Component {
     this.setState(
       {
         file: e.target.files[0],
-      },
+      }
       //() => console.log(this.state.file)
     );
     if (this.state.editedItem) {

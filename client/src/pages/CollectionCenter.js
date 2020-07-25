@@ -77,7 +77,7 @@ class CollectionCenters extends React.Component {
         "content-type": "multipart/form-data",
         token: Store.getToken(),
       },
-    };    
+    };
     Api.post("collection-center/", formData, config)
       .then((response) => {
         //console.log(response);
@@ -101,17 +101,23 @@ class CollectionCenters extends React.Component {
       loading: true,
     });
     //console.log("Request put");
-    Api.patch(`collection-center/${data.key}/`, {
-      name: data.name,
-      address: data.address,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      //createdBy: "reactclient",
-    }, {
+    const formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("address", data.address);
+    formData.append("contactName", data.contactName);
+    formData.append("contactPhone", data.contactPhone);
+    data.photo && formData.append("photo", data.photo);
+    formData.append("latitude", data.latitude);
+    formData.append("longitude", data.longitude);
+
+    const config = {
       headers: {
+        "content-type": "multipart/form-data",
         token: Store.getToken(),
       },
-    })
+    };
+
+    Api.patch(`collection-center/${data.key}/`, formData, config)
       .then((response) => {
         //console.log(response);
         Message.success("Centro de acopio editado con éxito.");
