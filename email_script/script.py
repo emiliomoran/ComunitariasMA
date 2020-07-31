@@ -70,7 +70,7 @@ try:
 							s.send_message(msg)
 							print("Se envió mensaje\n")
 							del msg
-						except Error as e:
-							print("Error sending email", e)
-except Error as e:
-   	print("Error requests", e)
+						except:
+							print("Error sending email")
+except:
+   	print("Error requests")
